@@ -1,0 +1,388 @@
+<div class="page-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
+          <h4 class="mb-sm-0">Complaints</h4>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="d-flex justify-content-end ">
+      <button type="button" class="btn btn-success add-btn mb-3" (click)="openChartModal()"> More Views
+      </button>
+    </div> -->
+    <!-- <app-card-list [cardList]="cardList"></app-card-list> -->
+     <!-- <div class="row mb-3 d-flex">
+      <div class="col-1">
+          <label class="col-form-label">Date Range</label>   
+      </div>
+      <div class="col-5">
+          <div class="form-group mb-3">
+               <input type="text"
+                     placeholder="Daterangepicker"
+                     class="form-control"
+                     bsDaterangepicker  [(ngModel)]="dateRange" (bsValueChange)="getComplaints($event)"
+                     [bsConfig]="{rangeInputFormat: 'DD.MM.YYYY', dateInputFormat:
+                     'DD.MM.YYYY',ranges: commonService.ranges }">
+            </div>
+            
+      </div>
+    </div> -->
+
+        <div class="bg-white py-3 px-3 mb-2" style="border-radius: 3px;">
+      <div class="row">
+        <div class="col-3">
+          <div class="form-group mb-0">
+            <div class="input-group shadow-sm rounded"><span class="input-group-text bg-white border-end-0 p-2"><i
+                  class="ri-calendar-fill text-dark text-secondary"></i></span>
+                 <input type="text"
+                     placeholder="Daterangepicker"
+                     class="form-control border-start-1 line-height"
+                     bsDaterangepicker  [(ngModel)]="dateRange" (bsValueChange)="getComplaints($event)"
+                     [bsConfig]="{rangeInputFormat: 'DD.MM.YYYY', dateInputFormat:
+                     'DD.MM.YYYY',ranges: commonService.ranges }">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header border-0">
+            <div class="row g-4 align-items-center">
+              <div class="wrapper col-sm-auto">
+                <input class="abc" type="radio" name="filter" value="" [(ngModel)]="filters['compaintStatus']"
+                  (change)="fetchComplaints()"> <label class="fs-5">All</label>
+                <input class="abc" type="radio" name="filter" value="New" [(ngModel)]="filters['compaintStatus']"
+                  (change)="fetchComplaints()"> <label class="fs-5">New</label>
+                <input class="abc" type="radio" name="filter" value="Closed" [(ngModel)]="filters['compaintStatus']"
+                  (change)="fetchComplaints()"> <label class="fs-5">Closed</label>
+                <input class="abc" type="radio" name="filter" value="Escalated" [(ngModel)]="filters['compaintStatus']"
+                  (change)="fetchComplaints()"><label class="fs-5">Escalated</label>
+                <input class="abc" type="radio" name="filter" value="Updated" [(ngModel)]="filters['compaintStatus']"
+                  (change)="fetchComplaints()"><label class="fs-5">Updated</label>
+              </div>
+              <div class="col-sm-auto ms-auto">
+                <div class="hstack gap-2">
+                  <button type="button" class="btn btn-success add-btn" (click)="openChartModal()"> Dashboard
+                  </button>
+                  <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()">
+                    <i class="ri-delete-bin-2-line"></i>
+                  </button>
+                  <button class="btn btn-info material-shadow-none" (click)="downloadSampleImport($event)">
+                    Download Import Template
+                  </button>
+                  <button class="btn btn-info material-shadow-none" (click)="triggerFileInput($event)">
+                    Import
+                  </button>
+                  <div class="file-upload">
+                    <input type="file" id="fileInput" (change)="onFileChange($event)" class="file" />
+                  </div>
+                  <button type="button" class="btn btn-success add-btn" (click)="openAddTicketModal('Add')">
+                    Add Ticket
+                  </button>
+                  <!-- <button type="button" class="btn btn-success add-btn" (click)="openModal()">
+                    <i class="ri-add-line align-bottom me-1"></i>
+                    Add Complaint
+                  </button> -->
+                  <span class="dropdown">
+                    <button class="btn btn-soft-info btn-icon fs-14" type="button" id="dropdownMenuButton1"
+                      data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="ri-settings-4-line"></i>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                      <li>
+                        <a class="dropdown-item" href="#" (click)="exportComplaints($event)">Export To Excel</a>
+                      </li>
+                      <!-- <li>
+                        <a class="dropdown-item" href="#" (click)="exportCSVComplaints($event)">Export to CSV</a>
+                      </li> -->
+                    </ul>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div>
+              <div class="table-responsive table-card">
+                <table class="table align-middle w-100" id="customerTable">
+                  <thead class="table-light">
+                    <tr>
+                      <th class="text-center w-5">Comp. ID</th>
+                      <th class="text-center w-5">Docket No</th>
+                      <th class="text-center w-5">Customer Name</th>
+                      <th class="text-center w-10">Comp. Date</th>
+                      <th class="text-center w-5">Comp. Status</th>
+                      <th class="text-center w-10">Resolution Date</th>
+                      <th class="text-center w-5">SLA in Hrs</th>
+                      <th class="text-center w-5">Raised By</th>
+                      <th class="text-center w-5">Assigned To</th>
+                      <th class="text-center w-10">EDD</th>
+                      <th class="text-center w-10">ADD</th>
+                      <th class="text-center w-5">Auto Closure</th>
+                      <th class="text-center w-5">Delivery Status</th>
+                      <th class="text-center w-5"
+                        *ngIf="userType === 'manager' ||userType === 'MANAGER'|| userType === 'ADMINISTRATOR'">Esc.
+                        Status</th>
+                      <th class="text-center w-8">Actions</th>
+                    </tr>
+                    <tr>
+                      <th class="w-5">
+                        <input type="text" [(ngModel)]="filters['complaintID']" (input)="fetchComplaints()"
+                          class="form-control" />
+                      </th>
+                      <th class="w-5">
+                        <input type="text" [(ngModel)]="filters['documentNo']" (input)="fetchComplaints()"
+                          class="form-control" />
+                      </th>
+                      <th class="w-5">
+                        <input type="text" [(ngModel)]="filters['customerName']" (input)="fetchComplaints()"
+                          class="form-control" />
+                      </th>
+                      <th class="w-10"  style="min-width: 160px;">
+                        <div class="input-group">
+                          <input class="form-control" placeholder="dd/mm/yyyy" name="d2" #c2="ngModel"
+                            [(ngModel)]="filters['compalaintDate']" ngbDatepicker (ngModelChange)="fetchComplaints()"
+                            #d3="ngbDatepicker" readonly />
+                          <span role="button" (click)="clearDate()" tabindex="0" class="ng-clear-wrapper clear-wrapper"
+                            title="Clear date" *ngIf="filters['compalaintDate']">
+                            <span aria-hidden="true" class="ng-clear clear">×</span>
+                          </span>
+                          <button class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="d3.toggle()"
+                            type="button"></button>
+                        </div>
+                      </th>
+                      <th class="w-5">
+                        <input type="text" [(ngModel)]="filters['compaintStatus']" (input)="fetchComplaints()"
+                          class="form-control" />
+                      </th>
+                      <th class="w-10" style="min-width: 160px;">
+                        <div class="input-group">
+                          <input class="form-control" placeholder="dd/mm/yyyy" name="d2" #c2="ngModel"
+                            [(ngModel)]="filters['resolutionDate']" ngbDatepicker (ngModelChange)="fetchComplaints()"
+                            #d2="ngbDatepicker" readonly />
+                          <span role="button" (click)="clearDate()" tabindex="0" class="ng-clear-wrapper clear-wrapper"
+                            title="Clear date" *ngIf="filters['resolutionDate']">
+                            <span aria-hidden="true" class="ng-clear clear">×</span>
+                          </span>
+                          <button class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="d2.toggle()"
+                            type="button"></button>
+                        </div>
+                      </th>
+                      <th class="w-5">
+                        <input type="text" [(ngModel)]="filters['slaInHr']" (input)="fetchComplaints()"
+                          class="form-control" />
+                      </th>
+                      <th class="w-5">
+                        <input type="text" [(ngModel)]="filters['raisedBy']" (input)="fetchComplaints()"
+                          class="form-control" />
+                      </th>
+                      <th class="w-5">
+                        <input type="text" [(ngModel)]="filters['assignedTo']" (input)="fetchComplaints()"
+                          class="form-control" />
+                      </th>
+                     <th class="w-10" style="min-width: 160px;">
+                        <div class="input-group">
+                          <input width="100%" class="form-control" placeholder="dd/mm/yyyy" name="edd" #c2="ngModel"
+                            [(ngModel)]="filters['edd']" ngbDatepicker (ngModelChange)="fetchComplaints()"
+                            #edd="ngbDatepicker" readonly />
+                          <span role="button" (click)="clearDate()" tabindex="0" class="ng-clear-wrapper clear-wrapper"
+                            title="Clear date" *ngIf="filters['edd']">
+                            <span aria-hidden="true" class="ng-clear clear">×</span>
+                          </span>
+                          <button class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="edd.toggle()"
+                            type="button"></button>
+                        </div>
+                      </th>
+                      <th class="w-10" style="min-width: 160px;">
+                        <div class="input-group">
+                          <input width="100%" class="form-control" placeholder="dd/mm/yyyy" name="addDate" #c2="ngModel"
+                            [(ngModel)]="filters['addDate']" ngbDatepicker (ngModelChange)="fetchComplaints()"
+                            #addDate="ngbDatepicker" readonly />
+                          <span role="button" (click)="clearDate()" tabindex="0" class="ng-clear-wrapper clear-wrapper"
+                            title="Clear date" *ngIf="filters['addDate']">
+                            <span aria-hidden="true" class="ng-clear clear">×</span>
+                          </span>
+                          <button class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="addDate.toggle()"
+                            type="button"></button>
+                        </div>
+                      </th>
+                      <th class="w-5">
+                        <input type="text" [(ngModel)]="filters['autoClosure']" (input)="fetchComplaints()"
+                          class="form-control" />
+                      </th>
+                      <th class="w-5">
+                        <input type="text" [(ngModel)]="filters['deliveryStatus']" (input)="fetchComplaints()"
+                          class="form-control" />
+                      </th>
+                      <th class="w-5"></th>
+                      <th class="w-8"></th>
+                    </tr>
+                  </thead>
+                  <tbody class="list form-check-all">
+                    <tr *ngFor="let complaint of complaints; let i = index">
+                      <td class="text-center w-5 truncate-text" [title]="complaint.complaintID">{{
+                        complaint.complaintID ?complaint.complaintID:'--' }}</td>
+                      <td class="text-center w-5 truncate-text" [title]="complaint.documentNo">{{ complaint.documentNo
+                        ?complaint.documentNo:'--' }}</td>
+                      <td class="text-center w-5 truncate-text" [title]="complaint.customerName">{{
+                        complaint.customerName ?complaint.customerName:'--' }}</td>
+                      <td class="text-center w-10 truncate-text" [title]="complaint.compalaintDate">
+                        {{ complaint.compalaintDate ?complaint.compalaintDate:'--' }}
+                      </td>
+                      <th class="text-center w-5 truncate-text" [title]="complaint.compaintStatus">{{
+                        complaint.compaintStatus ?complaint.compaintStatus:'--' }}</th>
+                      <td class="text-center w-10 truncate-text" [title]="complaint.resolutionDate">
+                        {{ complaint.resolutionDate ?complaint.resolutionDate:'--' }}
+                      </td>
+                      <td class="text-center w-5 truncate-text" [title]="complaint.slaInHr">{{ complaint.slaInHr
+                        ?complaint.slaInHr:'--' }}</td>
+                      <td class="text-center w-5 truncate-text" [title]="complaint.raisedBy">{{ complaint.raisedBy
+                        ?complaint.raisedBy:'--' }}</td>
+                      <td class="text-center w-5 truncate-text" [title]="complaint.assignedTo">{{ complaint.assignedTo
+                        ?complaint.assignedTo:'--' }}</td>
+                        <td class="text-center w-10 truncate-text" [title]="complaint.edd">{{complaint.edd?(complaint.edd | date:'dd/MM/yyyy'):'--'}}</td>
+                        <td class="text-center w-10 truncate-text" [title]="complaint.addDate">{{complaint.addDate?(complaint.addDate| date:'dd/MM/yyyy'):'--'}}</td>
+                        <td class="text-center w-5 truncate-text" [title]="complaint.autoClosure">{{complaint.autoClosure ?complaint.autoClosure:'--'}}</td>
+                        <td class="text-center w-5 truncate-text" [title]="complaint.deliveryStatus">{{complaint.deliveryStatus?complaint.deliveryStatus:'--'}}</td>
+                      <td class="text-center w-5"
+                        *ngIf="userType === 'manager' ||userType === 'MANAGER' || userType === 'ADMINISTRATOR'">
+                        {{complaint.compaintStatus === 'Escalated' ? 'Yes':'--'}}</td>
+                      <td class="text-center w-8">
+                        <ul class="list-inline hstack gap-2 mb-0">
+                          <!-- <li *ngIf="complaint.complaintStatus != 'Closed'" class="list-inline-item text-center"
+                            data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                            <a class="edit-item-btn" href="#" (click)="editModal($event, complaint.complaintId)"><i
+                                class="ri-pencil-fill align-bottom text-muted"></i></a>
+                          </li> -->
+                          <!-- <li  [ngClass]="{'disabled-image': complaint.compaintStatus === 'Closed'}" class="list-inline-item text-center"
+                          data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit" >
+                          <a class="edit-item-btn"  (click)="complaint.compaintStatus === 'Closed' ? null : openAddTicketModal('Edit',complaint.complaintID)"><i
+                              class="ri-pencil-fill align-bottom text-muted"></i></a>
+                          </li> -->
+                          <li [ngClass]="{'disabled-image': complaint.compaintStatus === 'Closed' || complaint.autoClosure === 'Yes'}" class="list-inline-item disabled-icon bg-blue d-flex justify-content-center align-items-center">
+                            <a class="edit-item-btn" [popover]="'Update'" placement="auto" triggers="hover" [outsideClick]="true" container="body" [ngClass]="{'disabled-image': complaint.compaintStatus === 'Closed' || complaint.autoClosure === 'Yes'}"
+                              (click)="complaint.compaintStatus === 'Closed' || complaint.autoClosure === 'Yes'? null : openAddTicketModal('Update',complaint.complaintID)"><i
+                                class="ri-pencil-fill align-bottom text-muted edit-item-btn"></i></a>
+                            <!-- <a><img src="assets/images/update-icon.svg" title="Update" (click)="complaint.compaintStatus === 'Closed' ? null : openAddTicketModal('Update',complaint.complaintID)" height="17" /></a> -->
+                          </li>
+                          <!-- <li *ngIf="complaint.complaintStatus === 'Closed' || complaint.autoClosure === 'Yes'" class="pe-3"> </li> -->
+                          <li class="list-inline-item disabled-icon bg-blue d-flex justify-content-center align-items-center cursor-pointer"
+                            [popover]="'View'" placement="auto" triggers="hover" [outsideClick]="true" container="body">
+                            <a href="#" (click)="viewModal($event, complaint.complaintID,complaint)"><i
+                                class="ri-eye-fill align-bottom text-muted edit-item-btn"></i></a>
+                          </li>
+                          <li class="buttoncss" [ngClass]="{'disabled-image': complaint.compaintStatus === 'Closed' || complaint.autoClosure === 'Yes'}">
+                            <img src="assets/images/closed-icon.png"  class="me-2" [popover]="'Closed'" placement="auto" triggers="hover" [outsideClick]="true" container="body"
+                              (click)="complaint.compaintStatus === 'Closed' || complaint.autoClosure === 'Yes' ? null : openAddTicketModal('Close', complaint.complaintID)"
+                              height="23" />
+                            <img src="assets/images/escalation-icon.jpg" [popover]="'Escalation'" placement="auto" triggers="hover" [outsideClick]="true" container="body"
+                              (click)="complaint.compaintStatus === 'Closed' || complaint.autoClosure === 'Yes' ? null : openAddTicketModal('Escalation',complaint.complaintID)"
+                              height="24" />
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                  <div *ngIf="loading && complaints.length === 0" class="text-center border-found">
+                <lord-icon src="/assets/json/system-solid-716-spinner-three-dots-loop-scale.json" trigger="loop"
+                  colors="primary:#121331,secondary:#08a88a" style="width: 100px; height: 100px">
+                </lord-icon>
+            </div>
+                <div class="noresult" *ngIf="!loading && complaints.length == 0">
+                  <div class="text-center">
+                    <!-- <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+                      colors="primary:#121331,secondary:#08a88a" style="width: 75px; height: 75px"></lord-icon> 
+                    <h5 class="mt-2">Sorry! No Result Found</h5> -->
+                    <img src="assets/images/noData.png" height="200" width="300">
+                    <h5 class="mt-2">Sorry! No Data Found</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-end align-items-center mt-3" *ngIf="complaints.length != 0">
+                 <div class="m-3 mt-0"> Showing Total Records : <strong>{{totalItems}}</strong> </div>
+                <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="pageSize" [maxSize]="3"
+                  (pageChange)="onPageChange($event)">
+                </ngb-pagination>
+              </div>
+            </div>
+
+            <!-- <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header bg-light p-3">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                      {{complaintId === "" ? "Add Complaint" : "Update Complaint"}}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                      id="close-modal"></button>
+                  </div>
+                  <app-add-complaint (dataEmitter)="closeEditModal()"
+                    [complaintResponse]="selectedComplaint"></app-add-complaint>
+                </div>
+              </div>
+            </div> -->
+
+            <div class="modal fade" id="showModalDetail" tabindex="-1" aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header bg-light p-3">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                      Complaint Detail
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                      id="close-modal"></button>
+                  </div>
+                  <app-complaint-detail [complaintResponse]="selectedComplaint"></app-complaint-detail>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade" id="showChartModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header bg-light p-3">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                      Complain By Status
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                      id="close-modal"></button>
+                  </div>
+                  <div *ngIf="isComplaintdashboard">
+                  <app-user-chart [chartList]="'complaint'"></app-user-chart>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade" id="showTicketModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+              aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <!-- <div class="modal-header bg-light p-3">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                      {{complaintId + " Ticket"}}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                      id="close-modal"></button>
+                  </div> -->
+                  <div *ngIf="isAddComplaint">
+                  <app-add-ticket [complaint]="complaintId" [complaintResponse]="selectedComplaint"
+                    (dataEmitter)="closeTicketModal()"></app-add-ticket>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

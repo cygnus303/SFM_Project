@@ -1,0 +1,161 @@
+<form [formGroup]="approveForm" class="horizontal-form" autocomplete="off">
+    <div class="modal-body">
+      <input type="hidden" id="id-field" />
+      <div class="row g-3">
+        <div class="col-lg-6">
+          <div>
+            <label class="control-label">Expense Code</label>
+            <input class="form-control" type="text" formControlName="expenseCode" readonly>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div>
+            <label class="control-label">Distance in KM</label>
+            <input class="form-control" type="text" formControlName="distanceInKm" readonly/>
+          </div>
+        </div>
+  
+        <div class="col-lg-6">
+          <div>
+            <label class="control-label">Customer Name</label>
+            <input class="form-control" type="text" formControlName="companyName" readonly/>
+          </div>
+        </div>
+        <div class="col-lg-6">
+            <div>
+              <label class="control-label">Req. ID </label>
+              <input class="form-control" type="text" formControlName="requestId" readonly/>
+            </div>
+          </div>
+        <div class="col-lg-6">
+          <div>
+            <label class="control-label">Exp. Rate</label>
+            <input class="form-control" type="text" formControlName="expenseRate"  readonly />
+          </div>
+        </div>
+  
+        <div class="col-lg-6">
+          <div>
+            <label class="control-label">Meeting Date</label>
+            <input class="form-control" type="text" formControlName="expenseDate"  readonly/>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div>
+            <label class="control-label">Amount</label>
+            <input class="form-control" type="text" formControlName="amount" readonly/>
+          </div>
+        </div>
+        <div class="col-lg-6">
+            <div>
+              <label class="control-label">Transport Mode*</label>
+              <ng-select [items]="transportModes" bindLabel="codeDesc" bindValue="codeId" formControlName="transportModeId"
+            placeholder="Search Transport Mode" [searchable]="true" [clearable]="true" readonly
+            [ngClass]="{'border-danger': approveForm.controls['transportModeId'].invalid && approveForm.controls['transportModeId'].touched}">
+          </ng-select>
+          <div *ngIf="approveForm.controls['transportModeId'].invalid && approveForm.controls['transportModeId']?.touched" class="text-danger">
+            <small *ngIf="approveForm.controls['transportModeId'].errors?.['required']">Transport mode is required.</small>
+          </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div>
+              <label class="control-label">Supporting Document:</label>
+              <input class="form-control" type="file" formControlName="document" style="pointer-events: none; background-color: #f8f9fa;" />
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div>
+              <label class="control-label">Expense Date</label>
+              <div class="input-group">
+                <input class="form-control" placeholder="dd/mm/yyyy" formControlName="expenseDate" ngbDatepicker
+                  #d2="ngbDatepicker" readonly/>
+                <button class="btn btn-sm btn-outline-secondary ri-calendar-line" 
+                  type="button" readonly></button>
+              </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div>
+              <label class="control-label">Remarks:</label>
+              <input class="form-control" type="text" formControlName="remarks"/>
+            </div>
+        </div>
+        <div class="col-lg-6">
+          <div>
+            <label class="control-label">CheckedIn Location</label>
+            <input class="form-control" type="text" formControlName="checkedInLocation" readonly/>
+          </div>
+        </div>
+        <!-- <div class="col-lg-6">
+          <div>
+            <label class="control-label">Auditor/Manager Remarks</label>
+            <input class="form-control" type="text" formControlName="auditorRemark" 
+            [ngClass]="{'border-danger': approveForm.controls['auditorRemark'].invalid && approveForm.controls['auditorRemark'].touched}"/>
+            <div *ngIf="approveForm.controls['auditorRemark'].invalid && approveForm.controls['auditorRemark']?.touched" class="text-danger">
+              <small *ngIf="approveForm.controls['auditorRemark'].errors?.['required']">Auditor Remarks is required.</small>
+            </div>
+          </div>
+        </div> -->
+        <!-- <div class="col-lg-6">
+          <div>
+            <label class="control-label">Manager Remarks</label>
+            <input class="form-control" type="text" formControlName="managerRemark" 
+            [ngClass]="{'border-danger': approveForm.controls['managerRemark'].invalid && approveForm.controls['managerRemark'].touched}"/>
+            <div *ngIf="approveForm.controls['managerRemark'].invalid && approveForm.controls['managerRemark']?.touched" class="text-danger">
+              <small *ngIf="approveForm.controls['managerRemark'].errors?.['required']">Auditor Remarks is required.</small>
+            </div>
+          </div>
+        </div> -->
+        <div class="col-lg-6">
+            <div>
+              <label class="control-label">Checked Out Location</label>
+              <input class="form-control" type="text" formControlName="checkOutLocation"  readonly/>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+        <div class="hstack gap-2 justify-content-end">
+            <button
+            type="submit"
+            class="btn btn-success"
+            id="add-btn"
+           (click)="onReject('Approve')" [disabled]="(expenseResponse?.isEdit === 'Y')">
+            Approve
+        </button>
+        <button type="button" class="btn btn-danger" (click)="onReject('Reject')" [disabled]="(expenseResponse?.isEdit === 'Y')">
+            Reject
+        </button>
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="onCloseEvent()">
+          Close
+        </button>
+        </div>
+      </div>
+</form>
+
+<div class="modal fade" id="rejectTemplate"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog custom-top-modal">
+    <div class="modal-content">
+      <h5 class="p-2 m-0 bg-color">Are you want to {{typeEvent}}?</h5>
+     <div class="p-3 pt-2">
+      <div>
+        <label>Remarks</label>
+        <textarea type="text" [(ngModel)]="isDefaultComment" class="w-100 form-control" #remarksInput="ngModel"  minlength="5" required>
+          </textarea>
+        <div *ngIf="remarksInput.invalid && remarksInput.touched" class="text-danger">
+          <small *ngIf="remarksInput.errors?.['required']">Remarks are required.</small>
+          <small *ngIf="remarksInput.errors?.['minlength']">Remarks must be at least 5 characters long.</small>
+        </div>
+      </div>
+      <div class="button-group gap-2  d-flex justify-content-end p-3">
+        <button [disabled]="remarksInput.invalid" (click)="updateAdditionalInfo(isDefaultComment)"
+          class="btn btn-success d-flex align-items-center mr-2">
+          Yes
+        </button>
+      <button type="button" data-bs-dismiss="modal" class="btn btn-light d-flex align-items-center" (click)="onCancel()">No</button>
+      </div>
+     </div>
+    </div>
+  </div>
+</div>

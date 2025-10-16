@@ -1,0 +1,39 @@
+.modal-header {
+    display: flex;
+    justify-content: space-between; /* Space between title and close button */
+    align-items: center; /* Center vertically */
+    padding: 1rem; /* Adjust padding if needed */
+}
+
+#showChartModal{
+    --vz-modal-width: 1100px;
+}
+
+.fontsize{
+    font-size: 10px;
+}
+
+.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  ::ng-deep .popover {
+    background-color: #ffffff !important; /* Change to your desired color */
+    color: #000 !important; /* Text color */
+  }
+  
+  ::ng-deep .popover-header {
+    background-color: #c5c5c5 !important; /* Title background */
+    color: #000 !important;
+  }
+  
+  ::ng-deep .popover-body {
+    background-color: #ffffff !important; /* Content background */
+    color: #000 !important;
+    padding: 8px;
+  }
+  .disabled-image {
+  cursor: not-allowed;
+  opacity: 0.5;
+}

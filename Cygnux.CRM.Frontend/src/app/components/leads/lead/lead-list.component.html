@@ -1,0 +1,305 @@
+<div class="page-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
+          <h4 class="mb-sm-0">Leads</h4>
+
+          <!-- <div class="page-title-right">
+            <ol class="breadcrumb m-0">
+              <li class="breadcrumb-item">
+                <a href="javascript: void(0);">CRM</a>
+              </li>
+              <li class="breadcrumb-item active">Leads</li>
+            </ol>
+          </div> -->
+        </div>
+      </div>
+    </div>
+    <!-- <div class="d-flex justify-content-end ">
+      <button type="button" class="btn btn-success add-btn mb-3" (click)="openChartModal()"> More Views
+      </button>
+    </div> -->
+    <!-- <div class="row mb-3 d-flex align-items-center">
+      <div class="col-6 d-flex align-items-center">
+        <label class="me-2 mb-0">Date Range</label>
+        <input type="text" placeholder="Daterangepicker" class="form-control" bsDaterangepicker [(ngModel)]="dateRange"
+          (bsValueChange)="getLeads($event)"
+          [bsConfig]="{rangeInputFormat: 'DD.MM.YYYY', dateInputFormat:'DD.MM.YYYY',ranges: commonService.ranges}"
+          style="flex:1;">
+      </div>
+
+      <div class="col-3 d-flex align-items-center">
+        <label class="me-2 mb-0">User</label>
+        <ng-select [items]="customerService.users" bindLabel="name" bindValue="userId"  [placeholder]="'Search User'"
+          [clearable]="true" [searchable]="true" (change)="getLeads(this.dateRange)"  [(ngModel)]="selectedUser" style="flex:1;">
+        </ng-select>
+      </div>
+    </div> -->
+    <div class="bg-white py-3 px-3 mb-2" style="border-radius: 3px;">
+      <div class="row">
+        <div class="col-3">
+          <div class="form-group mb-0">
+            <div class="input-group shadow-sm rounded"><span class="input-group-text bg-white border-end-0 p-2"><i
+                  class="ri-calendar-fill text-dark text-secondary"></i></span>
+              <input type="text" placeholder="Daterangepicker" class="form-control border-start-1 line-height" bsDaterangepicker
+                [(ngModel)]="dateRange" (bsValueChange)="getLeads($event)"
+                [bsConfig]="{rangeInputFormat: 'DD.MM.YYYY', dateInputFormat:'DD.MM.YYYY',ranges: commonService.ranges}">
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="form-group mb-0">
+            <div class="input-group shadow-sm rounded">
+              <span class="input-group-text bg-white border-end-03px-2 border-start-1">
+                <i class="ri-group-fill text-dark text-secondary"></i>
+              </span>
+              <ng-select [items]="customerService.users" bindLabel="name" bindValue="userId" [placeholder]="'Search User'"
+                [clearable]="true" [searchable]="true" (change)="getLeads(this.dateRange)" [(ngModel)]="selectedUser"
+                class="form-control border-start-1 line-height p-0 border-remover">
+              </ng-select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header border-0">
+            <div class="row">
+              <div class="col">
+                <div class="hstack gap-2 d-flex justify-content-end">
+                  <button type="button" class="btn btn-success add-btn" (click)="openChartModal()"> Dashboard
+                  </button>
+                  <button class="btn btn-info material-shadow-none" (click)="downloadSampleImport($event)">
+                    Download Import Template
+                  </button>
+            
+                  <button class="btn btn-info material-shadow-none" (click)="triggerFileInput($event)">
+                    Import
+                  </button>
+                  <div class="file-upload">
+                    <input type="file" id="fileInput" (change)="onFileChange($event)" class="file" />
+                  </div>
+                  <button type="button" class="btn btn-success add-btn" (click)="openModal()">
+                    <i class="ri-add-line align-bottom me-1"></i> Add Lead
+                  </button>
+            
+                  <span class="dropdown">
+                    <button class="btn btn-soft-info btn-icon fs-14" type="button" id="dropdownMenuButton1"
+                      data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="ri-settings-4-line"></i>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                      <li>
+                        <a class="dropdown-item" href="#" (click)="exportLeads($event)">Export To Excel</a>
+                      </li>
+                      <!-- <li> <a class="dropdown-item" href="#" (click)="exportCSVLeads($event)">Export to CSV</a></li> -->
+                    </ul>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div>
+              <div class="table-responsive table-card">
+                <table class="table align-middle" id="customerTable">
+                  <thead class="table-light">
+                    <tr>
+                      <th class="text-center">Lead Category</th>
+                      <th class="text-center">Customer</th>
+                      <th class="text-center">Lead Date</th>
+                      <th class="text-center">Assigned To</th>
+                      <th class="text-center">Active</th>
+                      <th class="text-center">Action</th>
+                    </tr>
+                    <tr>
+                      <th>
+                        <input type="text" [(ngModel)]="filters['LeadCategory']" (input)="onStartTimeChange()"
+                          class="form-control" />
+                      </th>
+                      <th>
+                        <input type="text" [(ngModel)]="filters['CustomerName']" (input)="onStartTimeChange()"
+                          class="form-control" />
+                      </th>
+                      <th>
+                        <div class="input-group">
+                          <input width="100%" class="form-control" placeholder="dd/mm/yyyy" name="d2" #c2="ngModel"
+                            [(ngModel)]="filters['LeadDate']" ngbDatepicker (ngModelChange)="onStartTimeChange()"
+                            #d2="ngbDatepicker" readonly />
+                          <span role="button" (click)="clearDate()" tabindex="0" class="ng-clear-wrapper clear-wrapper"
+                            title="Clear date" *ngIf="filters['LeadDate']">
+                            <span aria-hidden="true" class="ng-clear clear">×</span>
+                          </span>
+                          <button class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="d2.toggle()"
+                            type="button"></button>
+                          <i *ngIf="filters['LeadDate']" class="fa-sharp-duotone fa-solid fa-xmark"></i>
+                        </div>
+                      </th>
+                      <th>
+                        <input type="text" [(ngModel)]="filters['AssignedTo']" (input)="onStartTimeChange()"
+                          class="form-control" />
+                      </th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody class="list form-check-all">
+                    <tr *ngFor="let lead of leads; let i = index">
+                      <td class="text-center">{{ lead.leadCategory ? lead.leadCategory:'--' }}</td>
+                      <td class="text-center">{{ lead.companyName ? lead.companyName:'--'}}</td>
+                      <td class="text-center">{{ lead.leadDate ? lead.leadDate:'--'}}</td>
+                      <td class="text-center">{{ lead.assignedTo ? lead.assignedTo:'--'}}</td>
+                      <td class="text-center">
+                        <input class="form-check-input" type="checkbox" disabled="true" [checked]="lead.isActive" />
+                      </td>
+                      <td>
+                        <ul class="list-inline justify-content-center hstack gap-2 mb-0">
+                          <li class="list-inline-item disabled-icon bg-blue d-flex justify-content-center align-items-center cursor-pointer" [ngClass]="{'disabled-image': !lead.leadCreated}"
+                           (click)="lead.leadCreated?editModal($event, lead.leadId):null" [popover]="'Edit'" placement="auto" triggers="hover" [outsideClick]="true" container="body">
+                           <a><i class="ri-pencil-fill align-bottom text-muted edit-item-btn" ></i></a>
+                          </li>
+
+                          <li class="list-inline-item disabled-icon bg-blue d-flex justify-content-center align-items-center cursor-pointer"
+                           (click)="viewModal($event, lead.leadId)" [popover]="'View'" placement="auto" triggers="hover" [outsideClick]="true" container="body">
+                            <a><i class="ri-eye-fill align-bottom text-muted edit-item-btn" ></i></a>  
+                          </li>
+                          <li class="list-inline-item disabled-icon bg-blue d-flex justify-content-center align-items-center cursor-pointer" 
+                           (click)="callModal($event,lead)" [popover]="'Call'" placement="auto" triggers="hover" [outsideClick]="true" container="body">
+                            <a><i class="ri-phone-line align-bottom text-muted edit-item-btn" ></i></a>
+                          </li>
+                          <li class="list-inline-item disabled-icon bg-blue d-flex justify-content-center align-items-center cursor-pointer" 
+                           (click)="meetingModal($event, lead)" [popover]="'Meeeting'" placement="auto" triggers="hover" [outsideClick]="true" container="body">
+                              <!-- <img src="./assets/images/meeting.png" height="15" width="15" class="edit-item-btn"   (click)="meetingModal($event, lead)" > -->
+                           <a> <i class="ri-team-fill align-bottom text-muted edit-item-btn"></i></a>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                  <div *ngIf="loading && leads.length === 0" class="text-center border-found">
+              <lord-icon src="/assets/json/system-solid-716-spinner-three-dots-loop-scale.json" trigger="loop"
+                colors="primary:#121331,secondary:#08a88a" style="width: 100px; height: 100px">
+              </lord-icon>
+            </div>
+                <div class="noresult" *ngIf="!loading && leads.length == 0">
+                  <div class="text-center">
+                    <!-- <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+                      colors="primary:#121331,secondary:#08a88a" style="width: 75px; height: 75px"></lord-icon> -->
+                   <img src="assets/images/noData.png" height="200" width="300">
+                    <h5 class="mt-2">Sorry! No Data Found</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-end align-items-center mt-3" *ngIf="leads.length != 0">
+                 <div class="m-3 mt-0"> Showing Total Records : <strong>{{totalItems}}</strong> </div>
+                <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="pageSize" [maxSize]="3"
+                  (pageChange)="onPageChange($event)">
+                </ngb-pagination>
+              </div>
+            </div>
+
+            <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+              data-bs-backdrop="static" data-bs-keyboard="false">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <!-- <div class="modal-header bg-light p-3">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                      {{ leadId == "" ? "Add Lead" : "Update Lead" }}
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                      id="close-modal"
+                    ></button>
+                  </div> -->
+                  <div *ngIf="isaddLeadOpen">
+                  <app-add-lead (dataEmitter)="closeEditModal()" [leadResponse]="selectedLead"></app-add-lead>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade" id="showModalMeeting" tabindex="-1" aria-labelledby="exampleModalLabel"
+              aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <!-- <div class="modal-header bg-light p-3">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                      Add Meeting
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                      id="close-modal"
+                    ></button>
+                  </div> -->
+                  <div *ngIf="isaddMeetingOpen">
+                  <app-add-meeting [checkOutValue]="checkOutValue" (dataEmitter)="closeMeetingModal()"
+                    [addmeetingResponse]="selectedMeeting" [isMeetingList]="'Add'"></app-add-meeting>
+                    </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade" id="showModalDetail" tabindex="-1" aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header bg-light p-3">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                      Lead Detail
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                      id="close-modal"></button>
+                  </div>
+                  <app-lead-detail [leadResponse]="selectedLead"></app-lead-detail>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade" id="showChartModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header bg-light p-3">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                      Leads By Status
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                      id="close-modal"></button>
+                  </div>
+                  <div *ngIf="isLeadDashboard">
+                  <app-user-chart [chartList]="'leads'"></app-user-chart>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="showModalCall" tabindex="-1" aria-labelledby="exampleModalLabel"
+              aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <!-- <div class="modal-header bg-light p-3">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Call</h5>
+                  </div> -->
+                  <div *ngIf="isaddcallOpen">
+                  <app-add-call (dataEmitter)="closeCallModal()" [callResponse]="selectedCustomerName"
+                    [isCallList]="'Add'"></app-add-call>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
