@@ -26,6 +26,7 @@ export class ExpenseApprovalListComponent implements OnInit {
   public expenses: ExpenseResponse[] = [];
   public selectedExpense: ExpenseDetailResponse | null = null;
   public selectedCall: string | null = null;
+  public selectAll: boolean = false;
   page = 1; // Current page number
   pageSize = 5; // Number of items per page
   totalItems = 0; // Total number of items
@@ -33,11 +34,13 @@ export class ExpenseApprovalListComponent implements OnInit {
    cardList:string = 'Expenses';
    public selectedUser:any;
    public loading:boolean=false;
+  dateRange: [Date, Date] = [new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+    new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0, 23, 59, 59, 999)];
   @Output() edit = new EventEmitter<ExpenseResponse>();
 
   constructor(
     private expenseService: ExpenseService,
-    private commonService: CommonService,
+    public commonService: CommonService,
     private toasterService: ToastrService,
     private exportService: ExportService,
     private confirmationService: ConfirmationService,
@@ -76,6 +79,21 @@ export class ExpenseApprovalListComponent implements OnInit {
     }, 500);
   }
 
+  toggleSelectAll() {
+    this.expenses.forEach(x => x.isSelected = this.selectAll);
+    this.getSelectedData();
+  }
+
+  onRowSelect() {
+    this.selectAll = this.expenses.every(x => x.isSelected);
+    this.getSelectedData();
+  }
+
+  getSelectedData() {
+    debugger
+    const selected = this.expenses.filter(x => x.isSelected);
+  }
+
   addExpenseApproval(dataToSubmit: any): void {
     this.commonService.updateLoader(true);
     this.expenseService.addExpenseApproval(dataToSubmit).subscribe({
@@ -95,32 +113,36 @@ export class ExpenseApprovalListComponent implements OnInit {
       },
     });
   }
-  getExpenses(page: number = 1) {
-    this.commonService.updateLoader(true);
-    this.filters = Object.fromEntries(
-      Object.entries(this.filters).filter(([key, value]) => value !== null)
-    );
-    const filters: any = {
+getExpenses(page: number = 1) {
+  this.commonService.updateLoader(true);
+  this.filters = Object.fromEntries(
+    Object.entries(this.filters).filter(([key, value]) => value !== null)
+  );
+   const filters: any = {
       ...this.filters,
       userId:this.identifyService.getLoggedUserId(),
       Page: page,
       PageSize: this.pageSize,
       ...(this.selectedUser ? { FilterUserId: this.selectedUser } : {})
     };
-    this.expenseService.getExpenseApprovalList(filters).subscribe({
-      next: (response) => {
-        if (response) {
-          this.expenses = response.data;
-          this.totalItems = response.totalCount;
-        }
-        this.commonService.updateLoader(false);
-      },
-      error: (response: any) => {
-        this.toasterService.error(response);
-        this.commonService.updateLoader(false);
-      },
-    });
-  }
+  this.expenseService.getExpenseApprovalList(filters).subscribe({
+    next: (response) => {
+      if (response) {
+        this.expenses = (response.data || []).map((item: ExpenseResponse) => ({
+          ...item,
+          isSelected: false
+        }));
+        this.totalItems = response.totalCount;
+        this.selectAll = false;
+      }
+      this.commonService.updateLoader(false);
+    },
+    error: (response: any) => {
+      this.toasterService.error(response);
+      this.commonService.updateLoader(false);
+    },
+  });
+}
 
   clearDate() {
     this.filters['ExpenseDate'] = '';

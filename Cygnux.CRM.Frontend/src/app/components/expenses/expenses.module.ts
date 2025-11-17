@@ -17,6 +17,7 @@ import { ExpenseGeneralDetailComponent } from './expense-general-detail/expense-
 import { AddExpenseGeneralMasterComponent } from './add-expense-general-master/add-expense-general-master.component';
 import { ApproveExpenseComponent } from './approve-expense/approve-expense.component';
 import { PopoverModule } from 'ngx-bootstrap/popover';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
     NgSelectModule,
     NgbPaginationModule,
     LayoutModule,
-    PopoverModule
+    PopoverModule,
+    BsDatepickerModule.forRoot(),
   ],
   exports: [AddExpenseComponent, OnlyNumberDirective],
   providers: [DatePipe],

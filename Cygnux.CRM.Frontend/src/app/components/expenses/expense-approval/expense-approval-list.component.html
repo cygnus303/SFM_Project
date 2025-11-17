@@ -18,18 +18,29 @@
                     [clearable]="true" [searchable]="true" (change)="getExpenses()" [(ngModel)]="selectedUser" style="flex:1;">
                   </ng-select>
                 </div> -->
-                  <div class="col-3">
-              <div class="form-group mb-0">
-                <div class="input-group shadow-sm rounded">
-                  <span class="input-group-text bg-white border-end-03px-2 border-start-1">
-                    <i class="ri-group-fill text-dark text-secondary"></i>
-                  </span>
-                   <ng-select [items]="customerService.users" bindLabel="name" bindValue="userId" [placeholder]="'Search User'"
-                    [clearable]="true" [searchable]="true" (change)="getExpenses()" [(ngModel)]="selectedUser" class="form-control border-start-1 line-height p-0 border-remover">
-                  </ng-select>
+                <div class="col-3">
+                  <div class="form-group mb-0">
+                    <div class="input-group shadow-sm rounded"><span class="input-group-text bg-white border-end-0 p-2"><i
+                          class="ri-calendar-fill text-dark text-secondary"></i></span>
+                      <input type="text" placeholder="Daterangepicker" class="form-control border-start-1 line-height" bsDaterangepicker
+                        [(ngModel)]="dateRange"  [bsConfig]="{rangeInputFormat: 'DD.MM.YYYY', dateInputFormat:
+                                     'DD.MM.YYYY',ranges: commonService.ranges }" style="flex:1;">
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+                  <div class="col-3">
+                    <div class="form-group mb-0">
+                      <div class="input-group shadow-sm rounded">
+                        <span class="input-group-text bg-white border-end-03px-2 border-start-1">
+                          <i class="ri-group-fill text-dark text-secondary"></i>
+                        </span>
+                        <ng-select [items]="customerService.users" bindLabel="name" bindValue="userId" [placeholder]="'Search User'"
+                          [clearable]="true" [searchable]="true" (change)="getExpenses()" [(ngModel)]="selectedUser"
+                          class="form-control border-start-1 line-height p-0 border-remover">
+                        </ng-select>
+                      </div>
+                    </div>
+                  </div>
               <div class="col-sm-auto ms-auto">
                 <div class="hstack gap-2">
                   <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()">
@@ -60,6 +71,7 @@
                 <table class="table align-middle" id="customerTable">
                   <thead class="table-light">
                     <tr>
+                      <th class="text-center"></th>
                       <th class="text-center">Expense No.</th>
                       <th class="text-center">Expense Date</th>
                       <th class="text-center">Customer Name</th>
@@ -72,6 +84,7 @@
                       <th class="text-center">Action</th>
                     </tr>
                     <tr>
+                      <th><input type="checkbox" class="pure-checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()"></th>
                       <th>
                         <input type="text" [(ngModel)]="filters['expenseCode']" (input)="onStartTimeChange()"
                           class="form-control" />
@@ -122,6 +135,7 @@
                   </thead>
                   <tbody class="list form-check-all">
                     <tr *ngFor="let expense of expenses; let i = index">
+                      <th><input type="checkbox" class="pure-checkbox" [(ngModel)]="expense.isSelected" (change)="onRowSelect()"></th>
                       <td class="text-center">{{ expense.expenseCode ? expense.expenseCode:'--' }}</td>
                       <td class="text-center">{{ expense.expenseDate ?expense.expenseDate :'--'}}</td>
                       <td class="text-center">{{expense.contactName ? expense.contactName:'--' }}</td>
