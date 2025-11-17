@@ -37,8 +37,8 @@
             <div *ngIf="router.url.includes('/meeting/list') && isMeetingList!=='Update'">
                            <ng-select [items]="meetingCustomerList" bindLabel="customerName" bindValue="item" formControlName="customerName"  placeholder="Search Customer"
                             [disabled]="checkOutValue !== '-' || meetingResponse?.customerName || addMeetingResponse?true:false" [readonly]="checkOutValue !== '-' || meetingResponse?.customerName || addMeetingResponse?true:false" 
-                            [ngClass]="{ 'border-danger': meetingForm.controls['customerName'].invalid && meetingForm.controls['customerName'].touched}" (change)="getCustomerDetail($event)"
-                             [loading]="isCustomerLoading">
+                            [ngClass]="{ 'border-danger': meetingForm.controls['customerName'].invalid && meetingForm.controls['customerName'].touched}" (change)="getCustomerDetail($event)" (input)="getCustomerList($event)"
+                             [loading]="isCustomerLoading" [notFoundText]="notCustomerNameValue" (open)="resetMeetingDropdown()" >
                           </ng-select>
                           </div>
             <div *ngIf="

@@ -61,6 +61,8 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
   public isSubmitting: boolean = false;
   public customerData !: CustomerDetailResponse;
   isCustomerLoading = false; // loader flag
+  public notCustomerNameValue = 'Please enter at least 3 characters';
+
 
 
   @Input() checkOutValue: any;
@@ -179,6 +181,7 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
       })
     }
     const customer= event?event.customerCode:customerCode
+  if(event.customerCode.length>=3){
     this.customerService.getCustomerDetail(customer).subscribe({
       next: (response) => {
         if (response.data[0]) {
@@ -206,6 +209,7 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
         this.commonService.updateLoader(false);
       },
     });
+  }
   }
 
   checkDuplicateMeetingTimes(_control?: AbstractControl): ValidationErrors | null {
@@ -534,11 +538,29 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-getCustomerList(){
-  this.meetingService.getMeetingCustomer(this.identityService.getLoggedUserId()).subscribe({
+getCustomerList(event?:any){
+  const searchTerm=event.target.value
+   if (!searchTerm || searchTerm.trim() === '') {
+      this.meetingCustomerList = [];
+      this.notCustomerNameValue = 'Enter at least 3 character';
+      // this.isSearching = false;
+      return;
+    }
+
+    if (searchTerm.length < 3) {
+      this.notCustomerNameValue = 'Enter at least 3 character';
+      this.meetingCustomerList = [];
+      return;
+    }
+
+    // this.isSearching = true;
+    this.notCustomerNameValue = 'Searching...';
+  if(searchTerm && searchTerm.length >=3){
+  this.meetingService.getMeetingCustomer(this.identityService.getLoggedUserId(),searchTerm).subscribe({
       next: (response) => {
         if (response) {
           this.meetingCustomerList = response.data;
+          this.notCustomerNameValue = 'No items found';
         }
         this.commonService.updateLoader(false);
       },
@@ -547,6 +569,7 @@ getCustomerList(){
         this.commonService.updateLoader(false);
       },
     });
+  }
 }
 
 getLatLongData(event:any){
@@ -565,6 +588,11 @@ getLatLongData(event:any){
         this.commonService.updateLoader(false);
       },
     });
+}
+
+resetMeetingDropdown(){
+  this.meetingCustomerList=[]
+  this.notCustomerNameValue='Please enter at least 3 characters';
 }
 
   ngOnDestroy(): void {

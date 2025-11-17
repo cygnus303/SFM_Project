@@ -102,9 +102,10 @@ export class ExpenseApprovalListComponent implements OnInit {
     );
     const filters: any = {
       ...this.filters,
+      userId:this.identifyService.getLoggedUserId(),
       Page: page,
       PageSize: this.pageSize,
-      userId:this.selectedUser?this.selectedUser:this.identifyService.getLoggedUserId()
+      ...(this.selectedUser ? { FilterUserId: this.selectedUser } : {})
     };
     this.expenseService.getExpenseApprovalList(filters).subscribe({
       next: (response) => {
@@ -135,8 +136,9 @@ export class ExpenseApprovalListComponent implements OnInit {
     this.commonService.updateLoader(true);
     const filters: any = {
       ...this.filters,
-      UserId:this.selectedUser?this.selectedUser:this.identifyService.getLoggedUserId(),
-      export:false
+      UserId:this.identifyService.getLoggedUserId(),
+      export:false,
+      ...(this.selectedUser ? { FilterUserId: this.selectedUser } : {})
     }
     this.expenseService.exportExpense(filters).subscribe({
       next: (response) => {
