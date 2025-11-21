@@ -104,7 +104,7 @@ toggleSelectAll() {
   if (this.selectAll) {
     // Apply check ONLY to allowed rows
     this.expenses.forEach(x => {
-      if (!x.isManager_AuditApproved && x.createdBy !== this.identifyService.getLoggedUserId()) {
+      if (!x.isManager_AuditApproved && x.createdBy !== this.identifyService.getLoggedUserId() && x.isEdit !=='Y') {
         x.isSelected = true;
       } else {
         x.isSelected = false; // keep disabled rows unchecked
@@ -118,6 +118,11 @@ toggleSelectAll() {
   this.selectedAny = this.expenses.some(x => x.isSelected);
 }
 
+get isFilterApplied(): boolean {
+  if (!this.filters) return false;
+
+  return Object.values(this.filters).some(v => v !== null && v !== '' && v !== undefined);
+}
 
 
 
