@@ -32,8 +32,13 @@ export class ExpenseApprovalListComponent implements OnInit {
   totalItems = 0; // Total number of items
   filters: { [key: string]: string } = {}; // Dynamic filter object
    cardList:string = 'Expenses';
+  public reasonRemark:string = '';
    public selectedUser:any;
    public loading:boolean=false;
+   public selectedIds: Set<any> = new Set(); 
+   public permissionType:string='';
+   public remark:string='';
+   selectedAny: boolean = false;
   dateRange: [Date, Date] = [new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0, 23, 59, 59, 999)];
   @Output() edit = new EventEmitter<ExpenseResponse>();
@@ -52,7 +57,7 @@ export class ExpenseApprovalListComponent implements OnInit {
     this.commonService.loading.subscribe((state: boolean) => {
       this.loading = state;
     });
-    this.getExpenses();
+    this.getExpenses(this.dateRange);
     this.customerService.getUsers();
   }
 
@@ -79,20 +84,135 @@ export class ExpenseApprovalListComponent implements OnInit {
     }, 500);
   }
 
-  toggleSelectAll() {
-    this.expenses.forEach(x => x.isSelected = this.selectAll);
-    this.getSelectedData();
+// toggleSelectAll() {
+//   if (this.selectAll) {
+//     this.selectedIds.clear();    // no need to store thousands of IDs
+//     this.selectAll = true;
+//   } else {
+//     this.selectedIds.clear();
+//     this.selectAll = false;
+//   }
+//   this.expenses.forEach(x => x.isSelected = this.selectAll);
+//     this.selectedAny = this.expenses.some(x => x.isSelected);
+
+// }
+
+toggleSelectAll() {
+  this.selectedIds.clear();
+
+  if (this.selectAll) {
+    // Apply check ONLY to allowed rows
+    this.expenses.forEach(x => {
+      if (!x.isManager_AuditApproved && x.createdBy !== this.identifyService.getLoggedUserId()) {
+        x.isSelected = true;
+      } else {
+        x.isSelected = false; // keep disabled rows unchecked
+      }
+    });
+  } else {
+    // Uncheck all rows
+    this.expenses.forEach(x => x.isSelected = false);
   }
 
-  onRowSelect() {
-    this.selectAll = this.expenses.every(x => x.isSelected);
-    this.getSelectedData();
+  this.selectedAny = this.expenses.some(x => x.isSelected);
+}
+
+
+
+
+onRowSelect(row: any) {
+  if (row.isSelected) {
+    // ADD selected row
+    this.selectedIds.add({
+      attendeeCode: row.attendeeCode,
+      expenseId: row.expenseCode,
+      meetingId: row.meetingId,
+    });
+  } else {
+    // REMOVE only this row's ID
+    [...this.selectedIds].forEach(item => {
+      if (item.expenseId === row.expenseId) {
+        this.selectedIds.delete(item);
+      }
+    });
+    this.selectAll = false;
+  }
+    this.selectedAny = this.expenses.some(x => x.isSelected);
+}
+
+
+openReasonSwal(type:string) {
+  const modalElement = document.getElementById('Remarkmodal');
+    if (modalElement) {
+      const modal = new Modal(modalElement);
+      modal.show();
+      this.permissionType=type
+    }
+}
+
+getSelectedJSON(isApproved: boolean = false) {
+  const result: any = {
+    approvedBy: this.identifyService.getLoggedUserId(),
+    isApproved: isApproved,
+    reasonRemark: this.reasonRemark,
+  };
+
+  if (this.selectAll) {
+    result.isSelectAll = true;
+    result.filterJson = JSON.stringify({
+    page: 1,
+    pageSize: this.totalItems
+  });
+
+    result.startDate = this.dateRange?.[0]
+      ? this.dateRange[0].toLocaleDateString("en-GB")
+      : null;
+
+    result.endDate = this.dateRange?.[1]
+      ? this.dateRange[1].toLocaleDateString("en-GB")
+      : null;
+
+    result.jsonData = null;
+  } 
+  else {
+    result.isSelectAll = false;
+    result.jsonData =
+
+[...this.selectedIds];
+    
+    
+   ;
+     result.startDate=null
+     result.endDate=null
+     result.filterJson=null
   }
 
-  getSelectedData() {
-    debugger
-    const selected = this.expenses.filter(x => x.isSelected);
+  console.log("FINAL JSON", result);
+
+this.expenseService.multipleExpenseApproval(result).subscribe({
+  next: (response: any) => {
+    if (response?.success) {
+      this.toasterService.success(response.data.message);
+      this.selectAll = false;
+      this.selectedAny = false;
+      this.selectedIds = new Set();
+      this.getExpenses(this.dateRange);
+      this.onCancel();
+    } else {
+      this.toasterService.error(response?.error?.message || 'Something went wrong');
+    }
+  },
+
+  error: (err) => {
+    this.toasterService.error(err?.error?.message || 'Server error');
+  },
+
+  complete: () => {
+    this.commonService.updateLoader(false);
   }
+});
+
+}
 
   addExpenseApproval(dataToSubmit: any): void {
     this.commonService.updateLoader(true);
@@ -113,8 +233,8 @@ export class ExpenseApprovalListComponent implements OnInit {
       },
     });
   }
-getExpenses(page: number = 1) {
-  this.commonService.updateLoader(true);
+getExpenses(event?: any, page: number = 1) {
+this.commonService.updateLoader(true);
   this.filters = Object.fromEntries(
     Object.entries(this.filters).filter(([key, value]) => value !== null)
   );
@@ -123,24 +243,31 @@ getExpenses(page: number = 1) {
       userId:this.identifyService.getLoggedUserId(),
       Page: page,
       PageSize: this.pageSize,
+       startDate: event?.[0] ? event[0].toLocaleDateString("en-GB") : this.dateRange?.[0]?.toLocaleDateString("en-GB") || null,
+      endDate: event?.[1] ? event[1].toLocaleDateString("en-GB") : this.dateRange?.[1]?.toLocaleDateString("en-GB") || null,
       ...(this.selectedUser ? { FilterUserId: this.selectedUser } : {})
     };
+
   this.expenseService.getExpenseApprovalList(filters).subscribe({
     next: (response) => {
-      if (response) {
-        this.expenses = (response.data || []).map((item: ExpenseResponse) => ({
+
+      this.totalItems = response.totalCount;
+      this.expenses = response.data.map(item => {
+
+        let isSelected = false;
+        if (this.selectAll) {
+          isSelected = true;
+        }
+        else if (this.selectedIds.has(item.expenseCode)) {
+          isSelected = true;
+        }
+        return {
           ...item,
-          isSelected: false
-        }));
-        this.totalItems = response.totalCount;
-        this.selectAll = false;
-      }
+          isSelected
+        };
+      });
       this.commonService.updateLoader(false);
-    },
-    error: (response: any) => {
-      this.toasterService.error(response);
-      this.commonService.updateLoader(false);
-    },
+    }
   });
 }
 
@@ -160,6 +287,8 @@ getExpenses(page: number = 1) {
       ...this.filters,
       UserId:this.identifyService.getLoggedUserId(),
       export:false,
+       startDate: event?.[0] ? event[0].toLocaleDateString("en-GB") : this.dateRange?.[0]?.toLocaleDateString("en-GB") || null,
+      endDate: event?.[1] ? event[1].toLocaleDateString("en-GB") : this.dateRange?.[1]?.toLocaleDateString("en-GB") || null,
       ...(this.selectedUser ? { FilterUserId: this.selectedUser } : {})
     }
     this.expenseService.exportExpense(filters).subscribe({
@@ -181,6 +310,8 @@ getExpenses(page: number = 1) {
     this.commonService.updateLoader(true);
     const filters: any = {
       UserId:this.identifyService.getLoggedUserId(),
+       startDate: event?.[0] ? event[0].toLocaleDateString("en-GB") : this.dateRange?.[0]?.toLocaleDateString("en-GB") || null,
+      endDate: event?.[1] ? event[1].toLocaleDateString("en-GB") : this.dateRange?.[1]?.toLocaleDateString("en-GB") || null,
       export:false
     }
     this.expenseService.exportExpense(filters).subscribe({
@@ -198,7 +329,7 @@ getExpenses(page: number = 1) {
   }
   onPageChange(page: number) {
     this.page = page;
-    this.getExpenses(this.page);
+    this.getExpenses(this.dateRange,this.page);
   }
   getExpense(data: any) {
     this.commonService.updateLoader(true);
@@ -252,7 +383,25 @@ getExpenses(page: number = 1) {
       document.querySelectorAll('.modal-backdrop').forEach((backdrop) => {
         backdrop.remove();
       });
-      this.getExpenses();
+      this.getExpenses(this.dateRange);
+    }
+  }
+
+  onSubmit(){
+    if(this.permissionType === 'Approve'){
+      this.getSelectedJSON(true);
+    }else if(this.permissionType === 'Reject'){
+      this.getSelectedJSON(false)
+    }
+  }
+
+  onCancel(){
+  const modalElement = document.getElementById('Remarkmodal');
+    if (modalElement) {
+      const modal = Modal.getInstance(modalElement);
+      modal?.hide();
+      this.reasonRemark ='';
+     
     }
   }
 }

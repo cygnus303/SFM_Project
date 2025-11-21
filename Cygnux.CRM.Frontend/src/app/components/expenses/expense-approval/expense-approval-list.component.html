@@ -22,7 +22,7 @@
                   <div class="form-group mb-0">
                     <div class="input-group shadow-sm rounded"><span class="input-group-text bg-white border-end-0 p-2"><i
                           class="ri-calendar-fill text-dark text-secondary"></i></span>
-                      <input type="text" placeholder="Daterangepicker" class="form-control border-start-1 line-height" bsDaterangepicker
+                      <input type="text" placeholder="Daterangepicker" class="form-control border-start-1 line-height" bsDaterangepicker (bsValueChange)="getExpenses($event)"
                         [(ngModel)]="dateRange"  [bsConfig]="{rangeInputFormat: 'DD.MM.YYYY', dateInputFormat:
                                      'DD.MM.YYYY',ranges: commonService.ranges }" style="flex:1;">
                     </div>
@@ -41,7 +41,7 @@
                       </div>
                     </div>
                   </div>
-              <div class="col-sm-auto ms-auto">
+                  <div class="col-sm-auto ms-auto">
                 <div class="hstack gap-2">
                   <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()">
                     <i class="ri-delete-bin-2-line"></i>
@@ -84,7 +84,7 @@
                       <th class="text-center">Action</th>
                     </tr>
                     <tr>
-                      <th><input type="checkbox" class="pure-checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()"></th>
+                      <th><input type="checkbox" class="pure-checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()"   [checked]="selectAll"></th>
                       <th>
                         <input type="text" [(ngModel)]="filters['expenseCode']" (input)="onStartTimeChange()"
                           class="form-control" />
@@ -135,7 +135,7 @@
                   </thead>
                   <tbody class="list form-check-all">
                     <tr *ngFor="let expense of expenses; let i = index">
-                      <th><input type="checkbox" class="pure-checkbox" [(ngModel)]="expense.isSelected" (change)="onRowSelect()"></th>
+                      <th><input type="checkbox" class="pure-checkbox" [(ngModel)]="expense.isSelected" (change)="onRowSelect(expense)" [class.disabled-input]="expense.isManager_AuditApproved || expense.createdBy === identifyService.getLoggedUserId()"></th>
                       <td class="text-center">{{ expense.expenseCode ? expense.expenseCode:'--' }}</td>
                       <td class="text-center">{{ expense.expenseDate ?expense.expenseDate :'--'}}</td>
                       <td class="text-center">{{expense.contactName ? expense.contactName:'--' }}</td>
@@ -160,11 +160,14 @@
                     </tr>
                   </tbody>
                 </table>
+                
+
                   <div *ngIf="loading && expenses.length === 0" class="text-center border-found">
                 <lord-icon src="/assets/json/system-solid-716-spinner-three-dots-loop-scale.json" trigger="loop"
                   colors="primary:#121331,secondary:#08a88a" style="width: 100px; height: 100px">
                 </lord-icon>
             </div>
+            
                 <div class="noresult" *ngIf="!loading && expenses.length == 0">
                   <div class="text-center">
                     <!-- <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
@@ -174,12 +177,19 @@
                   </div>
                 </div>
               </div>
-              <div class="d-flex justify-content-end align-items-center mt-3" *ngIf="expenses.length != 0">
-                 <div class="m-3 mt-0"> Showing Total Records : <strong>{{totalItems}}</strong> </div>
-                <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="pageSize" [maxSize]="3"
-                  (pageChange)="onPageChange($event)">
-                </ngb-pagination>
+              <div class="row">
+                <div *ngIf="selectedAny" class="d-flex gap-2 col-8 justify-content-center align-items-center">
+                  <button class="btn btn-success" (click)="openReasonSwal('Approve')">Approve</button>
+                  <button class="btn btn-danger" (click)="openReasonSwal('Reject')">Reject</button>
+                </div>
+                <div class="d-flex justify-content-end align-items-center col-sm-auto ms-auto mt-3" *ngIf="expenses.length != 0">
+                  <div class="m-3 mt-0"> Showing Total Records : <strong>{{totalItems}}</strong> </div>
+                  <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="pageSize" [maxSize]="3"
+                    (pageChange)="onPageChange($event)">
+                  </ngb-pagination>
+                </div>
               </div>
+
             </div>
             <div class="modal fade" id="showApproveExpense" tabindex="-1" aria-labelledby="exampleModalLabel"
               aria-hidden="true" data-bs-backdrop="static"
@@ -219,3 +229,29 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="Remarkmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog custom-top-modal">
+    <div class="modal-content">
+      <h5 class="p-2 m-0 bg-color">Are you want to {{permissionType}}?</h5>
+     <div class="p-3 pt-2">
+      <div>
+        <label>Remarks</label>
+        <textarea type="text" [(ngModel)]="reasonRemark" class="w-100 form-control" #remarksInput="ngModel"  minlength="5" required>
+          </textarea>
+        <div *ngIf="remarksInput.invalid && remarksInput.touched" class="text-danger">
+          <small *ngIf="remarksInput.errors?.['required']">Remarks are required.</small>
+          <small *ngIf="remarksInput.errors?.['minlength']">Remarks must be at least 5 characters long.</small>
+        </div>
+      </div>
+      <div class="button-group gap-2  d-flex justify-content-end p-3">
+        <button [disabled]="remarksInput.invalid" (click)="onSubmit()"
+          class="btn btn-success d-flex align-items-center mr-2">
+          Yes
+        </button>
+      <button type="button" data-bs-dismiss="modal" class="btn btn-danger d-flex align-items-center" (click)="onCancel()">No</button>
+      </div>
+     </div>
+    </div>
+  </div>
+</div>
+

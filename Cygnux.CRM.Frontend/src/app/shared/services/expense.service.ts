@@ -75,4 +75,8 @@ export class ExpenseService {
   expenseApproval(approvalRequest: ApprovalRequest): Observable<IApiBaseResponse<CommonResponse>> {
     return this.apiHandlerService.Post('Expense/approval', approvalRequest);
   }
+  
+  multipleExpenseApproval(approvalRequest:any): Observable<IApiBaseResponse<CommonResponse>> {
+    return this.apiHandlerService.Post('Expense/MultipleExpenseAproveList', approvalRequest);
+  }
 }
