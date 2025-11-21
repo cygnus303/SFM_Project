@@ -84,7 +84,7 @@
                       <th class="text-center">Action</th>
                     </tr>
                     <tr>
-                      <th><input type="checkbox" class="pure-checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()"   [checked]="selectAll"></th>
+                      <th><input type="checkbox" class="pure-checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()"   [checked]="selectAll" [class.disabled-input]="isFilterApplied"></th>
                       <th>
                         <input type="text" [(ngModel)]="filters['expenseCode']" (input)="onStartTimeChange()"
                           class="form-control" />
@@ -135,7 +135,7 @@
                   </thead>
                   <tbody class="list form-check-all">
                     <tr *ngFor="let expense of expenses; let i = index">
-                      <th><input type="checkbox" class="pure-checkbox" [(ngModel)]="expense.isSelected" (change)="onRowSelect(expense)" [class.disabled-input]="expense.isManager_AuditApproved || expense.createdBy === identifyService.getLoggedUserId()"></th>
+                      <th><input type="checkbox" class="pure-checkbox" [(ngModel)]="expense.isSelected" (change)="onRowSelect(expense)" [class.disabled-input]="expense.isManager_AuditApproved || expense.createdBy === identifyService.getLoggedUserId()||expense.isEdit==='Y'"></th>
                       <td class="text-center">{{ expense.expenseCode ? expense.expenseCode:'--' }}</td>
                       <td class="text-center">{{ expense.expenseDate ?expense.expenseDate :'--'}}</td>
                       <td class="text-center">{{expense.contactName ? expense.contactName:'--' }}</td>
