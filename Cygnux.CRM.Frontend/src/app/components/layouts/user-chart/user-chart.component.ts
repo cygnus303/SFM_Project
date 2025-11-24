@@ -379,6 +379,7 @@ export class UserChartComponent {
         enddate: this.endDate
       }
       if (this.chartList === 'leads') {
+        this.getLeadStatusfilter=[];
         this.isCardLoading=true
         this.leadService.getLeadCatagoryData(filters).subscribe({
           next: (response) => {
@@ -394,6 +395,7 @@ export class UserChartComponent {
           }
         });
       } else if (this.chartList === 'meeting') {
+        this.getLeadStatusfilter=[];
         this.isCardLoading=true;
         this.meetingService.getMeetingStatusData(filters).subscribe({
           next: (response) => {
@@ -589,6 +591,7 @@ export class UserChartComponent {
       startDate: new Date(this.startDate).toUTCString(),
       endDate: new Date(this.endDate).toUTCString()
     };
+    this.getLeadStatusfilter=[];
     this.isCardLoading=true;
     this.complaintService.getCompalintCounteData(filters).subscribe({
       next: (response) => {

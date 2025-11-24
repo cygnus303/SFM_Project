@@ -26,6 +26,9 @@ export class AttendanceDetailComponent{
   public getAttendancefilter!:AttendanceCardResponse;
   public getfilter:GetFilter[]=[];
   public userIdData:any;
+  public isCardLoading:boolean=false;
+  placeholderArray = Array(7);
+
   ranges: IRange[] = [
     {
       value: [new Date(new Date().setDate(new Date().getDate() - 7)), new Date()],
@@ -129,6 +132,8 @@ constructor(
         startdate:event[0].toISOString(),
         enddate:event[1].toISOString()
       }
+      this.getfilter=[];
+      this.isCardLoading=true;
      this.attendanceService.getAttendanceCardDetail(filters).subscribe({
       next:(response) =>{
         this.getAttendancefilter = response.data;
@@ -137,10 +142,12 @@ constructor(
           { name: "Total Number of Present Day", count: response.data[1].attendanceStatusCount || 0 ,color:'wheat' },
           { name: "Total Number of Absent Day", count: response.data[2].attendanceStatusCount || 0 ,color:'pink' }
         ];
+      this.isCardLoading=false;
       },
       error: (response: any) => {
         this.toasterService.error(response);
         this.commonService.updateLoader(false);
+      this.isCardLoading=false;
       },
      });
     }

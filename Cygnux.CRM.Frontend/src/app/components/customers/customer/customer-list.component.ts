@@ -118,6 +118,7 @@ export class CustomerListComponent implements OnInit {
   }
 
   getCustomerfilters(event:any){
+    this.getfilter=[];
     this.startDate= event?.[0] ? event[0].toLocaleDateString("en-GB") : this.dateRange?.[0]?.toLocaleDateString("en-GB") || null,
     this.endDate = event?.[1]  ? event[1].toLocaleDateString("en-GB") : this.dateRange?.[1]?.toLocaleDateString("en-GB") || null
     if(event?.length){
