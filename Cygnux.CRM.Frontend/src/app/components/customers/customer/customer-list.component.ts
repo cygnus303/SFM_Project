@@ -27,7 +27,7 @@ export class CustomerListComponent implements OnInit {
   getCustomerfilter!:CustomerFilter;
   selectedCustomer: CustomerResponse | null = null;
   page = 1; // Current page number
-  pageSize = 5; // Number of items per page
+  pageSize = 10; // Number of items per page
   totalItems = 0; // Total number of items
   filters: { [key: string]: string } = {}; // Dynamic filter object
   public isCallLoad:boolean=false;
@@ -35,6 +35,7 @@ export class CustomerListComponent implements OnInit {
   public loading:boolean=false;
   placeholderArray = Array(7);
   public isCardLoading:boolean=false;
+  public isExportLoading = false;
 
   @Output() edit = new EventEmitter<CustomerResponse>();
   dateRange: [Date, Date] = [new Date(new Date().getFullYear(), new Date().getMonth(), 1),
@@ -163,17 +164,17 @@ export class CustomerListComponent implements OnInit {
 
   exportCustomers(event: any) {
     event.preventDefault();
-    this.commonService.updateLoader(true);
+    this.isExportLoading = true;
     this.customerService.exportCustomer(this.filters).subscribe({
       next: (response) => {
         if (response) {
           this.exportService.exportToExcel(response.data);
         }
-        this.commonService.updateLoader(false);
+         this.isExportLoading = false;
       },
       error: (response: any) => {
         this.toasterService.error(response);
-        this.commonService.updateLoader(false);
+         this.isExportLoading = false;
       },
     });
   }

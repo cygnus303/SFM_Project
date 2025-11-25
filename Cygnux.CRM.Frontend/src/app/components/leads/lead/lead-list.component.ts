@@ -31,7 +31,7 @@ export class LeadListComponent implements OnDestroy {
   leadId: string = '';
   selectedMeeting: AddMeetingResponse | null = null;
   page = 1; // Current page number
-  pageSize = 5; // Number of items per page
+  pageSize = 10; // Number of items per page
   totalItems = 0; // Total number of items
   fileError: string | null = null; // For error handling
   filters: { [key: string]: string } = {}; // Dynamic filter object
@@ -42,6 +42,7 @@ export class LeadListComponent implements OnDestroy {
   public endDate: any;
   public startDate: any;
   public selectedUser: any;
+  public isExportLoading = false;
   dateRange: [Date, Date] = [new Date(new Date().getFullYear(), new Date().getMonth(), 1),
   new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0, 23, 59, 59, 999)];
   checkOutValue: string = '';
@@ -168,20 +169,20 @@ export class LeadListComponent implements OnDestroy {
     this.startDate = this.dateRange?.[0]?.toLocaleDateString("en-GB") || '';
      this.endDate = this.dateRange?.[1]?.toLocaleDateString("en-GB") || '';
     event.preventDefault();
-    this.commonService.updateLoader(true);
      const filters: any = {
       ...this.filters,
     };
+     this.isExportLoading = true;
     this.leadService.exportLead(this.startDate, this.endDate,this.selectedUser?this.selectedUser:this.identityService.getLoggedUserId(),filters).subscribe({
       next: (response) => {
         if (response) {
           this.exportService.exportToExcel(response.data);
         }
-        this.commonService.updateLoader(false);
+        this.isExportLoading = false;
       },
       error: (response: any) => {
         this.toasterService.error(response);
-        this.commonService.updateLoader(false);
+        this.isExportLoading = false;
       },
     });
   }

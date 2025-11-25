@@ -37,10 +37,10 @@ export class ComplaintListComponent implements OnInit {
   public isAddComplaint:boolean=false;
   public isComplaintdashboard:boolean=false;
   public loading:boolean=false;
-
+  public isExportLoading = false;
 
   page = 1; // Current page number
-  pageSize = 5; // Number of items per page
+  pageSize = 10; // Number of items per page
   totalItems = 0; // Total number of items
   selectedFilter: string = ''
   private debounceTimer: any;
@@ -107,21 +107,20 @@ export class ComplaintListComponent implements OnInit {
     event.preventDefault();
       this.startDate=this.dateRange?.[0] ? this.dateRange[0].toLocaleDateString("en-GB") : '';
     this.endDate=this.dateRange?.[1]  ? this.dateRange[1].toLocaleDateString("en-GB") : ''
-
-    this.commonService.updateLoader(true);
      const filters: any = {
       ...this.filters,
     };
+    this.isExportLoading = true;
     this.complaintService.getComplaintListexport(this.identifyService.getLoggedUserId(),this.startDate,this.endDate,filters).subscribe({
       next: (response) => {
         if (response) {
           this.exportService.exportToExcel(response.data);
         }
-        this.commonService.updateLoader(false);
+        this.isExportLoading = false;
       },
       error: (response: any) => {
         this.toasterService.error(response);
-        this.commonService.updateLoader(false);
+        this.isExportLoading = false;
       },
     });
   }

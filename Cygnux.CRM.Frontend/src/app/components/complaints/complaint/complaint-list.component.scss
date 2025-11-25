@@ -86,6 +86,7 @@ input[type="radio"]:after{
 #customerTable {
   overflow-x: auto;
   display: block;   /* important for scroll to appear */
+  table-layout: fixed;
 }
 
 /* Custom scrollbar only for this table */
@@ -111,4 +112,17 @@ input[type="radio"]:after{
 #customerTable {
   scrollbar-width: thin;
   scrollbar-color: #405189 #f1f1f1;
+}
+
+#customerTable {
+  table-layout: fixed !important;
+  width: 100%;
+}
+
+#customerTable thead tr th,
+#customerTable tbody tr td {
+  width: 150px !important;   /* 🔥 fixed width for ALL columns */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
