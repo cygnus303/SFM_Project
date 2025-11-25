@@ -38,6 +38,7 @@ export class MeetingListComponent implements OnInit {
   public isAddMeeting:boolean=false;
   public isMeetingdashboard:boolean=false;
   public loading:boolean=false;
+  public isExportLoading = false;
 
   @Output() edit = new EventEmitter<MeetingResponse>();
   dateRange: [Date, Date] = [new Date(new Date().getFullYear(), new Date().getMonth(), 1),
@@ -68,21 +69,21 @@ export class MeetingListComponent implements OnInit {
       this.startDate = this.dateRange?.[0]?.toLocaleDateString("en-GB") || '';
      this.endDate = this.dateRange?.[1]?.toLocaleDateString("en-GB") || '';
     event.preventDefault();
-    this.commonService.updateLoader(true);
        const filters: any = {
       ...this.filters,
       // UserID:this.selectedUser?this.selectedUser:this.identityService.getLoggedUserId(),
     };
+    this.isExportLoading = true;
     this.meetingService.exportMeeting(this.selectedUser?this.selectedUser:this.identityService.getLoggedUserId(),filters,this.startDate,this.endDate).subscribe({
       next: (response) => {
         if (response) {
           this.exportService.exportToExcel(response.data);
         }
-        this.commonService.updateLoader(false);
+        this.isExportLoading = false;
       },
       error: (response: any) => {
         this.toasterService.error(response);
-        this.commonService.updateLoader(false);
+        this.isExportLoading = false;
       },
     });
   }

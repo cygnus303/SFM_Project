@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { WelcomeComponent } from './welcome.component';
 import { WelcomeRoutes } from './welcome.routes';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 
 
 @NgModule({
@@ -16,6 +18,8 @@ import { WelcomeRoutes } from './welcome.routes';
     LayoutModule,
     BsDatepickerModule.forRoot(),
     RouterModule.forChild(WelcomeRoutes),
+     NgApexchartsModule,
+    CanvasJSAngularChartsModule
   ]
 })
 export class WelcomeModule { }

@@ -60,3 +60,6 @@
   100% { opacity: 1; }
 }
 
+.table>:not(caption)>*>* {
+    padding: 8px .6rem !important;
+}

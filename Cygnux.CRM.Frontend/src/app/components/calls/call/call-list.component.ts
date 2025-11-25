@@ -24,7 +24,7 @@ export class CallListComponent implements OnInit {
   selectedCall: CallDetailResponse | null = null;
   callId: string | null = null;
   page = 1; // Current page number
-  pageSize = 5; // Number of items per page
+  pageSize = 10; // Number of items per page
   totalItems = 0; // Total number of items
   filters: { [key: string]: string } = {}; // Dynamic filter object
   @Output() edit = new EventEmitter<CallResponse>();
@@ -35,7 +35,7 @@ export class CallListComponent implements OnInit {
   public loading:boolean=false;
   public isCardLoading:boolean=false;
   placeholderArray = Array(7);
-
+  public isExportLoading = false;
 
   constructor(
     private callService: CallService,
@@ -99,18 +99,18 @@ export class CallListComponent implements OnInit {
       ...this.filters,
       UserID:this.identityService.getLoggedUserId(),
     };
+    this.isExportLoading = true;
     event.preventDefault();
-    this.commonService.updateLoader(true);
     this.callService.exportCall(filters).subscribe({
       next: (response) => {
         if (response) {
           this.exportService.exportToExcel(response.data);
         }
-        this.commonService.updateLoader(false);
+        this.isExportLoading = false;
       },
       error: (response: any) => {
         this.toasterService.error(response);
-        this.commonService.updateLoader(false);
+        this.isExportLoading = false;
       },
     });
   }

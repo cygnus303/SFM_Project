@@ -30,6 +30,11 @@ export class SidebarComponent implements OnInit {
     });
   }
 
+  changeTitle(title: string) {
+  this.commonService.updateTitle(title);
+}
+
+
   ngOnChanges(changes: any): void {
     this.commonService.isSFMMaster.subscribe((res) => {
       this.isSFMMasters = res

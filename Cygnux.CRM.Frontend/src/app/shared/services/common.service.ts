@@ -11,7 +11,10 @@ export class CommonService {
   loading = new BehaviorSubject(false);
   isLoading = this.loading.asObservable();
   public userChart = new Subject<boolean>()
-  public complaintViewModal = new Subject<any>()
+  public complaintViewModal = new Subject<any>();
+private storedTitle = localStorage.getItem('pageTitle') || 'Dashboard';
+  private titleSource = new BehaviorSubject<string>(this.storedTitle);
+  currentTitle = this.titleSource.asObservable();
   updateLoader(isLoading: boolean) {
     this.loading.next(isLoading);
   }
@@ -63,6 +66,11 @@ export class CommonService {
       label: 'Last Month',
     },
   ];
+
+  updateTitle(title: string) {
+    localStorage.setItem('pageTitle', title);
+    this.titleSource.next(title);
+  }
 
   getMenu(): Observable<IApiBaseResponse<any>> {
     return this.apiHandlerService.Get(`External/Menu?userid=${this.identifyService.getLoggedUserId()}`);

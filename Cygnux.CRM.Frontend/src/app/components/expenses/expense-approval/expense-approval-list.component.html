@@ -1,12 +1,12 @@
 <div class="page-content">
   <div class="container-fluid">
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
           <h4 class="mb-sm-0">Expense Approval</h4>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="row">
       <div class="col-lg-12">
         <div class="card">
@@ -19,12 +19,12 @@
                   </ng-select>
                 </div> -->
                 <div class="col-3">
-                  <div class="form-group mb-0">
+                  <div class="form-group mb-0 cursor-pointer" (click)="dp.toggle(); $event.stopPropagation()">
                     <div class="input-group shadow-sm rounded"><span class="input-group-text bg-white border-end-0 p-2"><i
                           class="ri-calendar-fill text-dark text-secondary"></i></span>
-                      <input type="text" placeholder="Daterangepicker" class="form-control border-start-1 line-height" bsDaterangepicker (bsValueChange)="getExpenses($event)"
-                        [(ngModel)]="dateRange"  [bsConfig]="{rangeInputFormat: 'DD.MM.YYYY', dateInputFormat:
-                                     'DD.MM.YYYY',ranges: commonService.ranges }" style="flex:1;">
+                      <input type="text" placeholder="Daterangepicker" class="form-control border-start-1 line-height" #dp="bsDaterangepicker" bsDaterangepicker (bsValueChange)="getExpenses($event)"
+                        [(ngModel)]="dateRange" name="dateRange" [class.disabled-input]="true"   [bsConfig]="{rangeInputFormat: 'DD.MM.YYYY', dateInputFormat:
+                                     'DD.MM.YYYY',ranges: commonService.ranges,containerClass: 'theme-dark-blue' }" style="flex:1;">
                     </div>
                   </div>
                 </div>
@@ -46,21 +46,12 @@
                   <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()">
                     <i class="ri-delete-bin-2-line"></i>
                   </button>
-
-                  <span class="dropdown">
-                    <button class="btn btn-soft-info btn-icon fs-14" type="button" id="dropdownMenuButton1"
-                      data-bs-toggle="dropdown" aria-expanded="false">
-                      <i class="ri-settings-4-line"></i>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                      <li>
-                        <a class="dropdown-item" href="#" (click)="exportExpenses($event)">Export To Excel</a>
-                      </li>
-                      <!-- <li>
-                        <a class="dropdown-item" href="#" (click)="exportCSVExpenses($event)">Export to CSV</a>
-                      </li> -->
-                    </ul>
-                  </span>
+                  
+                  <button class="btn btn-square btn-primary pull-right rounded-3 ms-2" [disabled]="isExportLoading"
+                    (click)="exportExpenses($event)">
+                    <span *ngIf="isExportLoading" class="spinner-border spinner-border-sm"></span>
+                    <i *ngIf="!isExportLoading" class="bi bi-download"></i>
+                  </button>
                 </div>
               </div>
             </div>
@@ -68,7 +59,7 @@
           <div class="card-body">
             <div>
               <div class="table-responsive table-card">
-                <table class="table align-middle" id="customerTable">
+                <table class="table table-bordered align-middle" id="customerTable">
                   <thead class="table-light">
                     <tr>
                       <th class="text-center"></th>

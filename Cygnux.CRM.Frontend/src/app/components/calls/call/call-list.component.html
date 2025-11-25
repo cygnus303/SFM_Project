@@ -1,12 +1,12 @@
 <div class="page-content">
   <div class="container-fluid">
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
           <h4 class="mb-sm-0">Calls</h4>
         </div>
       </div>
-    </div>
+    </div> -->
     <app-card-list [getfilter]="getfilter"></app-card-list>
     <ng-container *ngIf="isCardLoading">
     <div class="d-flex flex-row flex-nowrap w-100 p-4 pe-0" style="gap: 1rem; overflow-x: auto;">
@@ -47,20 +47,11 @@
                       class="file" />
                   </div>
 
-                  <span class="dropdown">
-                    <button class="btn btn-soft-info btn-icon fs-14" type="button" id="dropdownMenuButton1"
-                      data-bs-toggle="dropdown" aria-expanded="false">
-                      <i class="ri-settings-4-line"></i>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                      <li>
-                        <a class="dropdown-item" href="#" (click)="exportCalls($event)">Export To Excel</a>
-                      </li>
-                      <!-- <li>
-                        <a class="dropdown-item" href="#" (click)="exportCSVCalls($event)">Export to CSV</a>
-                      </li> -->
-                    </ul>
-                  </span>
+                <button class="btn btn-square btn-primary pull-right rounded-3 ms-2" [disabled]="isExportLoading"
+                  (click)="exportCalls($event)">
+                  <span *ngIf="isExportLoading" class="spinner-border spinner-border-sm"></span>
+                  <i *ngIf="!isExportLoading" class="bi bi-download"></i>
+                </button>
                 </div>
               </div>
             </div>
@@ -68,7 +59,7 @@
           <div class="card-body">
             <div>
               <div class="table-responsive table-card">
-                <table class="table align-middle" id="customerTable">
+                <table class="table table-bordered align-middle" id="customerTable">
                   <thead class="table-light">
                     <tr>
                       <th class="sort" class="text-center" data-sort="callCategory">Call Category</th>
@@ -144,8 +135,6 @@
             </div>
                 <div class="noresult" *ngIf="!loading && calls.length === 0">
                   <div class="text-center">
-                    <!-- <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
-                      colors="primary:#121331,secondary:#08a88a" style="width: 75px; height: 75px"></lord-icon> -->
                     <img src="assets/images/noData.png" height="200" width="300">
                     <h5 class="mt-2">Sorry! No Data Found</h5>
                   </div>

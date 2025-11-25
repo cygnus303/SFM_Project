@@ -28,7 +28,7 @@ export class ExpenseListComponent implements OnInit {
   public selectedExpense: ExpenseDetailResponse | null = null;
   public selectedCall: string | null = null;
   page = 1; // Current page number
-  pageSize = 5; // Number of items per page
+  pageSize = 10; // Number of items per page
   totalItems = 0; // Total number of items
   filters: { [key: string]: string } = {}; // Dynamic filter object
   public cardList:string = 'Expenses';
@@ -36,6 +36,7 @@ export class ExpenseListComponent implements OnInit {
   public isAddExpenseLoad:boolean=false;
   public loading :boolean =false;
   @Output() edit = new EventEmitter<ExpenseResponse>();
+   public isExportLoading = false;
 
   constructor(
     private expenseService: ExpenseService,
@@ -91,22 +92,22 @@ export class ExpenseListComponent implements OnInit {
 
   exportExpenses(event: any) {
     event.preventDefault();
-    this.commonService.updateLoader(true);
     const filters: any = {
       ...this.filters,
       UserId:this.identifyService.getLoggedUserId(),
       export:true
     }
+    this.isExportLoading = true;
     this.expenseService.exportexport(this.selectedUser?this.selectedUser:this.identifyService.getLoggedUserId(),'','',filters).subscribe({
       next: (response) => {
         if (response) {
           this.exportService.exportToExcel(response.data);
         }
-        this.commonService.updateLoader(false);
+        this.isExportLoading = false;
       },
       error: (response: any) => {
         this.toasterService.error(response);
-        this.commonService.updateLoader(false);
+        this.isExportLoading = false;
       },
     });
   }

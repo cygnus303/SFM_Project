@@ -42,6 +42,7 @@ export class ExpenseApprovalListComponent implements OnInit {
   dateRange: [Date, Date] = [new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0, 23, 59, 59, 999)];
   @Output() edit = new EventEmitter<ExpenseResponse>();
+   public isExportLoading = false;
 
   constructor(
     private expenseService: ExpenseService,
@@ -282,7 +283,6 @@ this.commonService.updateLoader(true);
 
   exportExpenses(event: any) {
     event.preventDefault();
-    this.commonService.updateLoader(true);
     const filters: any = {
       ...this.filters,
       UserId:this.identifyService.getLoggedUserId(),
@@ -291,16 +291,17 @@ this.commonService.updateLoader(true);
       endDate: event?.[1] ? event[1].toLocaleDateString("en-GB") : this.dateRange?.[1]?.toLocaleDateString("en-GB") || null,
       ...(this.selectedUser ? { FilterUserId: this.selectedUser } : {})
     }
+    this.isExportLoading = true;
     this.expenseService.exportExpense(filters).subscribe({
       next: (response) => {
         if (response) {
           this.exportService.exportToExcel(response.data);
         }
-        this.commonService.updateLoader(false);
+        this.isExportLoading = false;
       },
       error: (response: any) => {
         this.toasterService.error(response);
-        this.commonService.updateLoader(false);
+        this.isExportLoading = false;
       },
     });
   }

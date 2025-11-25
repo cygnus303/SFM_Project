@@ -17,14 +17,14 @@ export class ExpenseGeneralMasterListComponent {
   public expenseId: string = '';
   public expenses: GeneralMasterResponseList[] = [];
   page = 1; // Current page number
-  pageSize = 5; // Number of items per page
+  pageSize = 10; // Number of items per page
   totalItems = 0; // Total number of items
   filters: { [key: string]: string } = {}; // Dynamic filter object
   selectedExpense: GeneralMasterResponseList | null = null;
-  cardList:string = 'Expenses General master';
   public isAddGenralMasterLoad:boolean=false;
   public loading:boolean =false;
   @Output() edit = new EventEmitter<any>();
+   public isExportLoading = false;
   
   constructor(
     private expenseGeneralService:ExpenseGeneralService,
@@ -67,17 +67,17 @@ export class ExpenseGeneralMasterListComponent {
       ...this.filters,
       export:true
     }
-    this.commonService.updateLoader(true);
+    this.isExportLoading = true;
     this.expenseGeneralService.getGeneralmasterList(filters).subscribe({
       next: (response) => {
         if (response) {
           this.exportService.exportToExcel(response.data);
         }
-        this.commonService.updateLoader(false);
+       this.isExportLoading = false;
       },
       error: (response: any) => {
         this.toasterService.error(response);
-        this.commonService.updateLoader(false);
+        this.isExportLoading = false;
       },
     });
   }

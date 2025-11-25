@@ -5,6 +5,7 @@ import { IdentityService } from '../../../shared/services/identity.service';
 declare function G(): void;
 import * as bootstrap from 'bootstrap';
 import { ScriptLoaderService } from '../../../shared/services/script-loader.service';
+import { CommonService } from '../../../shared/services/common.service';
 
 @Component({
   selector: 'app-header',
@@ -16,21 +17,20 @@ export class HeaderComponent implements OnInit {
   public userId : string | null = null;
   public designation : string | null = null;
   public userName : string | null = null;
+  public headerTitle: string = 'Dashboard';
 
-  constructor(
-    private identityService: IdentityService,
-    private router: Router,
-    private scriptLoader: ScriptLoaderService
- 
-  ) {
+  constructor(private identityService: IdentityService,private router: Router,private scriptLoader: ScriptLoaderService, public commonService: CommonService ) {
     this.email = identityService.getLoggedEmail();
     this.userId = identityService.getLoggedUserId();
-    this.designation = identityService.getdesignationName();
+    this.designation = identityService.getdesignationName() ?? '';
     this.userName = identityService.getUserName();
   }
 
   ngOnInit(): void {
     // if (typeof G === 'function') {G();}
+    this.commonService.currentTitle.subscribe(title => {
+      this.headerTitle = title;
+    });
 
   }
 

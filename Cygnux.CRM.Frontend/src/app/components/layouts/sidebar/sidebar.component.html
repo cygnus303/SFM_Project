@@ -35,37 +35,37 @@
       <ul class="navbar-nav" id="navbar-nav">
         <li class="menu-title"><span data-key="t-menu">Menu</span></li>
         <li class="nav-item"  *ngIf="isSFMMasters?.SFM==='Y'">
-          <a class="nav-link menu-link" routerLink="./customer" routerLinkActive="active">
+          <a class="nav-link menu-link"  (click)="changeTitle('Dashboard')" routerLink="./customer" routerLinkActive="active">
             <i class="ri-user-2-line"></i>
             <span data-key="t-customers">Customer</span>
           </a>
         </li>
         <li class="nav-item"  *ngIf="isSFMMasters?.SFM==='Y'">
-          <a class="nav-link menu-link" routerLink="./lead" routerLinkActive="active">
+          <a class="nav-link menu-link" routerLink="./lead" (click)="changeTitle('Leads')" routerLinkActive="active">
             <i class="ri-rocket-line"></i>
             <span data-key="t-lead">Lead</span>
           </a>
         </li>
         <li class="nav-item"  *ngIf="isSFMMasters?.SFM==='Y'">
-          <a class="nav-link menu-link" routerLink="./meeting/list" routerLinkActive="active">
+          <a class="nav-link menu-link" routerLink="./meeting/list" (click)="changeTitle('Meetings')" routerLinkActive="active">
             <i class="ri-map-pin-line"></i>
             <span data-key="t-calendar">Meeting</span>
           </a>
         </li>
         <li class="nav-item"  *ngIf="isSFMMasters?.SFM==='Y'">
-          <a class="nav-link menu-link" routerLink="./call/lists" routerLinkActive="active">
+          <a class="nav-link menu-link" routerLink="./call/lists"  (click)="changeTitle('Calls')" routerLinkActive="active">
             <i class="ri-phone-line"></i>
             <span data-key="t-call">Call</span>
           </a>
         </li>
         <li class="nav-item"  *ngIf="isSFMMasters?.SFM==='Y'">
-          <a class="nav-link menu-link" routerLink="./expense/lists" routerLinkActive="active">
+          <a class="nav-link menu-link" routerLink="./expense/lists"  (click)="changeTitle('Expenses')" routerLinkActive="active">
             <i class="ri-compasses-line"></i>
             <span data-key="t-expense">Expense</span>
           </a>
         </li>
         <li class="nav-item" *ngIf="isSFMMasters?.ISSFMMASTER">
-          <a class="nav-link menu-link" routerLink="./expense/general-master" routerLinkActive="active">
+          <a class="nav-link menu-link" routerLink="./expense/general-master"  (click)="changeTitle('Expense General Master')"  routerLinkActive="active">
             <i class="ri-compasses-2-line"></i>
             <span data-key="t-expense">Expense General Master</span>
           </a>
@@ -73,7 +73,7 @@
         <li class="nav-item"  *ngIf="isSFMMasters?.SFM==='Y'">
           <a
             class="nav-link menu-link"
-          
+           (click)="changeTitle('Expense Approval')"
             routerLink="./expense/approval" routerLinkActive="active"
           >
           <i class="ri-group-line"></i>
@@ -81,25 +81,25 @@
           </a>
         </li>
         <li class="nav-item"  *ngIf="isSFMMasters?.COMPLAINT_MGNT==='Y'">
-          <a class="nav-link menu-link" routerLink="./complaint/list" routerLinkActive="active">
+          <a class="nav-link menu-link" routerLink="./complaint/list" (click)="changeTitle('Complaint')" routerLinkActive="active">
             <i class="ri-stack-line"></i>
             <span data-key="t-complaint">Complaint</span>
           </a>
         </li>
         <li class="nav-item"  *ngIf="isSFMMasters?.SFM==='Y'">
-          <a class="nav-link menu-link" routerLink="./task" routerLinkActive="active">
+          <a class="nav-link menu-link" routerLink="./task" (click)="changeTitle('Task')" routerLinkActive="active">
             <i class="ri-pages-line"></i>
             <span data-key="t-notes">Task</span>
           </a>
         </li>
         <li class="nav-item"  *ngIf="isSFMMasters?.SFM==='Y'">
-          <a class="nav-link menu-link" routerLink="./my-calendar" routerLinkActive="active">
+          <a class="nav-link menu-link" routerLink="./my-calendar" (click)="changeTitle('My Calendar')" routerLinkActive="active">
             <i class="ri-calendar-2-line"></i>
             <span data-key="t-calendar">My Calendar</span>
           </a>
         </li>
         <li class="nav-item"  *ngIf="isSFMMasters?.SFM==='Y'">
-          <a class="nav-link menu-link" routerLink="./attendance" routerLinkActive="active">
+          <a class="nav-link menu-link" routerLink="./attendance" (click)="changeTitle('Attendance')"  routerLinkActive="active">
             <i class="ri-calendar-check-line"></i>
             <span data-key="t-calendar">Attendance</span>
           </a>
