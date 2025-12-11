@@ -38,6 +38,15 @@ export class ExpenseApprovalListComponent implements OnInit {
    public selectedIds: Set<any> = new Set(); 
    public permissionType:string='';
    public remark:string='';
+   pageSizeList = [
+   { label: 5, value: 5 },
+  { label: 10, value: 10 },
+  { label: 15, value: 15 },
+  { label: 20, value: 20 },
+  { label: 30, value: 30},
+  { label: 50, value: 50 },
+];
+
    selectedAny: boolean = false;
   dateRange: [Date, Date] = [new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0, 23, 59, 59, 999)];
@@ -84,67 +93,47 @@ export class ExpenseApprovalListComponent implements OnInit {
     }, 500);
   }
 
-// toggleSelectAll() {
-//   if (this.selectAll) {
-//     this.selectedIds.clear();    // no need to store thousands of IDs
-//     this.selectAll = true;
-//   } else {
-//     this.selectedIds.clear();
-//     this.selectAll = false;
-//   }
-//   this.expenses.forEach(x => x.isSelected = this.selectAll);
-//     this.selectedAny = this.expenses.some(x => x.isSelected);
-
-// }
-
 toggleSelectAll() {
-  this.selectedIds.clear();
+  this.expenses.forEach(expense => {
+    const isDisabled =
+      expense.isManager_AuditApproved ||
+      expense.createdBy === this.identifyService.getLoggedUserId() ||
+      expense.isEdit === 'Y';
 
-  if (this.selectAll) {
-    // Apply check ONLY to allowed rows
-    this.expenses.forEach(x => {
-      if (!x.isManager_AuditApproved && x.createdBy !== this.identifyService.getLoggedUserId() && x.isEdit !=='Y') {
-        x.isSelected = true;
-      } else {
-        x.isSelected = false; // keep disabled rows unchecked
-      }
-    });
+    if (!isDisabled) {
+      expense.isSelected = this.selectAll;
+    }
+  });
+
+  this.updateSelectedAny();
+}
+updateSelectedAny() {
+  this.selectedAny = this.expenses.some(e => e.isSelected);
+}
+
+onRowSelect(expense: any) {
+  if (expense.isSelected) {
+    this.selectedIds.add(expense.expenseCode);
   } else {
-    // Uncheck all rows
-    this.expenses.forEach(x => x.isSelected = false);
+    this.selectedIds.delete(expense.expenseCode);
   }
 
-  this.selectedAny = this.expenses.some(x => x.isSelected);
-}
-
-get isFilterApplied(): boolean {
-  if (!this.filters) return false;
-
-  return Object.values(this.filters).some(v => v !== null && v !== '' && v !== undefined);
-}
-
-
-
-onRowSelect(row: any) {
-  if (row.isSelected) {
-    // ADD selected row
-    this.selectedIds.add({
-      attendeeCode: row.attendeeCode,
-      expenseId: row.expenseCode,
-      meetingId: row.meetingId,
-    });
-  } else {
-    // REMOVE only this row's ID
-    [...this.selectedIds].forEach(item => {
-      if (item.expenseId === row.expenseId) {
-        this.selectedIds.delete(item);
-      }
-    });
+  this.updateSelectedAny();
+   if (!expense.isSelected) {
     this.selectAll = false;
+    return;
   }
-    this.selectedAny = this.expenses.some(x => x.isSelected);
-}
 
+  // Check if all selectable rows are selected
+  const allChecked = this.expenses.every((x: any) =>
+    x.isSelected ||
+    x.isManager_AuditApproved ||
+    x.createdBy === this.identifyService.getLoggedUserId() ||
+    x.isEdit === 'Y'
+  );
+
+  this.selectAll = allChecked;
+}
 
 openReasonSwal(type:string) {
   const modalElement = document.getElementById('Remarkmodal');
@@ -155,46 +144,27 @@ openReasonSwal(type:string) {
     }
 }
 
-getSelectedJSON(isApproved: boolean = false) {
-  const result: any = {
+
+getSelectedJSON(isApproved: boolean = false){
+ const selectedRows = this.expenses
+    .filter(x => x.isSelected)
+    .map(x => ({
+      attendeeCode: x.attendeeCode,
+      expenseId: x.expenseCode,
+      meetingId: x.meetingId
+    }));
+
+  const payload = {
     approvedBy: this.identifyService.getLoggedUserId(),
     isApproved: isApproved,
     reasonRemark: this.reasonRemark,
+    isSelectAll: false,
+    jsonData: selectedRows,
+    startDate: null,
+    endDate:  null,
+    filterJson:null
   };
-
-  if (this.selectAll) {
-    result.isSelectAll = true;
-    result.filterJson = JSON.stringify({
-    page: 1,
-    pageSize: this.totalItems
-  });
-
-    result.startDate = this.dateRange?.[0]
-      ? this.dateRange[0].toLocaleDateString("en-GB")
-      : null;
-
-    result.endDate = this.dateRange?.[1]
-      ? this.dateRange[1].toLocaleDateString("en-GB")
-      : null;
-
-    result.jsonData = null;
-  } 
-  else {
-    result.isSelectAll = false;
-    result.jsonData =
-
-[...this.selectedIds];
-    
-    
-   ;
-     result.startDate=null
-     result.endDate=null
-     result.filterJson=null
-  }
-
-  console.log("FINAL JSON", result);
-
-this.expenseService.multipleExpenseApproval(result).subscribe({
+ this.expenseService.multipleExpenseApproval(payload).subscribe({
   next: (response: any) => {
     if (response?.success) {
       this.toasterService.success(response.data.message);
@@ -216,7 +186,6 @@ this.expenseService.multipleExpenseApproval(result).subscribe({
     this.commonService.updateLoader(false);
   }
 });
-
 }
 
   addExpenseApproval(dataToSubmit: any): void {
@@ -238,43 +207,88 @@ this.expenseService.multipleExpenseApproval(result).subscribe({
       },
     });
   }
-getExpenses(event?: any, page: number = 1) {
-this.commonService.updateLoader(true);
-  this.filters = Object.fromEntries(
-    Object.entries(this.filters).filter(([key, value]) => value !== null)
-  );
-   const filters: any = {
+
+  getExpenses(event?: any,page: number = 1) {
+  this.selectAll = false;
+  this.expenses = [];
+  this.expenses?.forEach((x: any) => (x.isSelected = false));
+    this.commonService.updateLoader(true);
+    this.filters = Object.fromEntries(
+      Object.entries(this.filters).filter(([key, value]) => value !== null)
+    );
+    const filters: any = {
       ...this.filters,
       userId:this.identifyService.getLoggedUserId(),
       Page: page,
-      PageSize: this.pageSize,
+      PageSize: this.pageSize?this.pageSize:5,
        startDate: event?.[0] ? event[0].toLocaleDateString("en-GB") : this.dateRange?.[0]?.toLocaleDateString("en-GB") || null,
       endDate: event?.[1] ? event[1].toLocaleDateString("en-GB") : this.dateRange?.[1]?.toLocaleDateString("en-GB") || null,
       ...(this.selectedUser ? { FilterUserId: this.selectedUser } : {})
     };
-
-  this.expenseService.getExpenseApprovalList(filters).subscribe({
-    next: (response) => {
-
-      this.totalItems = response.totalCount;
-      this.expenses = response.data.map(item => {
-
-        let isSelected = false;
-        if (this.selectAll) {
-          isSelected = true;
+    this.expenseService.getExpenseApprovalList(filters).subscribe({
+      next: (response) => {
+        if (response) {
+          this.expenses = response.data;
+          this.totalItems = response.totalCount;
         }
-        else if (this.selectedIds.has(item.expenseCode)) {
-          isSelected = true;
-        }
-        return {
-          ...item,
-          isSelected
-        };
-      });
-      this.commonService.updateLoader(false);
-    }
-  });
+        this.commonService.updateLoader(false);
+      },
+      error: (response: any) => {
+        this.toasterService.error(response);
+        this.commonService.updateLoader(false);
+      },
+    });
+  }
+
+  checkIfAllSelected() {
+  // Check if all items are selected
+  this.selectAll = this.expenses.every((x: any) => x.isSelected === true);
 }
+
+
+// getExpenses(event?: any, page: number = 1) {
+
+//   this.commonService.updateLoader(true);
+
+//   const filters: any = {
+//     ...this.filters,
+//     userId: this.identifyService.getLoggedUserId(),
+//     Page: page,
+//     PageSize: this.pageSize,
+//     startDate: event?.[0]
+//       ? event[0].toLocaleDateString("en-GB")
+//       : this.dateRange?.[0]?.toLocaleDateString("en-GB") || null,
+//     endDate: event?.[1]
+//       ? event[1].toLocaleDateString("en-GB")
+//       : this.dateRange?.[1]?.toLocaleDateString("en-GB") || null,
+//     ...(this.selectedUser ? { FilterUserId: this.selectedUser } : {})
+//   };
+
+//   this.expenseService.getExpenseApprovalList(filters).subscribe({
+//     next: (response) => {
+//       this.totalItems = response.totalCount;
+
+//       this.expenses = response.data.map(item => {
+
+//         const isDisabled =
+//           item.isManager_AuditApproved ||
+//           item.createdBy === this.identifyService.getLoggedUserId() ||
+//           item.isEdit === 'Y';
+
+//         return {
+//           ...item,
+//           isSelected:
+//             this.selectAll && !isDisabled  // ONLY select if NOT disabled
+//               ? true
+//               : this.selectedIds.has(item.expenseCode)
+//         };
+//       });
+
+//       this.commonService.updateLoader(false);
+//     }
+//   });
+// }
+
 
   clearDate() {
     this.filters['ExpenseDate'] = '';

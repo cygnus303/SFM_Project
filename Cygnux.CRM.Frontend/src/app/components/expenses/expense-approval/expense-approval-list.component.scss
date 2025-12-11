@@ -36,3 +36,10 @@
   left: 2px;
   top: -1px;
 }
+.clear-icon.ng-select {
+  .ng-select-container{
+   span.ng-clear-wrapper {
+    display: none !important;
+  }
+}
+}

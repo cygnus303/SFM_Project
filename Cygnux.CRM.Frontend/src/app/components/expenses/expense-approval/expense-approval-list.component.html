@@ -18,6 +18,14 @@
                     [clearable]="true" [searchable]="true" (change)="getExpenses()" [(ngModel)]="selectedUser" style="flex:1;">
                   </ng-select>
                 </div> -->
+                  <div class="col-2">
+                  <div class="d-flex align-items-center">
+                    <ng-select [items]="pageSizeList" bindLabel="label" bindValue="value" [(ngModel)]="pageSize" (change)="getExpenses()"
+                      [searchable]="false" placeholder="Page Size" class="form-control p-0 me-2 clear-icon">
+                    </ng-select>
+                    <span class="text-nowrap">Records</span>
+                  </div>
+                  </div>
                 <div class="col-3">
                   <div class="form-group mb-0">
                     <div class="input-group shadow-sm rounded"><span class="input-group-text bg-white border-end-0 p-2"><i
@@ -41,6 +49,7 @@
                       </div>
                     </div>
                   </div>
+                 
                   <div class="col-sm-auto ms-auto">
                 <div class="hstack gap-2">
                   <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()">
@@ -84,7 +93,9 @@
                       <th class="text-center">Action</th>
                     </tr>
                     <tr>
-                      <th><input type="checkbox" class="pure-checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()"   [checked]="selectAll" [class.disabled-input]="isFilterApplied"></th>
+                      <!-- <th><input type="checkbox" class="pure-checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()"   [checked]="selectAll" [class.disabled-input]="isFilterApplied"></th> -->
+                      <th><input type="checkbox" class="pure-checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()"   ></th>
+
                       <th>
                         <input type="text" [(ngModel)]="filters['expenseCode']" (input)="onStartTimeChange()"
                           class="form-control" />

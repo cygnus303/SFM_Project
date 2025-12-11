@@ -19,7 +19,14 @@ export class ExternalService {
   ) {}
 
   getGeneralMaster( searchText: string | null, codeType: string): Observable<IApiBaseResponse<GeneralMasterResponse[]>> {
-    return this.apiHandlerService.Get(`external/${codeType}?searchText=${searchText}`);
+     let url = `external/${codeType}`;
+
+  // Add searchText only if it has value
+  if (searchText) {
+    url += `?searchText=${encodeURIComponent(searchText)}`;
+  }
+
+  return this.apiHandlerService.Get(url);
   }
   getUserMaster(): Observable<IApiBaseResponse<UserResponse[]>> {
     return this.apiHandlerService.Get(`external/user`);
