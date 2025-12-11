@@ -92,9 +92,15 @@
                       </button>
                     </div>
                   </div>
-                  <div class="mt-4">
-                    <button class="btn btn-success w-100" type="submit">
-                      Sign In
+                    <div class="mt-4">
+                    <button class="btn btn-success w-100" type="submit" [disabled]="loading">
+                    <ng-container *ngIf="!loading; else loadingTemplate">
+                      Log In
+                    </ng-container>
+                    <ng-template #loadingTemplate>
+                      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Loading...
+                    </ng-template>
                     </button>
                   </div>
                 </form>

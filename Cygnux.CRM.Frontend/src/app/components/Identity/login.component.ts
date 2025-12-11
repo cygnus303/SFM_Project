@@ -21,6 +21,9 @@ export class LoginComponent implements OnInit {
   public isFormSubmit = false;
   isPasswordVisible: boolean = false;
   password: string = '';
+  public loading :boolean = false;
+
+
   constructor(
     private identityService: IdentityService,
     private commonService: CommonService,
@@ -94,8 +97,9 @@ export class LoginComponent implements OnInit {
     }, 3000);
   }
 
-  login() {
+ login() {
     this.commonService.updateLoader(true);
+        this.loading = true;
     this.identityService.login(this.loginFormGroup.getRawValue()).subscribe({
       next: (response) => {
         if (response && response.data && response.data.token) {
@@ -112,13 +116,15 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('loginUser', JSON.stringify(response.data));
           this.commonService.getMenuList(); 
           this.router.navigateByUrl('/welcome');
-          this.identityService.setUserType()   
+          this.identityService.setUserType();
+          this.loading = false; // hide button loader
         } else {
           this.toasterService.error(response.errorMessage);
           this.commonService.updateLoader(false);
         }
       },
       error: (response: any) => {
+        this.loading = false;
         this.commonService.updateLoader(false);
         this.toasterService.error(response.error.message);
       },
