@@ -88,12 +88,10 @@
                             </div>
 
                             <!-- ApexCharts line -->
-                            <div id="lineChart" style="height:320px;">
-                                <apx-chart [series]="lineChart.series" [chart]="lineChart.chart"
-                                    [xaxis]="lineChart.xaxis" [stroke]="lineChart.stroke" [markers]="lineChart.markers"
-                                    [dataLabels]="lineChart.dataLabels" [tooltip]="lineChart.tooltip"
-                                    [colors]="lineChart.colors" [fill]="lineChart.fill"
-                                    [grid]="lineChart.grid"></apx-chart>
+                            <div id="chartOptions" style="height:320px;">
+                                <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [dataLabels]="chartOptions.dataLabels"
+                                    [plotOptions]="chartOptions.plotOptions" [responsive]="chartOptions.responsive" [xaxis]="chartOptions.xaxis"
+                                    [legend]="chartOptions.legend" [fill]="chartOptions.fill"></apx-chart>
                             </div>
                         </div>
                     </div>
@@ -166,7 +164,6 @@
                         </div>
                     </div>
                 </div> -->
-
             </section>
         </main>
     </div>
