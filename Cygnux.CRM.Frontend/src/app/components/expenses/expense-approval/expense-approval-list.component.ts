@@ -27,6 +27,8 @@ export class ExpenseApprovalListComponent implements OnInit {
   public selectedExpense: ExpenseDetailResponse | null = null;
   public selectedCall: string | null = null;
   public selectAll: boolean = false;
+  public isAddExpenseApprovedLoad:boolean=false;
+
   page = 1; // Current page number
   pageSize = 5; // Number of items per page
   totalItems = 0; // Total number of items
@@ -66,7 +68,7 @@ export class ExpenseApprovalListComponent implements OnInit {
     this.commonService.loading.subscribe((state: boolean) => {
       this.loading = state;
     });
-    this.getExpenses(this.dateRange);
+    // this.getExpenses(this.dateRange);
     this.customerService.getUsers();
   }
 
@@ -390,6 +392,7 @@ getSelectedJSON(isApproved: boolean = false){
     if (modalElement) {
       const modal = new Modal(modalElement);
       modal.show();
+      this.isAddExpenseApprovedLoad=true
       this.getExpense(expense);
     }
   }

@@ -27,7 +27,7 @@
           <div>
             <label>Docket No</label>
              <div class="position-relative">
-            <input type="text" class="form-control mb-3" formControlName="docketNo" (input)="onDocketNoChange($event)" [readonly]="complaint !== 'Add'">
+            <input type="text" class="form-control mb-3" formControlName="docketNo" (input)="onDocketNoChange($event)" [readonly]="complaint !== 'Add'" placeholder="Enter Docket No">
                <div *ngIf="loading && (complaint ==='Update' || complaint ==='Close')" class="position-absolute top-50 end-0 translate-middle-y me-3">
                   <span class="spinner-border spinner-border-sm text-primary"></span>
                 </div>
@@ -41,7 +41,7 @@
           </div>
           <div>
             <label>Origin</label>
-            <input type="text" class="form-control" formControlName="origin" readonly>
+            <input type="text" class="form-control" formControlName="origin"  placeholder="Origin" readonly>
           </div>
         </div>
         <div class="col-3">
@@ -57,17 +57,17 @@
           </div>
           <div>
             <label>Doc Date</label>
-            <input type="text" class="form-control mb-3" formControlName="docDate" readonly>
+            <input type="text" class="form-control mb-3" formControlName="docDate" placeholder="Docket Date" readonly>
           </div>
           <div>
             <label>Destination</label>
-            <input type="text" class="form-control" formControlName="destination" readonly>
+            <input type="text" class="form-control" formControlName="destination" readonly placeholder="Destination">
           </div>
         </div>
         <div class="col-3">
           <div>
             <label>Manager ID</label>
-            <input type="text" class="form-control mb-3" formControlName="managerId" readonly>
+            <input type="text" class="form-control mb-3" formControlName="managerId" readonly placeholder="Enter Manager ID">
             <div *ngIf="
               ticketForm.controls['managerId'].invalid &&
               ticketForm.controls['managerId']?.touched
@@ -77,18 +77,18 @@
           </div>
           <div>
             <label>EDD</label>
-            <input type="text" class="form-control mb-3" formControlName="EDD" readonly>
+            <input type="text" class="form-control mb-3" formControlName="EDD" readonly placeholder="EDD">
           </div>
           <div>
             <label>Current Location</label>
-            <input type="text" class="form-control" formControlName="currentLocation" readonly>
+            <input type="text" class="form-control" formControlName="currentLocation" readonly placeholder="Current Location">
           </div>
           
         </div>
         <div class="col-3">
           <div>
             <label>Manager Name</label>
-            <input type="text" class="form-control mb-3" formControlName="managerName" readonly>
+            <input type="text" class="form-control mb-3" formControlName="managerName" readonly placeholder="Manager Name">
             <div *ngIf="
               ticketForm.controls['managerName'].invalid &&
               ticketForm.controls['managerName']?.touched
@@ -98,7 +98,7 @@
           </div>
           <div>
             <label>Billing Party</label>
-            <input type="text" class="form-control mb-3" formControlName="billingParty" readonly>
+            <input type="text" class="form-control mb-3" formControlName="billingParty" readonly placeholder="Billing Party">
           </div>
           <div>
             <label>Ticket Address To</label>
@@ -178,7 +178,7 @@
   
           <div>
             <label>Description*</label>
-            <textarea rows="1" class="form-control" formControlName="description" [readonly]="complaint !== 'Add'"></textarea>
+            <textarea rows="1" class="form-control" formControlName="description" [readonly]="complaint !== 'Add'" placeholder="Enter Description"></textarea>
             <div *ngIf="
             ticketForm.controls['description'].invalid &&
             ticketForm.controls['description']?.touched

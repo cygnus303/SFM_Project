@@ -43,7 +43,7 @@ export class ExpenseListComponent implements OnInit {
     private toasterService: ToastrService,
     private exportService: ExportService,
     public identifyService :IdentityService,
-     public customerService:CustomerService
+    public customerService:CustomerService
   ) {defineElement(lottie.loadAnimation);}
 
   ngOnInit(): void {
@@ -52,7 +52,6 @@ export class ExpenseListComponent implements OnInit {
     });
     this.getExpenses();
     this.userType=localStorage.getItem('UserType');
-    this.customerService.getUsers();
   }
 
     timeoutRef: any;

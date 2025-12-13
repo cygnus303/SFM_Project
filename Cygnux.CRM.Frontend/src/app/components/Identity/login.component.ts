@@ -38,9 +38,9 @@ export class LoginComponent implements OnInit {
     if (token) {
       this.validateToken(token!);
 
-      setTimeout(() => {
-        this.refreshToken();
-      }, 3000);
+      // setTimeout(() => {
+      //   this.refreshToken();
+      // }, 3000);
     }
     this.buildLoginForm();
   }
@@ -92,9 +92,9 @@ export class LoginComponent implements OnInit {
       return;
     }
     this.login();
-    setTimeout(() => {
-      this.refreshToken();
-    }, 3000);
+    // setTimeout(() => {
+    //   this.refreshToken();
+    // }, 3000);
   }
 
  login() {
@@ -118,6 +118,9 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl('/welcome');
           this.identityService.setUserType();
           this.loading = false; // hide button loader
+                  setTimeout(() => {
+              this.refreshToken();
+            }, 3000);
         } else {
           this.toasterService.error(response.errorMessage);
           this.commonService.updateLoader(false);

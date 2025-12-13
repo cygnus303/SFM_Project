@@ -22,6 +22,7 @@
               <input style="text-transform: uppercase;"
               class="form-control"
               maxlength="255"
+              placeholder="Enter Customer Name"
               formControlName="customerName"
               type="text"
               required
@@ -52,7 +53,7 @@
       <div class="col-lg-6">
         <div>
           <label class="control-label">Contact Name</label>
-          <input class="form-control" maxlength="255" formControlName="contactName" type="text"
+          <input class="form-control" maxlength="255" formControlName="contactName" type="text" placeholder="Enter ContactName"
             [readOnly]="checkOutValue !== '-' || meetingRole || meetingRole"  [ngClass]="{ 'border-danger': meetingForm.controls['contactName'].invalid && meetingForm.controls['contactName'].touched}"/>
           <div *ngIf="
               meetingForm.controls['contactName'].invalid &&
@@ -66,7 +67,7 @@
       <div class="col-lg-6">
         <div>
           <label class="control-label">Address</label>
-          <input class="form-control" maxlength="500" formControlName="address" type="text"
+          <input class="form-control" maxlength="500" formControlName="address" type="text" placeholder="Enter Address"
             [readOnly]="checkOutValue !== '-' || meetingRole" />
           <div *ngIf="
               meetingForm.controls['address'].invalid &&
@@ -79,7 +80,7 @@
       <div class="col-lg-6">
         <div>
           <label class="control-label">Contact No*</label>
-          <input class="form-control" maxlength="10" formControlName="contactNo" type="text" appOnlyNumber required
+          <input class="form-control" maxlength="10" formControlName="contactNo" type="text" appOnlyNumber required placeholder="Enter Contact No"
             [readOnly]="checkOutValue !== '-' || meetingRole"  />
           <div *ngIf="
               meetingForm.controls['contactNo'].invalid &&
@@ -94,7 +95,7 @@
       <div class="col-lg-6">
         <div>
           <label class="control-label">Email*</label>
-          <input class="form-control" maxlength="255" formControlName="email" type="text" required
+          <input class="form-control" maxlength="255" formControlName="email" type="text" required placeholder="Enter Email"
             [readOnly]="checkOutValue !== '-' || meetingRole"  />
           <div *ngIf="
               meetingForm.controls['email'].invalid &&
@@ -108,7 +109,7 @@
       <div class="col-lg-6">
         <div>
           <label class="control-label">Meeting Purpose*</label>
-          <input class="form-control" maxlength="500" formControlName="meetingPurpose" type="text" required
+          <input class="form-control" maxlength="500" formControlName="meetingPurpose" type="text" required placeholder="Enter Meeting Purpose"
             [readOnly]="checkOutValue !== '-' || meetingRole" />
           <div *ngIf="
               meetingForm.controls['meetingPurpose'].invalid &&

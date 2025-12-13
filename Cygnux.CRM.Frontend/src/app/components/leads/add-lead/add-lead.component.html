@@ -95,6 +95,7 @@
             class="form-control"
             maxlength="255"
             formControlName="companyName"
+            placeholder="Enter Company Name"
             type="text"
             required
             [ngClass]="{ 'border-danger': leadForm.controls['companyName'].invalid && leadForm.controls['companyName'].touched}"/>
@@ -131,6 +132,7 @@
             class="form-control"
             maxlength="255"
             formControlName="contactName"
+            placeholder="Enter Contact Name"
             type="text"
             [ngClass]="{ 'border-danger': leadForm.controls['contactName'].invalid && leadForm.controls['contactName'].touched}"/>
           <div
@@ -154,6 +156,7 @@
             class="form-control"
             maxlength="10"
             formControlName="contactNo"
+            placeholder="Enter Contact No"
             type="text"
             appOnlyNumber
             required
@@ -180,6 +183,7 @@
           <label class="control-label">Address</label>
           <input
             class="form-control"
+            placeholder="Enter Address"
             maxlength="500"
             formControlName="address"
             type="text"
@@ -194,6 +198,7 @@
             class="form-control"
             maxlength="255"
             formControlName="email"
+            placeholder="Enter Email"
             type="text"
             [ngClass]="{ 'border-danger': leadForm.controls['email'].invalid && leadForm.controls['email'].touched}"/>
           <div *ngIf="
@@ -210,6 +215,7 @@
           <label class="control-label">City</label>
           <ng-select
             formControlName="cityId"
+            placeholder="Enter City"
             [items]="cities"
             bindLabel="location"
             bindValue="city_code"

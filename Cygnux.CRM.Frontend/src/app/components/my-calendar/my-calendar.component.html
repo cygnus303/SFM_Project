@@ -37,10 +37,12 @@
           id="close-modal"
         ></button>
       </div> -->
+      <div *ngIf="isMeeting">
       <app-add-meeting
         (dataEmitter)="closeEditMeetingModal()"
         [meetingResponse]="selectedMeeting" [isMeetingList]="'Update'" 
       ></app-add-meeting>
+      </div>
     </div>
   </div>
 </div>
@@ -64,10 +66,12 @@
           id="close-modal"
         ></button>
       </div> -->
+      <div *ngIf="isCall">
       <app-add-call
         (dataEmitter)="closeEditCallModal()"
         [callResponse]="selectedCall" [isCallList]="'Update'"
       ></app-add-call>
+      </div>
     </div>
   </div>
 </div>

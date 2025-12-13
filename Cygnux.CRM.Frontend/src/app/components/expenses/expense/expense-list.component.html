@@ -159,11 +159,11 @@
                       <td class="text-center truncate-text">{{ expense.meetingDate ? expense.meetingDate:'--' }}</td>
                       <td class="text-center truncate-text">{{expense.checkIn? expense.checkIn:'--'}}</td>
                       <td class="text-center truncate-text">{{expense.checkOut?expense.checkOut:'--'}}</td>
-                      <td class="text-center truncate-text">{{expense.distanceTravelled?expense.distanceTravelled:'--'}}</td>
+                      <td class="text-center truncate-text">{{expense.distanceTravelled?expense.distanceTravelled:'0'}}</td>
                       <td class="text-center truncate-text">{{expense.requestDate!=='01/01/1900' ? (expense.requestDate):'--' }}
                       </td>
                       <td class="text-center"></td>
-                      <td class="text-center truncate-text">{{ expense.amount ? expense.amount:'--' }}</td>
+                      <td class="text-center truncate-text">{{ expense.amount ? expense.amount:'0' }}</td>
                       <td class="text-center truncate-text">{{ expense.status ? expense.status:'--' }}</td>
                       <td class="text-center">
                         <ul class="list-inline hstack gap-2 mb-0">
@@ -266,7 +266,7 @@
               </div>
             </div>
 
-            <div class="modal fade" id="showApproveExpense" tabindex="-1" aria-labelledby="exampleModalLabel"
+            <!-- <div class="modal fade" id="showApproveExpense" tabindex="-1" aria-labelledby="exampleModalLabel"
               aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
               <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -274,13 +274,11 @@
                     <h5 class="modal-title" id="exampleModalLabel">
                       Expense Approve
                     </h5>
-                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                      id="close-modal"></button> -->
                   </div>
                   <app-approve-expense [expenseResponse]="selectedExpense"></app-approve-expense>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>

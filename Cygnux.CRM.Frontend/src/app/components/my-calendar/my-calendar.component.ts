@@ -23,6 +23,8 @@ export class MyCalendarComponent implements OnInit {
   @Output() editCall = new EventEmitter<CallResponse>();
   selectedMeeting: MeetingResponse | null = null;
   selectedCall: CallResponse | null = null;
+  public isMeeting:boolean=false;
+  public isCall:boolean=false;
 
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -107,6 +109,7 @@ export class MyCalendarComponent implements OnInit {
     if (modalElement) {
       const modal = new Modal(modalElement);
       modal.show();
+      this.isMeeting=true
       this.getMeeting(meetingId);
     }
   }
@@ -115,6 +118,7 @@ export class MyCalendarComponent implements OnInit {
     if (modalElement) {
       const modal = new Modal(modalElement);
       modal.show();
+      this.isCall=true
       this.getCall(callId);
     }
   }

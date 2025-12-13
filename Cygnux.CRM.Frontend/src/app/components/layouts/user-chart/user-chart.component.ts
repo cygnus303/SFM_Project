@@ -181,7 +181,7 @@ export class UserChartComponent {
   ){
     this.setDefaultDates();
     this.userIdData = this.identifyService.getLoggedUserId();
-    this.getUsers();
+    // this.getUsers();
     this.meetingChartSubscription = this.commonService.userChart.subscribe((res)=>{
       if(this.chartList==='meeting'){
         this.getMeetingCountDayWise();
@@ -214,7 +214,7 @@ export class UserChartComponent {
       this.getLeadSourceChart();
     }
     if (this.chartList === 'meeting') {
-      this.getUsers();
+      // this.getUsers();
       this.getMeetingCountDayWise();
     }
     if (this.chartList === 'complaint') {

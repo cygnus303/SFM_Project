@@ -67,7 +67,6 @@ export class AddCallComponent implements OnInit, OnChanges {
     this.getCallCategories();
     this.getCallPurposes();
     this.getCallStatuses();
-    this.getUsers();
   }
 
   buildForm(): void {
@@ -218,20 +217,5 @@ export class AddCallComponent implements OnInit, OnChanges {
           this.commonService.updateLoader(false);
         },
       });
-  }
-  getUsers() {
-    this.commonService.updateLoader(true);
-    this.externalService.getUserMaster().subscribe({
-      next: (response) => {
-        if (response) {
-          this.users = response.data;
-        }
-        this.commonService.updateLoader(false);
-      },
-      error: (response: any) => {
-        this.toasterService.error(response);
-        this.commonService.updateLoader(false);
-      },
-    });
   }
 }

@@ -214,8 +214,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                       id="close-modal"></button>
                   </div>
+                  <div *ngIf="isAddExpenseApprovedLoad">
                   <app-approve-expense [expenseResponse]="selectedExpense"
                     (onClose)="closeEditModal()"></app-approve-expense>
+                    </div>
                 </div>
               </div>
             </div>

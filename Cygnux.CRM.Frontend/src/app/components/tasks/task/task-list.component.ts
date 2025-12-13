@@ -30,6 +30,7 @@ export class TaskListComponent implements OnInit {
   @Output() edit = new EventEmitter<TaskResponse>();
   dateRange = [new Date(), new Date()];
   public loading:boolean=false;
+  public isAddTask:boolean=false;
   ranges: IRange[] = [
     {
       value: [new Date(new Date().setDate(new Date().getDate() - 7)), new Date()],
@@ -137,6 +138,7 @@ export class TaskListComponent implements OnInit {
       this.selectedTask = null;
       this.taskId = '';
       this.edit.emit();
+      this.isAddTask=true;
       modal.show();
     }
   }
@@ -184,6 +186,7 @@ export class TaskListComponent implements OnInit {
       const modal = new Modal(modalElement);
       modal.show();
       this.taskId = taskId;
+      this.isAddTask=true;
       this.getTask(taskId);
     }
   }
