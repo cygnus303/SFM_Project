@@ -34,6 +34,8 @@ export class HeaderComponent implements OnInit {
 
   }
 
+  
+
     ngAfterViewInit(): void {
     const dropdownEl = document.getElementById('page-header-user-dropdown');
     if (dropdownEl) {
