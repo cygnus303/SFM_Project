@@ -12,34 +12,9 @@ import { filter } from 'rxjs';
 })
 export class SidebarComponent implements OnInit {
   isSFMMasters: any
-  constructor(private scriptLoader: ScriptLoaderService, public commonService: CommonService, private router: Router, private cd: ChangeDetectorRef) {
+  constructor( public commonService: CommonService) {
   }
   ngOnInit(): void {
     this.isSFMMasters = JSON.parse(localStorage.getItem('ISSFMMASTER') || '{}');
-    // this.getMenuList(); 
-    
-    this.commonService.getMenuList();  // In case of direct route hit or page reload
-    
-    this.commonService.isSFMMaster.subscribe((res) => {
-      this.isSFMMasters = res;
-      this.cd.detectChanges();
-    });
-  
-    this.router.events.pipe(filter((event: any) => event instanceof NavigationEnd)).subscribe(() => {
-      this.commonService.getMenuList();  // Optional — if you want reload on every nav
-    });
-  }
-
-  ngOnChanges(changes: any): void {
-    this.commonService.isSFMMaster.subscribe((res) => {
-      this.isSFMMasters = res
-    });
-  }
-
-  getMenuList() {
-    this.commonService.getMenu().subscribe((res) => {
-      localStorage.setItem('ISSFMMASTER', JSON.stringify(res.data[0]));
-      this.isSFMMasters = res.data[0]
-    })
   }
 }
