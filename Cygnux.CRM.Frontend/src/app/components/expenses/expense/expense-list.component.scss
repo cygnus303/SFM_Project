@@ -40,3 +40,14 @@
     padding: 8px;
   }
   
+  .position-table tbody td {
+  padding: 12px 27px;   /* ↑ vertical & horizontal space */
+  background-color: #ffffff;
+}
+#customerTable thead tr th,
+#customerTable tbody tr td {
+  width: 150px !important;   /* 🔥 fixed width for ALL columns */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
