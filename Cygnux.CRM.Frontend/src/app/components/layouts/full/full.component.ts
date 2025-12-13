@@ -14,7 +14,6 @@ export class FullComponent implements OnInit{
     private router: Router
   ) { }
   ngOnInit(): void {
-    this.commonService.getMenuList(); 
   }
 
   signout(): void {

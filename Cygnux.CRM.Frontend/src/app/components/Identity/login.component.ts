@@ -114,13 +114,18 @@ export class LoginComponent implements OnInit {
           this.identityService.setUserName(response.data.name);
           this.identityService.setRegionCode(response.data.reportingLoc);
           localStorage.setItem('loginUser', JSON.stringify(response.data));
-          this.commonService.getMenuList(); 
-          this.router.navigateByUrl('/welcome');
-          this.identityService.setUserType();
-          this.loading = false; // hide button loader
+
+          this.commonService.getMenu().subscribe((res)=>{
+            localStorage.setItem('ISSFMMASTER', JSON.stringify(res.data[0]));
+            this.router.navigateByUrl('/welcome');
+            this.identityService.setUserType()
+          }); 
+
+             this.loading = false; // hide button loader
                   setTimeout(() => {
               this.refreshToken();
             }, 3000);
+          
         } else {
           this.toasterService.error(response.errorMessage);
           this.commonService.updateLoader(false);

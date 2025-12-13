@@ -45,6 +45,7 @@ export class HeaderComponent implements OnInit {
     event.preventDefault();
     this.identityService.clearToken();
     this.router.navigateByUrl('/login');
+     localStorage.clear();
   }
    toggleSidebar() {
       this.scriptLoader.loadScript('assets/js/app.js').then(() => console.log('Script loaded')).catch(error => console.error(error));
