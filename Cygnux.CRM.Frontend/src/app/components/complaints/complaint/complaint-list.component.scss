@@ -83,36 +83,11 @@ input[type="radio"]:after{
   color: rgb(48, 48, 48) !important;
 }
 /* enable horizontal scroll */
-#customerTable {
-  overflow-x: auto;
-  display: block;   /* important for scroll to appear */
-  table-layout: fixed;
-}
 
-/* Custom scrollbar only for this table */
-#customerTable::-webkit-scrollbar {
-  height: 3px; /* horizontal scrollbar height */
-}
 
-#customerTable::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 5px;
-}
-
-#customerTable::-webkit-scrollbar-thumb {
-  background: #405189;   /* grey color */
-  border-radius: 5px;
-}
-
-#customerTable::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
 
 /* Firefox support */
-#customerTable {
-  scrollbar-width: thin;
-  scrollbar-color: #405189 #f1f1f1;
-}
+
 
 #customerTable {
   table-layout: fixed !important;
@@ -125,4 +100,9 @@ input[type="radio"]:after{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.position-table tbody td {
+  padding: 12px 18px;   /* ↑ vertical & horizontal space */
+  background-color: #ffffff;
 }
