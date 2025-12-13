@@ -42,7 +42,7 @@ export class AppComponent {
     });
   }
 
-  ngOnInit() {
+  ngOnInit() { 
     this.spinner.show();
     setTimeout(() => {
       this.spinner.hide();
