@@ -73,6 +73,8 @@ export class ExpenseListComponent implements OnInit {
       UserID:this.selectedUser?this.selectedUser:this.identifyService.getLoggedUserId(),
       Page: page,
       PageSize: this.pageSize,
+      ExpenseDate: this.filters['ExpenseDate'] ? this.commonService.formatDate(new Date(this.filters['ExpenseDate'])) : '',
+      MeetingDate: this.filters['MeetingDate'] ? this.commonService.formatDate(new Date(this.filters['MeetingDate'])) : '',
     };
     this.expenseService.getExpenseList(filters).subscribe({
       next: (response) => {
@@ -183,7 +185,7 @@ export class ExpenseListComponent implements OnInit {
     this.getExpenses();
   } 
   clearmeetingDate(){
-    this.filters['ExpenseDate'] = '';
+    this.filters['MeetingDate'] = '';
     this.getExpenses();
   }
   closeEditModal() {

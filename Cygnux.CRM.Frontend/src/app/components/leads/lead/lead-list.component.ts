@@ -95,7 +95,8 @@ export class LeadListComponent implements OnDestroy {
       PageSize: this.pageSize,
       UserID: this.selectedUser?this.selectedUser:this.identityService.getLoggedUserId(),
       startDate: event?.[0] ? event[0].toLocaleDateString("en-GB") : this.dateRange?.[0]?.toLocaleDateString("en-GB") || null,
-      endDate: event?.[1] ? event[1].toLocaleDateString("en-GB") : this.dateRange?.[1]?.toLocaleDateString("en-GB") || null
+      endDate: event?.[1] ? event[1].toLocaleDateString("en-GB") : this.dateRange?.[1]?.toLocaleDateString("en-GB") || null,
+      LeadDate: this.filters['LeadDate'] ? this.commonService.formatDate(new Date(this.filters['LeadDate'])) : '',
     };
     this.leadService.getLeadList(filters).subscribe({
       next: (response) => {

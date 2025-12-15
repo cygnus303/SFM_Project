@@ -224,8 +224,10 @@ getSelectedJSON(isApproved: boolean = false){
       userId:this.identifyService.getLoggedUserId(),
       Page: page,
       PageSize: this.pageSize?this.pageSize:5,
-       startDate: event?.[0] ? event[0].toLocaleDateString("en-GB") : this.dateRange?.[0]?.toLocaleDateString("en-GB") || null,
+      startDate: event?.[0] ? event[0].toLocaleDateString("en-GB") : this.dateRange?.[0]?.toLocaleDateString("en-GB") || null,
       endDate: event?.[1] ? event[1].toLocaleDateString("en-GB") : this.dateRange?.[1]?.toLocaleDateString("en-GB") || null,
+      ExpenseDate: this.filters['ExpenseDate'] ? this.commonService.formatDate(new Date(this.filters['ExpenseDate'])) : '',
+      MeetingDate: this.filters['MeetingDate'] ? this.commonService.formatDate(new Date(this.filters['MeetingDate'])) : '',
       ...(this.selectedUser ? { FilterUserId: this.selectedUser } : {})
     };
     this.expenseService.getExpenseApprovalList(filters).subscribe({

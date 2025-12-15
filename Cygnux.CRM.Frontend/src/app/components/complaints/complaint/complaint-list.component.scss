@@ -96,7 +96,7 @@ input[type="radio"]:after{
 
 #customerTable thead tr th,
 #customerTable tbody tr td {
-  width: 150px !important;   /* 🔥 fixed width for ALL columns */
+  width: 199px !important;   /* 🔥 fixed width for ALL columns */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -105,4 +105,32 @@ input[type="radio"]:after{
 .position-table tbody td {
   padding: 12px 18px;   /* ↑ vertical & horizontal space */
   background-color: #ffffff;
+}
+
+.position-table th:last-child,
+.position-table td:last-child {
+  min-width: 199px !important;
+}
+
+.no-border-row td {
+  border: none !important;
+  padding: 0px !important;
+}
+
+
+.table-wrapper {
+  position: relative;
+  min-height: 400px;
+}
+
+.table-overlay {
+  position: absolute;
+  inset: 0; /* top:0 left:0 right:0 bottom:0 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  z-index: 5;
+  text-align: center;
 }

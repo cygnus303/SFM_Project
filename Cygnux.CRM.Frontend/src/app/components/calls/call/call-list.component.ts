@@ -79,6 +79,7 @@ export class CallListComponent implements OnInit {
       Page: page,
       PageSize: this.pageSize,
       UserID:this.identityService.getLoggedUserId(),
+      CallDate: this.filters['CallDate'] ? this.commonService.formatDate(new Date(this.filters['CallDate'])) : '',
     };
     this.callService.getCallList(params).subscribe({
       next: (response) => {
