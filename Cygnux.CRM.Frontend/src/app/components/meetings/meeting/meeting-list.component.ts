@@ -237,6 +237,7 @@ timeoutRef: any;
       PageSize: this.pageSize,
       startDate: event?.[0] ? event[0].toLocaleDateString("en-GB") : '',
       endDate: event?.[1]  ? event[1].toLocaleDateString("en-GB") : '',
+      MeetingDate: this.filters['MeetingDate'] ? this.commonService.formatDate(new Date(this.filters['MeetingDate'])) : '',
       isWeb:true
     };
     this.meetingService.getMeetingList(filters).subscribe({

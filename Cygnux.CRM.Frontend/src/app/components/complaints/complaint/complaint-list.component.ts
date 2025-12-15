@@ -85,7 +85,11 @@ export class ComplaintListComponent implements OnInit {
       export: false,
       UserID: this.identifyService.getLoggedUserId(),
       startDate: event?.[0] ? event[0].toLocaleDateString("en-GB") : this.dateRange?.[0]?.toLocaleDateString("en-GB") || null,
-      endDate: event?.[1] ? event[1].toLocaleDateString("en-GB") : this.dateRange?.[1]?.toLocaleDateString("en-GB") || null
+      endDate: event?.[1] ? event[1].toLocaleDateString("en-GB") : this.dateRange?.[1]?.toLocaleDateString("en-GB") || null,
+      compalaintDate: this.filters['compalaintDate'] ? this.commonService.formatDate(new Date(this.filters['compalaintDate'])) : '',
+      resolutionDate: this.filters['resolutionDate'] ? this.commonService.formatDate(new Date(this.filters['resolutionDate'])) : '',
+      edd: this.filters['edd'] ? this.commonService.formatDate(new Date(this.filters['edd'])) : '',
+      addDate: this.filters['addDate'] ? this.commonService.formatDate(new Date(this.filters['addDate'])) : '',
     };
     this.complaintService.getComplaintList(filters).pipe(take(1), finalize(() => this.commonService.updateLoader(false))).subscribe({
       next: (response: any) => {
@@ -201,14 +205,14 @@ export class ComplaintListComponent implements OnInit {
     }
   }
 
-  clearDate() {
-    if (this.filters['compalaintDate']) {
+  clearDate(type:string) {
+    if (type === 'compalaintDate') {
       this.filters['compalaintDate'] = '';
-    } else if(this.filters['resolutionDate']) {
+    } else if(type === 'resolutionDate') {
       this.filters['resolutionDate'] = '';
-    }else if(this.filters['edd']){
+    }else if(type === 'edd'){
       this.filters['edd'] = '';
-    }else{
+    }else if(type === 'addDate'){
       this.filters['addDate'] = '';
     }
     this.getComplaints();

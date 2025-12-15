@@ -74,7 +74,18 @@
                     class="form-control" />
                 </th>
                 <th>
-                  <div class="input-group">
+                   <div class="input-group position-relative">
+                    <input type="text" class="form-control" placeholder="dd/mm/yyyy" name="meetingDate"
+                      [(ngModel)]="filters['LeadDate']" bsDatepicker #dpL="bsDatepicker" 
+                      [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers: false, containerClass: 'theme-dark-blue'}" (ngModelChange)="onStartTimeChange()" readonly />
+                    <span role="button" tabindex="0" class="ng-clear-wrapper clear-wrapper" title="Clear date"
+                      *ngIf="filters['LeadDate']" (click)="clearDate()">
+                      <span aria-hidden="true" class="ng-clear clear">×</span>
+                    </span>
+                    <button type="button" class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="dpL.toggle()">
+                    </button>
+                  </div>
+                  <!-- <div class="input-group">
                     <input width="100%" class="form-control" placeholder="dd/mm/yyyy" name="d2" #c2="ngModel"
                       [(ngModel)]="filters['LeadDate']" ngbDatepicker (ngModelChange)="onStartTimeChange()"
                       #d2="ngbDatepicker" readonly />
@@ -85,7 +96,7 @@
                     <button class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="d2.toggle()"
                       type="button"></button>
                     <i *ngIf="filters['LeadDate']" class="fa-sharp-duotone fa-solid fa-xmark"></i>
-                  </div>
+                  </div> -->
                 </th>
                 <th>
                   <input type="text" [(ngModel)]="filters['AssignedTo']" (input)="onStartTimeChange()" class="form-control" />

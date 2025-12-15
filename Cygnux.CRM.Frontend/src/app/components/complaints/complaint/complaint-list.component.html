@@ -64,14 +64,14 @@
                   <th class="text-center w-10">Comp. ID</th>
                   <th class="text-center w-10">Docket No</th>
                   <th class="text-center w-10">Customer Name</th>
-                  <th class="text-center w-10">Comp. Date</th>
+                  <th class="text-center w-10" style="width: 190px !important;">Comp. Date</th>
                   <th class="text-center w-10">Comp. Status</th>
-                  <th class="text-center w-10">Resolution Date</th>
+                  <th class="text-center w-10" style="width: 190px !important;">Resolution Date</th>
                   <th class="text-center w-10">SLA in Hrs</th>
                   <th class="text-center w-10">Raised By</th>
                   <th class="text-center w-10">Assigned To</th>
-                  <th class="text-center w-10">EDD</th>
-                  <th class="text-center w-10">ADD</th>
+                  <th class="text-center w-10" style="width: 190px !important;">EDD</th>
+                  <th class="text-center w-10" style="width: 190px !important;">ADD</th>
                   <th class="text-center w-10">Auto Closure</th>
                   <th class="text-center w-10">Delivery Status</th>
                   <th class="text-center w-10"
@@ -92,8 +92,20 @@
                     <input type="text" [(ngModel)]="filters['customerName']" (input)="fetchComplaints()"
                       class="form-control" />
                   </th>
-                  <th class="w-10" style="min-width: 160px;">
-                    <div class="input-group">
+                  <th class="w-10" >
+                        <div class="input-group position-relative" >
+                          <input type="text" class="form-control" placeholder="dd/mm/yyyy" name="compalaintDate"
+                            [(ngModel)]="filters['compalaintDate']" bsDatepicker #dpc="bsDatepicker"
+                            [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers: false, containerClass: 'theme-dark-blue'}"
+                            (ngModelChange)="fetchComplaints()" readonly />
+                          <span role="button" tabindex="0" class="ng-clear-wrapper clear-wrapper" title="Clear date"
+                            *ngIf="filters['compalaintDate']" (click)="clearDate('compalaintDate')">
+                            <span aria-hidden="true" class="ng-clear clear">×</span>
+                          </span>
+                          <button type="button" class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="dpc.toggle()">
+                          </button>
+                        </div>
+                    <!-- <div class="input-group">
                       <input class="form-control" placeholder="dd/mm/yyyy" name="d2" #c2="ngModel"
                         [(ngModel)]="filters['compalaintDate']" ngbDatepicker (ngModelChange)="fetchComplaints()"
                         #d3="ngbDatepicker" readonly />
@@ -103,14 +115,27 @@
                       </span>
                       <button class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="d3.toggle()"
                         type="button"></button>
-                    </div>
+                    </div> -->
                   </th>
                   <th class="w-10">
                     <input type="text" [(ngModel)]="filters['compaintStatus']" (input)="fetchComplaints()"
                       class="form-control" />
                   </th>
                   <th class="w-10" style="min-width: 160px;">
-                    <div class="input-group">
+                        <div class="input-group position-relative" >
+                          <input type="text" class="form-control" placeholder="dd/mm/yyyy" name="resolutionDate"
+                            [(ngModel)]="filters['resolutionDate']" bsDatepicker #dpr="bsDatepicker"
+                            [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers: false, containerClass: 'theme-dark-blue'}"
+                            (ngModelChange)="fetchComplaints()" readonly />
+                          <span role="button" tabindex="0" class="ng-clear-wrapper clear-wrapper" title="Clear date"
+                            *ngIf="filters['resolutionDate']" (click)="clearDate('resolutionDate')">
+                            <span aria-hidden="true" class="ng-clear clear">×</span>
+                          </span>
+                          <button type="button" class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="dpr.toggle()">
+                          </button>
+                        </div>
+
+                    <!-- <div class="input-group">
                       <input class="form-control" placeholder="dd/mm/yyyy" name="d2" #c2="ngModel"
                         [(ngModel)]="filters['resolutionDate']" ngbDatepicker (ngModelChange)="fetchComplaints()"
                         #d2="ngbDatepicker" readonly />
@@ -120,7 +145,7 @@
                       </span>
                       <button class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="d2.toggle()"
                         type="button"></button>
-                    </div>
+                    </div> -->
                   </th>
                   <th class="w-10">
                     <input type="text" [(ngModel)]="filters['slaInHr']" (input)="fetchComplaints()"
@@ -134,8 +159,20 @@
                     <input type="text" [(ngModel)]="filters['assignedTo']" (input)="fetchComplaints()"
                       class="form-control" />
                   </th>
-                  <th class="w-10" style="min-width: 160px;">
-                    <div class="input-group">
+                  <th class="w-10">
+                     <div class="input-group position-relative" >
+                          <input type="text" class="form-control" placeholder="dd/mm/yyyy" name="edd"
+                            [(ngModel)]="filters['edd']" bsDatepicker #dpedd="bsDatepicker"
+                            [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers: false, containerClass: 'theme-dark-blue'}"
+                            (ngModelChange)="fetchComplaints()" readonly />
+                          <span role="button" tabindex="0" class="ng-clear-wrapper clear-wrapper" title="Clear date"
+                            *ngIf="filters['edd']" (click)="clearDate('edd')">
+                            <span aria-hidden="true" class="ng-clear clear">×</span>
+                          </span>
+                          <button type="button" class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="dpedd.toggle()">
+                          </button>
+                        </div>
+                    <!-- <div class="input-group">
                       <input width="100%" class="form-control" placeholder="dd/mm/yyyy" name="edd" #c2="ngModel"
                         [(ngModel)]="filters['edd']" ngbDatepicker (ngModelChange)="fetchComplaints()"
                         #edd="ngbDatepicker" readonly />
@@ -145,10 +182,22 @@
                       </span>
                       <button class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="edd.toggle()"
                         type="button"></button>
-                    </div>
+                    </div> -->
                   </th>
-                  <th class="w-10" style="min-width: 160px;">
-                    <div class="input-group">
+                  <th class="w-10">
+                      <div class="input-group position-relative" >
+                          <input type="text" class="form-control" placeholder="dd/mm/yyyy" name="addDate"
+                            [(ngModel)]="filters['addDate']" bsDatepicker #dpd="bsDatepicker"
+                            [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers: false, containerClass: 'theme-dark-blue'}"
+                            (ngModelChange)="fetchComplaints()" readonly />
+                          <span role="button" tabindex="0" class="ng-clear-wrapper clear-wrapper" title="Clear date"
+                            *ngIf="filters['addDate']" (click)="clearDate('addDate')">
+                            <span aria-hidden="true" class="ng-clear clear">×</span>
+                          </span>
+                          <button type="button" class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="dpd.toggle()">
+                          </button>
+                        </div>
+                    <!-- <div class="input-group">
                       <input width="100%" class="form-control" placeholder="dd/mm/yyyy" name="addDate" #c2="ngModel"
                         [(ngModel)]="filters['addDate']" ngbDatepicker (ngModelChange)="fetchComplaints()"
                         #addDate="ngbDatepicker" readonly />
@@ -158,7 +207,7 @@
                       </span>
                       <button class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="addDate.toggle()"
                         type="button"></button>
-                    </div>
+                    </div> -->
                   </th>
                   <th class="w-10">
                     <input type="text" [(ngModel)]="filters['autoClosure']" (input)="fetchComplaints()"
@@ -169,6 +218,7 @@
                       class="form-control" />
                   </th>
                   <th class="w-10"></th>
+                    <th class="w-10"></th>
                 </tr>
               </thead>
               <tbody class="list form-check-all">
@@ -235,23 +285,19 @@
                     </ul>
                   </td>
                 </tr>
-                <tr  class="text-center" >
-                  <td colspan="11">
-                    <div *ngIf="loading && complaints.length === 0" class="text-center border-found">
-                      <lord-icon src="/assets/json/system-solid-716-spinner-three-dots-loop-scale.json" trigger="loop"
-                        colors="primary:#121331,secondary:#08a88a" style="width: 100px; height: 100px">
-                      </lord-icon>
-                    </div>
-                    <div class="noresult" *ngIf="!loading && complaints.length == 0">
-                      <div class="text-center">
-                        <img src="assets/images/noData.png" height="200" width="300">
-                        <h5 class="mt-2">Sorry! No Data Found</h5>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
               </tbody>
             </table>
+            <div class="table-overlay pt-5" *ngIf="!loading && complaints.length === 0">
+              <img src="assets/images/noData.png" height="220">
+              <h5 class="mt-2">Sorry! No Data Found</h5>
+            </div>
+            
+            <div class="table-overlay" *ngIf="loading && complaints.length === 0">
+              <lord-icon src="/assets/json/system-solid-716-spinner-three-dots-loop-scale.json" trigger="loop"
+                colors="primary:#121331,secondary:#08a88a" style="width:100px;height:100px">
+              </lord-icon>
+            </div>
+
           </div>
           <div class="d-flex justify-content-end align-items-center mt-3" *ngIf="complaints.length != 0">
             <div class="m-3 mt-0"> Showing Total Records : <strong>{{totalItems}}</strong> </div>

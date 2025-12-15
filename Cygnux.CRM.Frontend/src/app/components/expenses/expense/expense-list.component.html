@@ -79,8 +79,20 @@
                         <input type="text" [(ngModel)]="filters['meetingId']" (input)="onStartTimeChange()"
                           class="form-control" />
                       </th>
-                      <th>
-                        <div class="input-group">
+                      <th >
+                        <div class="input-group position-relative" style="width: 160px !important;">
+                          <input type="text" class="form-control" placeholder="dd/mm/yyyy" name="expenseDate"
+                            [(ngModel)]="filters['ExpenseDate']" bsDatepicker #dpe="bsDatepicker"
+                            [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers: false, containerClass: 'theme-dark-blue'}"
+                            (ngModelChange)="onStartTimeChange()" readonly />
+                          <span role="button" tabindex="0" class="ng-clear-wrapper clear-wrapper" title="Clear date"
+                            *ngIf="filters['ExpenseDate']" (click)="clearDate()">
+                            <span aria-hidden="true" class="ng-clear clear">×</span>
+                          </span>
+                          <button type="button" class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="dpe.toggle()">
+                          </button>
+                        </div>
+                        <!-- <div class="input-group">
                           <input width="100%" class="form-control" placeholder="dd/mm/yyyy" name="d2" #c2="ngModel"
                             [(ngModel)]="filters['ExpenseDate']" ngbDatepicker (ngModelChange)="onStartTimeChange()"
                             #d2="ngbDatepicker" readonly />
@@ -90,14 +102,26 @@
                           </span>
                           <button class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="d2.toggle()"
                             type="button"></button>
-                        </div>
+                        </div> -->
                       </th>
                       <th>
                         <input type="text" [(ngModel)]="filters['CompanyName']" (input)="onStartTimeChange()"
                           class="form-control" />
                       </th>
                       <th>
-                        <div class="input-group">
+                           <div class="input-group position-relative" style="width: 160px !important;">
+                          <input type="text" class="form-control" placeholder="dd/mm/yyyy" name="expenseDate"
+                            [(ngModel)]="filters['MeetingDate']" bsDatepicker #dpm="bsDatepicker"
+                            [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers: false, containerClass: 'theme-dark-blue'}"
+                            (ngModelChange)="onStartTimeChange()" readonly />
+                          <span role="button" tabindex="0" class="ng-clear-wrapper clear-wrapper" title="Clear date"
+                            *ngIf="filters['MeetingDate']" (click)="clearmeetingDate()">
+                            <span aria-hidden="true" class="ng-clear clear">×</span>
+                          </span>
+                          <button type="button" class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="dpm.toggle()">
+                          </button>
+                        </div>
+                        <!-- <div class="input-group">
                           <input width="100%" class="form-control" placeholder="dd/mm/yyyy" name="d4" #c2="ngModel"
                             [(ngModel)]="filters['ExpenseDate']" ngbDatepicker (ngModelChange)="onStartTimeChange()"
                             #d4="ngbDatepicker" readonly />
@@ -107,7 +131,7 @@
                           </span>
                           <button class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="d4.toggle()"
                             type="button"></button>
-                        </div>
+                        </div> -->
                       </th>
                       <th>
                         <input type="text" [(ngModel)]="filters['CheckIn']" (input)="onStartTimeChange()"

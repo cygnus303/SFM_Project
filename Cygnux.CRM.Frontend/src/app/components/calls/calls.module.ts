@@ -12,6 +12,7 @@ import { CallDetailComponent } from './call-detail/call-detail.component';
 import { LayoutModule } from '../layouts/layout.module';
 import { DateFormatPipe } from '../../shared/pipes/date-format.pipe';
 import { PopoverModule } from 'ngx-bootstrap/popover';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
   declarations: [CallListComponent, AddCallComponent, CallDetailComponent],
@@ -24,7 +25,8 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
     NgSelectModule,
     NgbPaginationModule,
     LayoutModule,
-    PopoverModule
+    PopoverModule,
+    BsDatepickerModule.forRoot(),
   ],
   exports: [AddCallComponent],
   providers: [DatePipe, DateFormatPipe, ExportService],
