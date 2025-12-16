@@ -29,7 +29,7 @@ export class MeetingListComponent implements OnInit {
   selectedCall: string | null = null;
   selectedMeetingId: string | null = null;
   page = 1; // Current page number
-  pageSize = 5; // Number of items per page
+  pageSize = 10; // Number of items per page
   totalItems = 0; // Total number of items
   public endDate:any;
   public startDate:any;
@@ -50,10 +50,7 @@ export class MeetingListComponent implements OnInit {
     public exportService: ExportService,
     public confirmationService: ConfirmationService,
     public identityService:IdentityService,
-    public customerService:CustomerService
-  ) {defineElement(lottie.loadAnimation);
-    
-  }
+    public customerService:CustomerService) {defineElement(lottie.loadAnimation);}
 
   ngOnInit() {
        this.commonService.loading.subscribe((state: boolean) => {

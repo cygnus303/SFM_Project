@@ -48,10 +48,10 @@
       </div>
     </div>
 
-    <div class="row p-3">
-      <div class="col-lg-12">
+    <div class="card-body">
+      <div>
         <div class="table-responsive table-card table-wrapper">
-          <table class="table table-bordered align-middle position-table" id="customerTable">
+          <table class="table table-bordered align-middle w-100 position-table" id="customerTable">
             <thead class="table-light">
               <tr>
                 <th class="text-center">Customer Name</th>
@@ -85,8 +85,8 @@
                       type="button"></button>
                   </div>
                 </th> -->
-                <th style="width: 11% !important;">
-                  <div class="input-group position-relative">
+                <th>
+                  <div class="input-group position-relative" style="width: 160px !important;">
                     <input type="text" class="form-control" placeholder="dd/mm/yyyy" name="meetingDate"
                       [(ngModel)]="filters['MeetingDate']" bsDatepicker #dpM="bsDatepicker" 
                       [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers: false, containerClass: 'theme-dark-blue'}" (ngModelChange)="onStartTimeChange()" readonly />
@@ -132,10 +132,7 @@
                 <td class="text-center">
                   <a *ngIf="!meeting.meetingMOM">
                     {{ meeting.customerName ? meeting.customerName:'--'}}</a>
-                  <p *ngIf="
-                                  meeting.meetingMOM  ||
-                                  meeting.meetingMOM == null
-                                ">
+                  <p *ngIf="meeting.meetingMOM  || meeting.meetingMOM == null">
                     {{ meeting.customerName ? meeting.customerName:'--'}}
                   </p>
                 </td>

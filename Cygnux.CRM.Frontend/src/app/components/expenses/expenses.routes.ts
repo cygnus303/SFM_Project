@@ -8,13 +8,16 @@ export const ExpenseRoutes: Routes = [
   {
     path: 'lists',
     component: ExpenseListComponent,
+        data: { title: 'EXPENSES' }
   },
   {
     path: 'approval',
     component: ExpenseApprovalListComponent,
+        data: { title: 'EXPENSE APPROVAL' }
   },
   {
     path: 'general-master',
     component: ExpenseGeneralMasterListComponent,
+     data: { title: 'EXPENSE GENERAL MASTER' }
   },
 ];

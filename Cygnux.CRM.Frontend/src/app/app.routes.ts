@@ -26,6 +26,7 @@ export const routes: Routes = [
             (m) => m.WelcomeModule
           ),
         canActivate: [AuthGuard],
+        data: { title: 'DASHBOARD' }
       },
       {
         path: 'customer',
@@ -34,18 +35,21 @@ export const routes: Routes = [
             (m) => m.CustomerModule
           ),
         canActivate: [AuthGuard],
+        data: { title: 'CUSTOMER' }
       },
       {
         path: 'call',
         loadChildren: () =>
           import('./components/calls/calls.module').then((m) => m.CallModule),
         canActivate: [AuthGuard],
+        data: { title: 'CALLS' }
       },
       {
         path: 'lead',
         loadChildren: () =>
           import('./components/leads/leads.module').then((m) => m.LeadModule),
         canActivate: [AuthGuard],
+         data: { title: 'LEADS' }
       },
       {
         path: 'meeting',
@@ -54,12 +58,14 @@ export const routes: Routes = [
             (m) => m.MeetingModule
           ),
         canActivate: [AuthGuard],
+        data: { title: 'MEETINGS' }
       },
       {
         path: 'task',
         loadChildren: () =>
           import('./components/tasks/tasks.module').then((m) => m.TaskModule),
         canActivate: [AuthGuard],
+        data: { title: 'TASK' }
       },
       {
         path: 'expense',
@@ -68,6 +74,7 @@ export const routes: Routes = [
             (m) => m.ExpenseModule
           ),
         canActivate: [AuthGuard],
+        data: { title: 'EXPENSES' }
       },
       {
         path: 'complaint',
@@ -76,6 +83,7 @@ export const routes: Routes = [
             (m) => m.ComplaintModule
           ),
         canActivate: [AuthGuard],
+         data: { title: 'COMPLAINT' }
       },
       {
         path: 'my-calendar',
@@ -84,6 +92,7 @@ export const routes: Routes = [
             (m) => m.MyCalendarModule
           ),
         canActivate: [AuthGuard],
+         data: { title: 'MY CALENDAR' }
       },
       {
         path: 'attendance',
@@ -92,6 +101,7 @@ export const routes: Routes = [
             (m) => m.AttendanceModule
           ),
         canActivate: [AuthGuard],
+         data: { title: 'ATTENDANCE' }
       },
     ],
   },

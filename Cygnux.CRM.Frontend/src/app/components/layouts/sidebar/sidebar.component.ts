@@ -13,8 +13,4 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     this.isSFMMasters = JSON.parse(localStorage.getItem('ISSFMMASTER') || '{}');
   }
-
-  changeTitle(title: string) {
-  this.commonService.updateTitle(title);
-}
 }

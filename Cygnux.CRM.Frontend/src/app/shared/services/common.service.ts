@@ -11,9 +11,6 @@ export class CommonService {
   isLoading = this.loading.asObservable();
   public userChart = new Subject<boolean>()
   public complaintViewModal = new Subject<any>();
-private storedTitle = localStorage.getItem('pageTitle') || 'Dashboard';
-  private titleSource = new BehaviorSubject<string>(this.storedTitle);
-  currentTitle = this.titleSource.asObservable();
   updateLoader(isLoading: boolean) {
     this.loading.next(isLoading);
   }
@@ -66,22 +63,17 @@ private storedTitle = localStorage.getItem('pageTitle') || 'Dashboard';
     },
   ];
 
-  updateTitle(title: string) {
-    localStorage.setItem('pageTitle', title);
-    this.titleSource.next(title);
-  }
-
   getMenu(): Observable<IApiBaseResponse<any>> {
     return this.apiHandlerService.Get(`External/Menu?userid=${this.identifyService.getLoggedUserId()}`);
   }
 
-    formatDate(date: Date): string {
-  if (!date) return '';
-  const d = String(date.getDate()).padStart(2, '0');
-  const m = String(date.getMonth() + 1).padStart(2, '0');
-  const y = date.getFullYear();
-  return `${d}/${m}/${y}`;
-}
+  formatDate(date: Date): string {
+    if (!date) return '';
+    const d = String(date.getDate()).padStart(2, '0');
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const y = date.getFullYear();
+    return `${d}/${m}/${y}`;
+  }
 
 }
 

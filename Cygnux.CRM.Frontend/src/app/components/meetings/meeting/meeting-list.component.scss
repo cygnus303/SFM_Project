@@ -38,12 +38,15 @@
   opacity: 0.5;
 }
 .position-table tbody td {
-  padding: 12px 14px;   /* ↑ vertical & horizontal space */
+  padding: 12px 15px;   /* ↑ vertical & horizontal space */
   background-color: #ffffff;
 }
 
 #customerTable thead tr th,
 #customerTable tbody tr td {
- width: 199px !important;
+  width: 160px !important;   /* 🔥 fixed width for ALL columns */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
