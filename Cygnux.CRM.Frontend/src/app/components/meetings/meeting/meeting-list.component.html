@@ -54,6 +54,7 @@
           <table class="table table-bordered align-middle w-100 position-table" id="customerTable">
             <thead class="table-light">
               <tr>
+                <th class="text-center">Meeting Id</th>
                 <th class="text-center">Customer Name</th>
                 <th class="text-center">Meeting Date</th>
                 <th class="text-center">Start Time</th>
@@ -68,6 +69,10 @@
                 <th class="text-center">Action</th>
               </tr>
               <tr>
+                <th>
+                  <input type="text" [(ngModel)]="filters['MeetingId']" (input)="onStartTimeChange()"
+                    class="form-control" />
+                </th>
                 <th>
                   <input type="text" [(ngModel)]="filters['CustomerName']" (input)="onStartTimeChange()"
                     class="form-control" />
@@ -129,6 +134,7 @@
             </thead>
             <tbody class="list form-check-all">
               <tr *ngFor="let meeting of meetings; let i = index">
+                <td class="text-center">{{meeting.meetingId ? meeting.meetingId :'--'}}</td>
                 <td class="text-center">
                   <a *ngIf="!meeting.meetingMOM">
                     {{ meeting.customerName ? meeting.customerName:'--'}}</a>
