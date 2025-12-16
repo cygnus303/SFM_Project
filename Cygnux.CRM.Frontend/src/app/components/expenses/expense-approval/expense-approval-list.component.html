@@ -72,6 +72,7 @@
                   <thead class="table-light">
                     <tr>
                       <th class="text-center"></th>
+                      <th class="text-center">Meeting Id</th>
                       <th class="text-center">Expense No.</th>
                       <th class="text-center">Expense Date</th>
                       <th class="text-center">Customer Name</th>
@@ -86,7 +87,10 @@
                     <tr>
                       <!-- <th><input type="checkbox" class="pure-checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()"   [checked]="selectAll" [class.disabled-input]="isFilterApplied"></th> -->
                       <th><input type="checkbox" class="pure-checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()"   ></th>
-
+                      <th>
+                        <input type="text" [(ngModel)]="filters['meetingId']" (input)="onStartTimeChange()"
+                          class="form-control" />
+                      </th>
                       <th>
                         <input type="text" [(ngModel)]="filters['expenseCode']" (input)="onStartTimeChange()"
                           class="form-control" />
@@ -161,6 +165,7 @@
                   <tbody class="list form-check-all">
                     <tr *ngFor="let expense of expenses; let i = index">
                       <th><input type="checkbox" class="pure-checkbox" [(ngModel)]="expense.isSelected" (change)="onRowSelect(expense)" [class.disabled-input]="expense.isManager_AuditApproved || expense.createdBy === identifyService.getLoggedUserId()||expense.isEdit==='Y'"></th>
+                      <td class="text-center">{{ expense.meetingId ? expense.meetingId:'--' }}</td>
                       <td class="text-center">{{ expense.expenseCode ? expense.expenseCode:'--' }}</td>
                       <td class="text-center">{{ expense.expenseDate ?expense.expenseDate :'--'}}</td>
                       <td class="text-center">{{expense.contactName ? expense.contactName:'--' }}</td>

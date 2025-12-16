@@ -19,6 +19,8 @@ import { CommonService } from '../../../shared/services/common.service';
 import { CustomerService } from '../../../shared/services/customer.service';
 import { ExternalService } from '../../../shared/services/external.service';
 import { TaskService } from '../../../shared/services/task.service';
+import { MeetingService } from '../../../shared/services/meeting.service';
+import { IdentityService } from '../../../shared/services/identity.service';
 
 @Component({
   selector: 'app-add-task',
@@ -34,6 +36,10 @@ export class AddTaskComponent implements OnInit, OnChanges {
   public priorities: GeneralMasterResponse[] = [];
   public customers: LeadCustomerResponse[] = [];
   public isSubmitting: boolean = false;
+  isCustomerLoading = false; // loader flag
+  public customerList: any;
+  public notCustomerNameValue = 'Please enter at least 3 characters';
+
 
   @Input() taskResponse: TaskResponse | null = null;
   @Output() dataEmitter: EventEmitter<string> = new EventEmitter<string>();
@@ -46,6 +52,8 @@ export class AddTaskComponent implements OnInit, OnChanges {
     public customerService: CustomerService,
     public commonService: CommonService,
     private toasterService: ToastrService,
+    private meetingService: MeetingService,
+    private identityService: IdentityService
   ) {
     this.taskForm = new FormGroup({});
   }
@@ -91,7 +99,7 @@ export class AddTaskComponent implements OnInit, OnChanges {
       !this.taskId ? this.addTask(dataToSubmit) : this.updateTask(dataToSubmit);
     }
   }
-  onClose(){
+  onClose() {
     this.taskForm.reset();
     this.buildForm();
   }
@@ -203,4 +211,44 @@ export class AddTaskComponent implements OnInit, OnChanges {
       },
     });
   }
+
+  getCustomerList(event?: any) {
+    const searchTerm = event.target.value
+    if (!searchTerm || searchTerm.trim() === '') {
+      this.customerList = [];
+      this.notCustomerNameValue = 'Enter at least 3 character';
+      // this.isSearching = false;
+      return;
+    }
+
+    if (searchTerm.length < 3) {
+      this.notCustomerNameValue = 'Enter at least 3 character';
+      this.customerList = [];
+      return;
+    }
+
+    // this.isSearching = true;
+    this.notCustomerNameValue = 'Searching...';
+    if (searchTerm && searchTerm.length >= 3) {
+      this.meetingService.getMeetingCustomer(this.identityService.getLoggedUserId(), searchTerm).subscribe({
+        next: (response) => {
+          if (response) {
+            this.customerList = response.data;
+            this.notCustomerNameValue = 'No items found';
+          }
+          this.commonService.updateLoader(false);
+        },
+        error: (response: any) => {
+          this.toasterService.error(response);
+          this.commonService.updateLoader(false);
+        },
+      });
+    }
+  }
+
+  resetCustomerDropdown(){
+  this.customerList=[]
+  this.notCustomerNameValue='Please enter at least 3 characters';
+  }
+
 }

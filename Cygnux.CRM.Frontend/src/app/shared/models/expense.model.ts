@@ -26,7 +26,8 @@ export interface ExpenseResponse {
   attendeeIDs:string;
   userName:string;
   isSelected:boolean;
-  attendeeCode:string
+  attendeeCode:string;
+  meetingMOM:string;
 }
 
 export interface ExpenseDetailResponse extends ExpenseResponse {

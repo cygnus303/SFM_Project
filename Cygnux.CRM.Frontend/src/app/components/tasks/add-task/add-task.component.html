@@ -136,8 +136,8 @@
                 [clearable]="true"
               >
               </ng-select> -->
-              <ng-select
-              [items]="customerService.customersList"
+              <!-- <ng-select
+              [items]="customerList"
               bindLabel="customerName"
               bindValue="customerName"
               formControlName="leadId"
@@ -146,7 +146,11 @@
               [searchable]="true"
               [ngClass]="{ 'border-danger': taskForm.controls['leadId'].invalid && taskForm.controls['leadId'].touched }"
               [clearable]="true">
-            </ng-select>
+            </ng-select> -->
+             <ng-select [items]="customerList" bindLabel="customerName" bindValue="customerCode" formControlName="leadId"  placeholder="Search Customer"
+                            [ngClass]="{ 'border-danger': taskForm.controls['leadId'].invalid && taskForm.controls['leadId'].touched}" (input)="getCustomerList($event)"
+                             [loading]="isCustomerLoading" [notFoundText]="notCustomerNameValue" (open)="resetCustomerDropdown()" >
+                          </ng-select>
               <div
                 *ngIf="
                   taskForm.controls['leadId'].invalid &&
