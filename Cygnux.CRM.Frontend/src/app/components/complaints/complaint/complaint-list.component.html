@@ -1,5 +1,20 @@
 <div class="page-content">
-  <div class="container-fluid bg-white">
+     <ul class="nav nav-tabs border-tab nav-primary" id="info-tab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="basic-info-tab" data-bs-toggle="tab" href="#basic-info" role="tab"
+        aria-controls="basic-info" aria-selected="true">
+        <i class="icofont icofont-ui-home"></i>Complaint List
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="other-info-tab" data-bs-toggle="tab" href="#other-info" role="tab"
+        aria-controls="other-info" aria-selected="false">
+        <i class="icofont icofont-contacts"></i>Dashboard
+      </a>
+    </li>
+  </ul>
+  <div class="container-fluid bg-white tab-content" id="info-tabContent">
+    <div class="tab-pane fade active show" id="basic-info" role="tabpanel" aria-labelledby="basic-info-tab">
     <div class="bg-white py-3" style="border-radius: 3px;">
       <div class="row">
         <div class="col-3">
@@ -27,8 +42,8 @@
         </div>
         <div class="col-sm-auto ms-auto d-flex align-items-center">
           <div class="hstack gap-2">
-            <button type="button" class="btn btn-success add-btn" (click)="openChartModal()"> Dashboard
-            </button>
+            <!-- <button type="button" class="btn btn-success add-btn" (click)="openChartModal()"> Dashboard
+            </button> -->
             <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()">
               <i class="ri-delete-bin-2-line"></i>
             </button>
@@ -333,7 +348,7 @@
                   id="close-modal"></button>
               </div>
               <div *ngIf="isComplaintdashboard">
-                <app-user-chart [chartList]="'complaint'"></app-user-chart>
+                <!-- <app-user-chart [chartList]="'complaint'"></app-user-chart> -->
               </div>
             </div>
           </div>
@@ -352,5 +367,9 @@
         </div>
       </div>
     </div>
+    </div>
+     <div class="tab-pane fade" id="other-info" role="tabpanel" aria-labelledby="other-info-tab">
+      <app-user-chart [chartList]="'complaint'"></app-user-chart>
+  </div>
   </div>
 </div>
