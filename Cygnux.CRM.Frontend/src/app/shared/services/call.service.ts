@@ -44,8 +44,8 @@ export class CallService {
   ): Observable<IApiBaseResponse<CommonResponse>> {
     return this.apiHandlerService.Post('call/' + id, addCallRequest);
   }
-  importCall(formData: any): Observable<IApiBaseResponse<CommonResponse>> {
-    return this.apiHandlerService.Post('call/import', formData);
+  importCall(userId:string,formData: any): Observable<IApiBaseResponse<CommonResponse>> {
+    return this.apiHandlerService.Post(`call/import?userId=${userId}`, formData);
   }
 
   deleteCall(id: string): Observable<IApiBaseResponse<CommonResponse>> {
