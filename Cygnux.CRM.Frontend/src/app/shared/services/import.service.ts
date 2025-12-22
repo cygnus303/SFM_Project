@@ -58,7 +58,7 @@ export class ImportService {
             // this.importData(formData, this.leadService.importLead.bind(this.leadService), type);
             this.importData(formData, (data) => this.leadService.importLead(this.identityService.getLoggedUserId(), data), type);
           } else if (type === 'call') {
-            this.importData(formData, this.callService.importCall.bind(this.callService), type);
+            this.importData(formData, this.callService.importCall.bind(this.callService,this.identityService.getLoggedUserId()), type);
           }  else {
             this.toasterService.error('Invalid type specified for file import.');
           }
