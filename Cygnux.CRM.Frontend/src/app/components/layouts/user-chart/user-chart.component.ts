@@ -49,81 +49,18 @@ export class UserChartComponent {
   public chart: any;
   public charts: any;
   public RatingChart: any;
-  public chartOptions: {} = {};
-  public ColumnOption: ChartOptions = {
-    series: [],
-    chart: {
-      type: "bar",
-      height: 250
-    },
-    dataLabels: { enabled: false },
-    plotOptions: {
-      bar: {
-        horizontal: false
-      }
-    },
-    responsive: [],
-    xaxis: {
-      categories: []
-    },
-    legend: {
-      position: "right",
-      offsetY: 40
-    },
-    fill: {
-      opacity: 1
-    }
-  };
+  public chartOptions:  any = null;
+  public meetingCanvasOptions: any = null;
+  public complaintColumnOption: any = null;
 
-  complaintColumnOption: ChartOptions = {
-    series: [],
-    chart: {
-      type: 'bar',
-      height: 350,
-      stacked: true,
-      stackType: '100%',
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        columnWidth: '50%',
-      },
-    },
-    responsive: [
-      {
-        breakpoint: 480,
-        options: {
-          legend: {
-            position: 'bottom',
-            offsetX: -10,
-            offsetY: 0,
-          },
-        },
-      },
-    ],
-    xaxis: {
-      categories: [], // Initialize with an empty array
-    },
-    fill: {
-      opacity: 1,
-    },
-    legend: {
-      position: 'right',
-      offsetX: 0,
-      offsetY: 50,
-    },
-  };
   public meetingChartSubscription!: Subscription;
   public getLeadStatusfilter:GetFilter[]=[];
   public leadStatus:LeadByStatusResponse[]=[];
   public leadSource !:LeadBySourceResponse;
   public leadCatagory:LeadCategoryResponse[]=[];
   public isCardLoading:boolean=false;
-  dateRange: [Date, Date] = [new Date(new Date().getFullYear(), new Date().getMonth(), 1),
-  new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0, 23, 59, 59, 999)];
+  // dateRange: [Date, Date] = [new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+  // new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0, 23, 59, 59, 999)];
   startDate!: string ;
   endDate!: string;
   userType=localStorage.getItem('UserType')
@@ -131,7 +68,8 @@ export class UserChartComponent {
   public users: UserResponse[] = [];
   public userIdData:string='';
   placeholderArray = Array(7);
-
+  @Input() dateRange!: [Date, Date];
+  @Input() selectedUser!: any;
   ranges: IRange[] = [
     {
       value: [new Date(new Date().setDate(new Date().getDate() - 7)), new Date()],
@@ -180,18 +118,18 @@ export class UserChartComponent {
     private cdr: ChangeDetectorRef
   ){
     this.setDefaultDates();
-    this.userIdData = this.identifyService.getLoggedUserId();
+    this.userIdData = this.selectedUser;
     // this.getUsers();
     this.meetingChartSubscription = this.commonService.userChart.subscribe((res)=>{
       if(this.chartList==='meeting'){
-        this.getMeetingCountDayWise();
+        // this.getMeetingCountDayWise();
       }else if(this.chartList === 'complaint'){
-        this.getTicketByDayWise();
+        // this.getTicketByDayWise();
       }else if(this.chartList === 'leads'){
-        this.getLeadCatagoryChart();
-        this.getLeadSourceChart();
-        const selectedDates = [this.startDate, this.endDate]
-        this.getCustomerfilters(selectedDates,this.userIdData);
+        // this.getLeadCatagoryChart();
+        // this.getLeadSourceChart();
+        // const selectedDates = [this.startDate, this.endDate]
+        // this.getCustomerfilters(selectedDates,this.userIdData);
       }
     });
   }
@@ -202,6 +140,10 @@ export class UserChartComponent {
     this.endDate = today.toUTCString();
   }
 
+  ngOnInit(){
+   this.onDateRangeSelected(this.dateRange,this.selectedUser)
+  }
+
   onDateRangeSelected(selectedDates: any, userIdData: string) {
     if (selectedDates && selectedDates.length === 2) {
       this.startDate = selectedDates[0].toUTCString();
@@ -210,7 +152,7 @@ export class UserChartComponent {
     this.userIdData = userIdData;
     this.getCustomerfilters(selectedDates, this.userIdData);
     if (this.chartList === 'leads') {
-      this.getLeadCatagoryChart();
+      // this.getLeadCatagoryChart();
       this.getLeadSourceChart();
     }
     if (this.chartList === 'meeting') {
@@ -226,10 +168,11 @@ export class UserChartComponent {
 
   getMeetingCountDayWise() {
     var filters = {
-      userid: this.identityService.getLoggedUserId(),
+      userid: this.selectedUser,
       startdate: this.startDate,
       enddate: this.endDate
     }
+    this.meetingCanvasOptions = null;
     this.meetingService.getMeetingCountDayWise(filters).subscribe({
       next: (response) => {
         this.MeetingcolumnChart(response.data);
@@ -271,105 +214,94 @@ export class UserChartComponent {
     }
   }
 
-  createDoughnutChart(status: any) {
-    const ctx = document.getElementById('MyRatingChart') as HTMLCanvasElement;
-    if (this.RatingChart) {
-      this.RatingChart.destroy();
-    }
-    if (ctx) {
-      const { poor, good } = status;
-      this.pieChartData = {
-        labels: ['Poor', 'Good'],
-        datasets: [
-          {
-            label: 'Rating',
-            data: [poor, good],
-            backgroundColor: ['#f380af', '#41709d'],
-            hoverOffset: 4
-          }
-        ]
-      };
-      this.RatingChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: this.pieChartData,
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top'
-            }
-          }
-        }
-      });
-    }
+createDoughnutChart(status: any) {
+  const canvas = document.getElementById('MyRatingChart') as HTMLCanvasElement;
+  if (!canvas) return;
+
+  // 🔥 HARD DESTROY (important)
+  const existingChart = Chart.getChart(canvas);
+  if (existingChart) {
+    existingChart.destroy();
   }
 
+  const { poor, good } = status;
+
+  const data = {
+    labels: ['Poor', 'Good'],
+    datasets: [
+      {
+        label: 'Rating',
+        data: [poor, good],
+        backgroundColor: ['#f380af', '#41709d'],
+        hoverOffset: 4
+      }
+    ]
+  };
+
+  this.RatingChart = new Chart(canvas, {
+    type: 'doughnut',
+    data,
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top' }
+      }
+    }
+  });
+}
+
+
   initPieChart(leadSource: any) {
-    if (this.chartList === 'leads') {
-      if (this.chart) {
-        this.chart.destroy();
-      }
-      const { phoneLeads, emailLeads, whatsappLeads, webBotLeads } = leadSource;
-      this.pieChartData = {
-        labels: ['Phone Leads', 'Email Leads', 'WhatsApp Leads', 'WebBot Leads'],
-        datasets: [
-          {
-            label: 'Leads By Source',
-            data: [phoneLeads, emailLeads, whatsappLeads, webBotLeads],
-            backgroundColor: ['#f06548', '#455d74', '#ffcc00', '#34c38f'],
-            hoverOffset: 4
-          }
-        ]
-      };
-    } else if (this.chartList === 'meeting') {
-      if (this.chart) {
-        this.chart.destroy();
-      }
-      const { completed, pending } = leadSource;
-      this.pieChartData = {
-        labels: ['Completed', 'Pending'],
-        datasets: [
-          {
-            label: 'Meeting By Status',
-            data: [completed, pending],
-            backgroundColor: ['#8064a1', '#9bbb58'],
-            hoverOffset: 4
-          }
-        ]
-      };
-    } else if (this.chartList === 'complaint') {
-      if (this.chart) {
-        this.chart.destroy();
-      }
-      const { phoneComplaint, emailComplaint, whatsappComplaint, webBotComplaint } = leadSource;
-      this.pieChartData = {
-        labels: ['Phone', 'Email', 'WhatsApp', 'Web/Bot'],
-        datasets: [
-          {
-            label: 'Tickets By Source',
-            data: [phoneComplaint, emailComplaint, whatsappComplaint, webBotComplaint],
-            backgroundColor: ['#f06548', '#455d74', '#ffcc00', '#34c38f'],
-            hoverOffset: 4
-          }
-        ]
-      };
-    }
-    const pieChartElement = document.getElementById('MyPieChart') as HTMLCanvasElement;
-    if (pieChartElement) {
-      this.chart = new Chart(pieChartElement, {
-        type: 'doughnut',
-        data: this.pieChartData,
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top'
-            }
-          }
-        }
-      });
-    }
+  if (this.chart) {
+    this.chart.destroy();
+    this.chart = null;
   }
+
+  const pieChartElement = document.getElementById('MyPieChart') as HTMLCanvasElement;
+  if (!pieChartElement) return;
+
+  let labels: string[] = [];
+  let data: number[] = [];
+  let bgColors: string[] = [];
+
+  if (this.chartList === 'leads') {
+    const { phoneLeads, emailLeads, whatsappLeads, webBotLeads } = leadSource;
+    labels = ['Phone Leads', 'Email Leads', 'WhatsApp Leads', 'WebBot Leads'];
+    data = [phoneLeads, emailLeads, whatsappLeads, webBotLeads];
+    bgColors = ['#f06548', '#455d74', '#ffcc00', '#34c38f'];
+  } else if (this.chartList === 'meeting') {
+    const { completed, pending } = leadSource;
+    labels = ['Completed', 'Pending'];
+    data = [completed, pending];
+    bgColors = ['#8064a1', '#9bbb58'];
+  } else if (this.chartList === 'complaint') {
+    const { phoneComplaint, emailComplaint, whatsappComplaint, webBotComplaint } = leadSource;
+    labels = ['Phone', 'Email', 'WhatsApp', 'Web/Bot'];
+    data = [phoneComplaint, emailComplaint, whatsappComplaint, webBotComplaint];
+    bgColors = ['#f06548', '#455d74', '#ffcc00', '#34c38f'];
+  }
+
+  this.pieChartData = {
+    labels: labels,
+    datasets: [
+      {
+        label: 'Chart',
+        data: data,
+        backgroundColor: bgColors,
+        hoverOffset: 4
+      }
+    ]
+  };
+  this.chart = new Chart(pieChartElement, {
+    type: 'doughnut',
+    data: this.pieChartData,
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'top' } }
+    }
+  });
+}
+
 
   getCustomerfilters(event: any, userid: string) {
     if (event?.length && userid) {
@@ -379,10 +311,12 @@ export class UserChartComponent {
         enddate: this.endDate
       }
       if (this.chartList === 'leads') {
+        this.chartOptions = null; 
         this.getLeadStatusfilter=[];
         this.isCardLoading=true
         this.leadService.getLeadCatagoryData(filters).subscribe({
           next: (response) => {
+            this.funnelChart(response.data);
             this.getLeadStatusfilter = response.data
               .map((item: any) => ({
                 name: item.categoryName,
@@ -482,7 +416,7 @@ export class UserChartComponent {
       compaintStatus: status
     };
     this.isCardLoading=true;
-    this.complaintService.getComplaintListexport(this.identifyService.getLoggedUserId(),this.startDate,this.endDate,filters).subscribe({
+    this.complaintService.getComplaintListexport(this.selectedUser,this.startDate,this.endDate,filters).subscribe({
       next: (response) => {
         if (response) {
           this.exportService.exportToExcel(response.data);
@@ -499,7 +433,7 @@ export class UserChartComponent {
 
   getLeadSourceChart() {
     const filters: any = {
-      userid: this.identityService.getLoggedUserId(),
+      userid: this.selectedUser,
       startdate: this.startDate,
       enddate: this.endDate
     }
@@ -520,7 +454,7 @@ export class UserChartComponent {
 
   getLeadCatagoryChart() {
     const filters: any = {
-      userid: this.identityService.getLoggedUserId(),
+      userid: this.selectedUser,
       startdate: this.startDate,
       enddate: this.endDate
     }
@@ -538,40 +472,41 @@ export class UserChartComponent {
       },
     });
   }
-  ngAfterViewInit() {
-    setTimeout(() => {
-      this.getLeadCatagoryChart();
-    }, 0);
-  }
+  // ngAfterViewInit() {
+  //   setTimeout(() => {
+  //     this.getLeadCatagoryChart();
+  //   }, 0);
+  // }
 
 
-  funnelChart(leadCategory: any[]): void {
-    let dataPoints = leadCategory
-      .filter(item => item.categoryName !== "Total") // Remove "Total" category
+  funnelChart(data: any[]) {
+    const points = data
+      .filter(item => item.categoryName !== 'Total')
       .map(item => ({
-        y: item.leadCount,
-        name: item.categoryName
-      }));
-    dataPoints.sort((a, b) => b.y - a.y);
-    this.chartOptions = { ...this.chartOptions };
+        label: item.categoryName,
+        y: Number(item.leadCount)
+      }))
+      .sort((a, b) => b.y - a.y);
+    const chartWidth = window.innerWidth * 0.5;
+    // Toggle via *ngIf works reliably
     this.chartOptions = {
-      ...this.chartOptions,
       animationEnabled: true,
-      data: [{
-        type: "funnel",
-        indexLabel: "{name}: {y}",
-        valueRepresents: "area",
-        dataPoints: dataPoints
-      }]
-    }
+      theme: 'light2',
+      width: chartWidth,
+      data: [
+        {
+          type: 'funnel',
+          indexLabel: '{label} - {y}',
+          toolTipContent: '<b>{label}</b>: {y}',
+          valueRepresents: 'area',
+          neckWidth: '44%',
+          neckHeight: '30%',
+          dataPoints: points
+        }
+      ]
+    };
     this.cdr.detectChanges();
-    if (this.chartList === 'leads') {
-      setTimeout(() => {
-        this.chartOptions = { ...this.chartOptions };
-        this.cdr.detectChanges();
-        this.removeCanvasJSLink();
-      }, 100);
-    }
+    this.removeCanvasJSLink();
   }
 
   removeCanvasJSLink() {
@@ -669,6 +604,7 @@ export class UserChartComponent {
         year: 'numeric'
       }).replace(',', '')
     }
+    this.complaintColumnOption = null;
     this.complaintService.getTicketDaywiseData(filters).subscribe({
       next: (response) => {
         if (response) {
@@ -699,120 +635,110 @@ export class UserChartComponent {
     });
   }
 
-  MeetingcolumnChart(data: MeetingCountDayWise[]) {
-    this.ColumnOption = {
-      series: [
-        {
-          name: "Pending",
-          data: data.map(item => item.pendingCount)
-        },
-        {
-          name: "Completed",
-          data: data.map(item => item.completedCount)
-        }
-      ],
-      chart: {
-        type: "bar",
-        height: 280,
-        stacked: true,
-        toolbar: {
-          show: true
-        },
-        zoom: {
-          enabled: true
-        }
+ MeetingcolumnChart(data: MeetingCountDayWise[]) {
+  const chartWidth = window.innerWidth * 0.5;
+  this.meetingCanvasOptions = {
+    animationEnabled: true,
+    theme: "light2",
+     width: chartWidth,
+    axisX: {
+      title: "Day",
+      interval: 1
+    },
+    axisY: {
+      title: "Count",
+      includeZero: true
+    },
+    toolTip: {
+      shared: true
+    },
+    legend: {
+      verticalAlign: "center",
+      horizontalAlign: "right",
+    },
+    data: [
+      {
+        type: "stackedColumn",
+        name: "Pending",
+        showInLegend: true,
+        color: "#4f81bc",
+        dataPoints: data.map(item => ({
+          label: item.meetingDay,
+          y: item.pendingCount
+        }))
       },
-      dataLabels: {
-        enabled: false
-      },
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            legend: {
-              position: "bottom",
-              offsetX: -10,
-              offsetY: 0
-            }
-          }
-        }
-      ],
-      plotOptions: {
-        bar: {
-          horizontal: false
-        }
-      },
-      xaxis: {
-        type: "category",
-        categories: data.map(item => item.meetingDay)
-      },
-      legend: {
-        position: "right",
-        offsetY: 40
-      },
-      fill: {
-        opacity: 1,
-        colors: ['#4f81bc', '#c0504e'],
+      {
+        type: "stackedColumn",
+        name: "Completed",
+        showInLegend: true,
+        color: "#c0504e",
+        dataPoints: data.map(item => ({
+          label: item.meetingDay,
+          y: item.completedCount
+        }))
       }
-    };
-  }
+    ]
+  };
 
-  complainTicketDayWise(data: ComplaintCountDayWise[]) {
-    const categories = data.map((item) => item.complaintDay);
-    const pendingCounts = data.map((item) => item.pendingCount);
-    const completedCounts = data.map((item) => item.completedCount);
+  this.cdr.detectChanges();
+  this.removeCanvasJSLink();
+}
 
-    this.complaintColumnOption = {
-      series: [
-        {
-          name: 'Pending Complaints',
-          data: pendingCounts,
-        },
-        {
-          name: 'Completed Complaints',
-          data: completedCounts,
-        },
-      ],
-      chart: {
-        type: 'bar',
-        height: 350,
-        stacked: true,
-        stackType: '100%',
+
+complainTicketDayWise(data: ComplaintCountDayWise[]) {
+const chartWidth = window.innerWidth * 0.8;
+  this.complaintColumnOption = {
+    animationEnabled: true,
+    theme: "light2",
+    width: chartWidth,
+    axisX: {
+      title: "Day",
+      interval: 1
+    },
+
+    axisY: {
+      title: "Complaint Count",
+      includeZero: true
+    },
+
+    toolTip: {
+      shared: true
+    },
+
+    legend: {
+      cursor: "pointer",
+      verticalAlign: "top",
+      horizontalAlign: "center"
+    },
+
+    data: [
+      {
+        type: "column",
+        name: "Pending Complaints",
+        showInLegend: true,
+        dataPoints: data.map((item, index) => ({
+          x: index,
+          label: item.complaintDay,
+          y: item.pendingCount
+        }))
       },
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: '50%',
-        },
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            legend: {
-              position: 'bottom',
-              offsetX: -10,
-              offsetY: 0,
-            },
-          },
-        },
-      ],
-      xaxis: {
-        categories: categories,
-      },
-      fill: {
-        opacity: 1,
-      },
-      legend: {
-        position: 'right',
-        offsetX: 0,
-        offsetY: 50,
-      },
-    };
-  }
+      {
+        type: "column",
+        name: "Completed Complaints",
+        showInLegend: true,
+        dataPoints: data.map((item, index) => ({
+          x: index,
+          label: item.complaintDay,
+          y: item.completedCount
+        }))
+      }
+    ]
+  };
+
+  this.cdr.detectChanges();
+  this.removeCanvasJSLink();
+}
+
 
   ngOnDestroy(): void {
     if (this.meetingChartSubscription) { this.meetingChartSubscription.unsubscribe() }

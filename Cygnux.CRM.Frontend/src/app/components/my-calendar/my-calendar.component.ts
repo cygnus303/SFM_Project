@@ -29,6 +29,9 @@ export class MyCalendarComponent implements OnInit {
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth', // Month view
+    dayMaxEvents: false,      // important
+    fixedWeekCount: false,    // extra empty rows remove કરે
+    height: 'auto',
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
