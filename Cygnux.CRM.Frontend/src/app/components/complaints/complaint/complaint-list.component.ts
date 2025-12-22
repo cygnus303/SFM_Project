@@ -38,7 +38,7 @@ export class ComplaintListComponent implements OnInit {
   public isComplaintdashboard:boolean=false;
   public loading:boolean=false;
   public isExportLoading = false;
-
+  activeTab: 'list' | 'dashboard' = 'list';
   page = 1; // Current page number
   pageSize = 10; // Number of items per page
   totalItems = 0; // Total number of items
@@ -64,6 +64,10 @@ export class ComplaintListComponent implements OnInit {
       this.loading = state;
     });
     // this.getComplaints();
+  }
+
+  onDashboardTabOpen() {
+    this.activeTab = 'dashboard';
   }
 
   fetchComplaints(page: number = 1) {

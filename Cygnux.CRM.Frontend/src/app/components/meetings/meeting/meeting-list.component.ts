@@ -39,6 +39,7 @@ export class MeetingListComponent implements OnInit {
   public isMeetingdashboard:boolean=false;
   public loading:boolean=false;
   public isExportLoading = false;
+  activeTab: 'list' | 'dashboard' = 'list';
 
   @Output() edit = new EventEmitter<MeetingResponse>();
   dateRange: [Date, Date] = [new Date(new Date().getFullYear(), new Date().getMonth(), 1),
@@ -61,7 +62,11 @@ export class MeetingListComponent implements OnInit {
      this.endDate = this.dateRange?.[1]?.toLocaleDateString("en-GB") || '';
     // this.getMeetings(this.dateRange);
   }
-
+ 
+  onDashboardTabOpen() {
+    this.activeTab = 'dashboard';
+  }
+   
   exportMeetings(event: any) {
       this.startDate = this.dateRange?.[0]?.toLocaleDateString("en-GB") || '';
      this.endDate = this.dateRange?.[1]?.toLocaleDateString("en-GB") || '';

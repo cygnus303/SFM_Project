@@ -1,27 +1,26 @@
 <div class="page-content">
     <ul class="nav nav-tabs border-tab nav-primary" id="info-tab" role="tablist">
     <li class="nav-item">
-      <a class="nav-link active" id="basic-info-tab" data-bs-toggle="tab" href="#basic-info" role="tab"
+      <a class="nav-link active" id="basic-info-tab" data-bs-toggle="tab"  (click)="activeTab = 'list'" href="#basic-info" role="tab"
         aria-controls="basic-info" aria-selected="true">
         <i class="icofont icofont-ui-home"></i>Meeting List
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="other-info-tab" data-bs-toggle="tab" href="#other-info" role="tab"
+      <a class="nav-link" id="other-info-tab" data-bs-toggle="tab"  (click)="onDashboardTabOpen()" href="#other-info" role="tab"
         aria-controls="other-info" aria-selected="false">
         <i class="icofont icofont-contacts"></i>Dashboard
       </a>
     </li>
   </ul>
-  <div class="container-fluid bg-white tab-content" id="info-tabContent">
-    <div class="tab-pane fade active show" id="basic-info" role="tabpanel" aria-labelledby="basic-info-tab">
+  <div class="container-fluid bg-white">
       <div class="bg-white py-3 px-3 mb-2" style="border-radius: 3px;">
         <div class="row">
           <div class="col-3">
-            <div class="form-group mb-0 cursor-pointer" (click)="dp.toggle(); $event.stopPropagation()">
+            <div class="form-group mb-0 cursor-pointer"  (click)="activeTab !== 'dashboard' ? dp.toggle() : null; $event.stopPropagation()">
               <div class="input-group shadow-sm rounded"><span class="input-group-text bg-white border-end-0 p-2"><i
                     class="ri-calendar-fill text-dark text-secondary"></i></span>
-                <input type="text" placeholder="Daterangepicker" class="form-control border-start-1 line-height" #dp="bsDaterangepicker"
+                <input type="text" placeholder="Daterangepicker" class="form-control border-start-1 line-height" #dp="bsDaterangepicker" 
                   bsDaterangepicker [(ngModel)]="dateRange" name="dateRange"  (bsValueChange)="getMeetings($event)" [class.disabled-input]="true" 
                   [bsConfig]="{rangeInputFormat: 'DD.MM.YYYY', dateInputFormat:
                              'DD.MM.YYYY',ranges: commonService.ranges ,containerClass: 'theme-dark-blue'}" style="flex:1;">
@@ -34,14 +33,14 @@
                 <span class="input-group-text bg-white border-end-03px-2 border-start-1">
                   <i class="ri-group-fill text-dark text-secondary"></i>
                 </span>
-                <ng-select [items]="customerService.users" bindLabel="name" bindValue="userId" [placeholder]="'Search User'"
+                <ng-select [items]="customerService.users" bindLabel="name" bindValue="userId" [placeholder]="'Search User'" [disabled]="activeTab === 'dashboard'"
                   [clearable]="true" [searchable]="true" (change)="getMeetings(this.dateRange)" [(ngModel)]="selectedUser"
                   class="form-control border-start-1 line-height p-0 border-remover">
                 </ng-select>
               </div>
             </div>
           </div>
-          <div class="col-sm-auto ms-auto d-flex align-items-center">
+          <div class="col-sm-auto ms-auto d-flex align-items-center" *ngIf="activeTab !== 'dashboard'">
             <div class="hstack gap-2">
               <!-- <button type="button" class="btn btn-success add-btn" (click)="openChartModal()">Dashboard</button> -->
   
@@ -62,9 +61,8 @@
           </div>
         </div>
       </div>
-  
-      <div class="card-body">
-        <div>
+      <div class="card-body tab-content" id="info-tabContent">
+        <div class="tab-pane fade active show" id="basic-info" role="tabpanel" aria-labelledby="basic-info-tab">
           <div class="table-responsive table-card table-wrapper">
             <table class="table table-bordered align-middle w-100 position-table" id="customerTable">
               <thead class="table-light">
@@ -306,10 +304,10 @@
           </div>
         </div>
       </div>
+     <div class="tab-pane fade" id="other-info" role="tabpanel" aria-labelledby="other-info-tab"   >
+      <app-user-chart [chartList]="'meeting'" [dateRange]="dateRange" *ngIf="activeTab === 'dashboard'"
+        [selectedUser]="selectedUser?selectedUser:this.identityService.getLoggedUserId()"></app-user-chart>
     </div>
-     <div class="tab-pane fade" id="other-info" role="tabpanel" aria-labelledby="other-info-tab">
-      <app-user-chart [chartList]="'meeting'"></app-user-chart>
-  </div>
   </div>
 </div>
 

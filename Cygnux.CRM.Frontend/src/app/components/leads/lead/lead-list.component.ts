@@ -52,7 +52,11 @@ export class LeadListComponent implements OnDestroy {
   public isaddcallOpen:boolean=false;
   public isLeadDashboard:boolean=false;
   public loading: boolean = false;
+  activeTab: 'list' | 'dashboard' = 'list';
 
+  onDashboardTabOpen() {
+    this.activeTab = 'dashboard';
+  }
 
   constructor(
     private leadService: LeadService,
@@ -60,7 +64,7 @@ export class LeadListComponent implements OnDestroy {
     private toasterService: ToastrService,
     private exportService: ExportService,
     public importService: ImportService,
-    private identityService: IdentityService,
+    public identityService: IdentityService,
     public customerService: CustomerService
   ) {
     defineElement(lottie.loadAnimation);

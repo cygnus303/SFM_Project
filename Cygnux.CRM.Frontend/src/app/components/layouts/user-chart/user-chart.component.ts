@@ -51,7 +51,7 @@ export class UserChartComponent {
   public RatingChart: any;
   public chartOptions:  any = null;
   public meetingCanvasOptions: any = null;
- public complaintColumnOption: any = null;
+  public complaintColumnOption: any = null;
 
   public meetingChartSubscription!: Subscription;
   public getLeadStatusfilter:GetFilter[]=[];
@@ -59,8 +59,8 @@ export class UserChartComponent {
   public leadSource !:LeadBySourceResponse;
   public leadCatagory:LeadCategoryResponse[]=[];
   public isCardLoading:boolean=false;
-  dateRange: [Date, Date] = [new Date(new Date().getFullYear(), new Date().getMonth(), 1),
-  new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0, 23, 59, 59, 999)];
+  // dateRange: [Date, Date] = [new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+  // new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0, 23, 59, 59, 999)];
   startDate!: string ;
   endDate!: string;
   userType=localStorage.getItem('UserType')
@@ -68,7 +68,8 @@ export class UserChartComponent {
   public users: UserResponse[] = [];
   public userIdData:string='';
   placeholderArray = Array(7);
-
+  @Input() dateRange!: [Date, Date];
+  @Input() selectedUser!: any;
   ranges: IRange[] = [
     {
       value: [new Date(new Date().setDate(new Date().getDate() - 7)), new Date()],
@@ -117,7 +118,7 @@ export class UserChartComponent {
     private cdr: ChangeDetectorRef
   ){
     this.setDefaultDates();
-    this.userIdData = this.identifyService.getLoggedUserId();
+    this.userIdData = this.selectedUser;
     // this.getUsers();
     this.meetingChartSubscription = this.commonService.userChart.subscribe((res)=>{
       if(this.chartList==='meeting'){
@@ -137,6 +138,10 @@ export class UserChartComponent {
     const today = new Date();
     this.startDate = today.toUTCString();
     this.endDate = today.toUTCString();
+  }
+
+  ngOnInit(){
+   this.onDateRangeSelected(this.dateRange,this.selectedUser)
   }
 
   onDateRangeSelected(selectedDates: any, userIdData: string) {
@@ -163,7 +168,7 @@ export class UserChartComponent {
 
   getMeetingCountDayWise() {
     var filters = {
-      userid: this.identityService.getLoggedUserId(),
+      userid: this.selectedUser,
       startdate: this.startDate,
       enddate: this.endDate
     }
@@ -411,7 +416,7 @@ createDoughnutChart(status: any) {
       compaintStatus: status
     };
     this.isCardLoading=true;
-    this.complaintService.getComplaintListexport(this.identifyService.getLoggedUserId(),this.startDate,this.endDate,filters).subscribe({
+    this.complaintService.getComplaintListexport(this.selectedUser,this.startDate,this.endDate,filters).subscribe({
       next: (response) => {
         if (response) {
           this.exportService.exportToExcel(response.data);
@@ -428,7 +433,7 @@ createDoughnutChart(status: any) {
 
   getLeadSourceChart() {
     const filters: any = {
-      userid: this.identityService.getLoggedUserId(),
+      userid: this.selectedUser,
       startdate: this.startDate,
       enddate: this.endDate
     }
@@ -449,7 +454,7 @@ createDoughnutChart(status: any) {
 
   getLeadCatagoryChart() {
     const filters: any = {
-      userid: this.identityService.getLoggedUserId(),
+      userid: this.selectedUser,
       startdate: this.startDate,
       enddate: this.endDate
     }
