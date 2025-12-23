@@ -76,12 +76,18 @@ export class AddLeadComponent implements OnInit, OnChanges {
   }
 
   buildForm(): void {
+    const today = new Date();
+
+  const todayDate =
+    String(today.getDate()).padStart(2, '0') + '/' +
+    String(today.getMonth() + 1).padStart(2, '0') + '/' +
+    today.getFullYear();
     let assignedTo = this.identityService.getLoggedUserId();
     let branchCode = this.identityService.getBranchCode();
     let storedUser = localStorage.getItem('loginUser');
     let parsedUser = JSON.parse(storedUser || '');
     this.leadForm = new FormGroup({
-      leadCategoryId: new FormControl(null, [Validators.required]),
+      leadCategoryId: new FormControl('1', [Validators.required]),
       LeadDate: new FormControl(todayDate, [Validators.required]),
       companyName: new FormControl('', [Validators.required]),
       contactName: new FormControl(null, [Validators.required]),
