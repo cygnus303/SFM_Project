@@ -473,14 +473,15 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
   }
   getUsers() {
     this.commonService.updateLoader(true);
-    this.externalService.getUserMaster().subscribe({
+    this.meetingService.getAssignedTo().subscribe({
       next: (response) => {
         if (response) {
           // const data = response.data.filter((d)=>d.userId.toString() !== this.identityService.getLoggedUserId());
-          this.users = response.data.map((user: any) => ({
-            userId: user.userId,
-            name: `${user.userId}: ${user.name}`,
-          }));
+          // this.users = response.data.map((user: any) => ({
+          //   userId: user.userId,
+          //   name: `${user.userId}: ${user.name}`,
+          // }));
+        this.users = response.data;
         }
         this.commonService.updateLoader(false);
       },

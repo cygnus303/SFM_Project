@@ -26,6 +26,7 @@ import { ExternalService } from '../../../shared/services/external.service';
 import { IdentityService } from '../../../shared/services/identity.service';
 import { LeadService } from '../../../shared/services/lead.service';
 import { CustomerService } from '../../../shared/services/customer.service';
+import { MeetingService } from '../../../shared/services/meeting.service';
 
 @Component({
   selector: 'app-add-lead',
@@ -59,6 +60,7 @@ export class AddLeadComponent implements OnInit, OnChanges {
     private toasterService: ToastrService,
     private identityService: IdentityService,
     public customerService: CustomerService,
+    private meetingService:MeetingService
   ) {
     this.leadForm = new FormGroup({});
   }
@@ -105,7 +107,7 @@ export class AddLeadComponent implements OnInit, OnChanges {
       RegionId: new FormControl(parsedUser.reportingLoc),
       designationId: new FormControl(parsedUser.designationId),
       LeadSourceId: new FormControl(null),
-      assignedToId: new FormControl(assignedTo),
+      assignedToId: new FormControl(null),
       industryTypeId: new FormControl(null),
       ServiceInterestedIDs: new FormControl([], [Validators.required]),
       isActive: new FormControl(true),
@@ -282,14 +284,14 @@ export class AddLeadComponent implements OnInit, OnChanges {
   }
   getUsers() {
     this.commonService.updateLoader(true);
-    this.externalService.getUserMaster().subscribe({
+    this.meetingService.getAssignedTo().subscribe({
       next: (response) => {
         if (response) {
-          this.users = response.data.map((user: any) => ({
-            userId: user.userId,
-            name: `${user.userId } : ${ user.name}`,
-          }));
-          // this.users = response.data;
+          // this.users = response.data.map((user: any) => ({
+          //   userId: user.userId,
+          //   name: `${user.userId } : ${ user.name}`,
+          // }));
+          this.users = response.data;
         }
         this.commonService.updateLoader(false);
       },
