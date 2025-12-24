@@ -96,4 +96,8 @@ export class MeetingService {
   getLatLongAccordingAddress(address:string): Observable<any>{
     return this.apiHandlerService.Get(`Meeting/GetCoordinates?address=${address}`);
   }
+
+  getAssignedTo(): Observable<any>{
+    return this.apiHandlerService.Get(`Meeting/AssignToList`);
+  }
 }
