@@ -248,20 +248,30 @@
           </div>
         </div>
       </div>
-
       <div class="col-lg-6 " *ngIf="meetingId != ''">
         <div>
           <label class="control-label">Meeting MOM</label>
           <!-- <textarea class="form-control" maxlength="500" formControlName="meetingMOM"></textarea> -->
           <ng-select [items]="meetingMom" bindLabel="moM" bindValue="moM" formControlName="meetingMOM"
-          placeholder="Search Mom" [multiple]="true" [clearable]="true" [searchable]="true" [class.disabled]="checkOutValue === '-'">
-        </ng-select>
+            [ngClass]="{ 'border-danger': meetingForm.controls['meetingMOM'].invalid && meetingForm.controls['meetingMOM'].touched}"
+            placeholder="Search Mom" [multiple]="true" [clearable]="true" [searchable]="true"
+            [class.disabled]="checkOutValue === '-'">
+          </ng-select>
+          <div *ngIf="meetingForm.controls['meetingMOM'].invalid && meetingForm.controls['meetingMOM']?.touched"
+            class="text-danger">
+            <small *ngIf="meetingForm.controls['meetingMOM'].errors?.['required']">Meeting MOM is required.</small>
+          </div>
         </div>
       </div>
       <div class="col-lg-6" *ngIf="meetingId != ''">
         <div>
           <label class="control-label">Remarks</label>
-            <textarea class="form-control" maxlength="300" rows="1" formControlName="remarks" [readOnly]="checkOutValue === '-'"></textarea>
+          <textarea class="form-control" maxlength="300" rows="1" formControlName="remarks" [readOnly]="checkOutValue === '-'"
+            [ngClass]="{ 'border-danger': meetingForm.controls['remarks'].invalid && meetingForm.controls['remarks'].touched}"></textarea>
+          <div *ngIf="meetingForm.controls['remarks'].invalid && meetingForm.controls['remarks']?.touched"
+            class="text-danger">
+            <small *ngIf="meetingForm.controls['remarks'].errors?.['required']">Remarks is required.</small>
+          </div>
         </div>
       </div>
       <div class="col-lg-4">
