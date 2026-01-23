@@ -112,12 +112,14 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
         ...this.meetingResponse,
         meetingTypeId: this.meetingResponse.meetingTypeId?.toString()
       });
+      this.updateRemarksValidator();
       this.getCustomerDetail('',this.meetingResponse.customerCode);
       this.meetingRole = this.meetingResponse.meetingRole === 'A' ? true : false;
       // this.checkOutValue = this.meetingResponse.checkOut;
     } else {
       this.meetingForm.reset();
       this.meetingId = '';
+      this.updateRemarksValidator();
     }
     if (changes['addmeetingResponse'] && this.addmeetingResponse) {
       this.meetingForm.patchValue(this.addmeetingResponse);
@@ -132,7 +134,22 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
     this.getCalendar();
     this.getMeetingMom();
     this.getCustomerList();
-    this.getCustomerDetail('',this.meetingResponse?.customerCode)
+    this.getCustomerDetail('',this.meetingResponse?.customerCode);
+    this.updateRemarksValidator();
+  }
+
+  updateRemarksValidator() {
+    const remarksControl = this.meetingForm.get('remarks');
+    const meetingMOMControl = this.meetingForm.get('meetingMOM');
+    if (this.meetingId !== '') {
+      remarksControl?.setValidators([Validators.required]);
+      meetingMOMControl?.setValidators([Validators.required]);
+    } else {
+      remarksControl?.clearValidators();
+      meetingMOMControl?.clearValidators();
+    }
+    remarksControl?.updateValueAndValidity();
+    meetingMOMControl?.updateValueAndValidity();
   }
   
   buildForm(): void {
@@ -373,7 +390,8 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
         : this.updateMeeting(dataToSubmit);
 
     } else {
-      this.meetingForm.markAllAsTouched()
+      this.meetingForm.markAllAsTouched();
+         this.logInvalidFieldNames(form);
     }
   }
 
@@ -382,6 +400,19 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
 //   customerCode:event.customerCode,
 // })
 //   }
+
+ logInvalidFieldNames(form: FormGroup): void {
+  const invalidFields = Object.keys(form.controls).filter((key) => {
+    const control = form.get(key);
+    return control && control.invalid;
+  });
+ 
+  if (invalidFields.length > 0) {
+    console.log('Invalid fields:', invalidFields.join(', '));
+  } else {
+    console.log('No invalid fields.');
+  }
+}
 
   addMeeting(dataToSubmit: any): void {
     this.commonService.updateLoader(true);
