@@ -111,7 +111,8 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
       this.meetingForm.patchValue({
         ...this.meetingResponse,
         meetingTypeId: this.meetingResponse.meetingTypeId?.toString()
-      })
+      });
+      this.getCustomerDetail('',this.meetingResponse.customerCode);
       this.meetingRole = this.meetingResponse.meetingRole === 'A' ? true : false;
       // this.checkOutValue = this.meetingResponse.checkOut;
     } else {
@@ -181,7 +182,7 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
       })
     }
     const customer= event?event.customerCode:customerCode
-  if(event.customerCode.length>=3){
+      if(customer?.length>=3){
     this.customerService.getCustomerDetail(customer).subscribe({
       next: (response) => {
         if (response.data[0]) {
@@ -540,7 +541,7 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 getCustomerList(event?:any){
-  const searchTerm=event.target.value
+  const searchTerm=event?.target?.value;
    if (!searchTerm || searchTerm.trim() === '') {
       this.meetingCustomerList = [];
       this.notCustomerNameValue = 'Enter at least 3 character';
