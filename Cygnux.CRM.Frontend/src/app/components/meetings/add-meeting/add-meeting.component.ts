@@ -141,7 +141,7 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
   updateRemarksValidator() {
     const remarksControl = this.meetingForm.get('remarks');
     const meetingMOMControl = this.meetingForm.get('meetingMOM');
-    if (this.meetingId !== '') {
+    if (this.meetingId !== '' && this.checkOutValue !== '-') {
       remarksControl?.setValidators([Validators.required]);
       meetingMOMControl?.setValidators([Validators.required]);
     } else {
