@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { MeetingService } from '../../shared/services/meeting.service';
 import { CommonService } from '../../shared/services/common.service';
-import { MeetingMoMResponse } from '../../shared/models/meeting.model';
+import { MeetingMoMListResponse, MeetingMoMResponse } from '../../shared/models/meeting.model';
+import { IdentityService } from '../../shared/services/identity.service';
 
 @Component({
   selector: 'app-meeting-mom',
@@ -11,26 +12,20 @@ import { MeetingMoMResponse } from '../../shared/models/meeting.model';
 })
 export class MeetingMOMComponent {
   public meetingMom: MeetingMoMResponse[] = [];
-  constructor( private meetingService: MeetingService,public commonService: CommonService) {}
+  public MOMList: MeetingMoMListResponse[] = [];
+   page = 1; // Current page number
+  pageSize = 10; // Number of items per page
+  totalItems = 0; // Total number of items
+
+  public selectedMeetingId: string | null = null;
+
+  constructor( private meetingService: MeetingService,public commonService: CommonService,private identityService:IdentityService) {}
+
+
    ngOnInit(): void {
     this.getMeetingMom();
+    this.getMeetingMOMList()
   }
-  meetingList = [
-    {
-      meetingId: 'MT00011508',
-      meetingDate: '21/01/2026',
-      customerName: 'AARTI DRUGS LTD',
-      checkIn: '12:45',
-      checkOut: '13:35'
-    },
-    {
-      meetingId: 'MT00011499',
-      meetingDate: '21/01/2026',
-      customerName: 'GALPHA LAB LTD',
-      checkIn: '09:15',
-      checkOut: '11:35'
-    }
-  ];
 
     getMeetingMom() {
     this.commonService.updateLoader(true);
@@ -45,6 +40,34 @@ export class MeetingMOMComponent {
         this.commonService.updateLoader(false);
       },
     });
+  }
+
+  onMeetingClick(meetingId: string) {
+this.selectedMeetingId = meetingId;
+}
+
+
+isRowActive(item: any): boolean {
+return this.selectedMeetingId === item.meetingId;
+}
+
+getMeetingMOMList(){
+  this.meetingService.getMOMList(this.identityService.getLoggedUserId()).subscribe({
+      next: (response) => {
+        if (response) {
+          this.MOMList = response.data;
+        }
+        this.commonService.updateLoader(false);
+      },
+      error: (response: any) => {
+        this.commonService.updateLoader(false);
+      },
+    });
+}
+
+  onPageChange(page: number) {
+    this.page = page;
+    // this.getMeetingMOMList(this.page);
   }
 
 }

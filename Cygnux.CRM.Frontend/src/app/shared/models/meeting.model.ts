@@ -115,6 +115,16 @@ export interface MeetingCountDayWise {
   seq: number;
 }
 
+export interface MeetingMoMListResponse{
+    meetingMOM:string,
+    meetingId: string;
+    meetingDate: string;
+    checkIn: string;
+    checkOut: string;
+    remarks: string;
+    contactName: string;
+}
+
 export interface MeetingCheckInRequest{
     meetingID:string,
     userID: string,

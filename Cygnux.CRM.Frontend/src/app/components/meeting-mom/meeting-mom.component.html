@@ -15,21 +15,39 @@
                     </tr>
                 </thead>
                 <tbody class="list form-check-all">
-                    <tr *ngFor="let item of meetingList">
+                    <tr *ngFor="let item of MOMList">
                         <td>
-                            <a href="javascript:void(0)" class="text-danger fw-semibold text-decoration-underline">{{ item.meetingId }}</a>
+                            <a href="javascript:void(0)" class="fw-semibold text-decoration-underline" (click)="onMeetingClick(item.meetingId)"
+                            [ngClass]="{ 'text-danger': isRowActive(item) }">{{ item.meetingId }}</a>
                         </td>
                         <td>{{ item.meetingDate }}</td>
-                        <td>{{ item.customerName }}</td>
+                        <td>{{ item.contactName }}</td>
                         <td>{{ item.checkIn }}</td>
                         <td>{{ item.checkOut }}</td>
                         <td>
                             <ng-select [items]="meetingMom" bindLabel="moM" bindValue="moM" 
-                                placeholder="Search Mom" [multiple]="true" [clearable]="true" [searchable]="true">
+                                placeholder="Search Mom" [multiple]="true" [clearable]="true" [searchable]="true"
+                                [readonly]="!isRowActive(item)" [(ngModel)]="item.meetingMOM"
+                                [ngClass]="{
+                                'border-danger': isRowActive(item) && (!item.meetingMOM || item.meetingMOM.length === 0)
+                                }">
                            </ng-select>
+                           <div class="text-danger small"
+                            *ngIf="isRowActive(item) && (!item.meetingMOM || item.meetingMOM.length === 0)">
+                            Meeting MOM is required
+                            </div>
                         </td>
                         <td>
-                            <textarea rows="1" class="form-control form-control-sm" placeholder="Remarks"></textarea>
+                            <textarea rows="1" class="form-control form-control-sm" placeholder="Remarks"
+                            [disabled]="!isRowActive(item)"
+                            [required]="isRowActive(item)" [(ngModel)]="item.remarks"
+                            [ngClass]="{
+                            'border-danger': isRowActive(item) && !item.remarks
+                            }"></textarea>
+                        <div class="text-danger small"
+                            *ngIf="isRowActive(item) && !item.remarks">
+                            Remarks is required
+                            </div>
                         </td>
                         <td class="text-center">
                             <button class="btn btn-outline-dark btn-sm fw-semibold">
@@ -39,6 +57,12 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="d-flex justify-content-end align-items-center mt-3" *ngIf="MOMList.length != 0">
+            <div class="m-3 mt-0"> Showing Total Records : <strong>{{totalItems}}</strong> </div>
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="pageSize" [maxSize]="3"
+              (pageChange)="onPageChange($event)">
+            </ngb-pagination>
         </div>
     </div>
 </div>
