@@ -61,7 +61,11 @@ getMeetingMOMList(){
   this.meetingService.getMOMList(this.identityService.getLoggedUserId()).subscribe({
       next: (response) => {
         if (response) {
-          this.MOMList = response.data;
+          // this.MOMList = response.data;
+          this.MOMList = response.data.map((item: any) => ({
+          ...item,
+          meetingMOM: item.meetingMOM === '' ? null : item.meetingMOM
+          }));
         }
         this.commonService.updateLoader(false);
       },
