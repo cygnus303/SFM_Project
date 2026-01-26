@@ -100,4 +100,8 @@ export class MeetingService {
   getAssignedTo(): Observable<any>{
     return this.apiHandlerService.Get(`Meeting/AssignToList`);
   }
+
+  getMOMList(userId:string): Observable<any>{
+    return this.apiHandlerService.Get(`Meeting/Pending-Mom?userId=${userId}`);
+  }
 }
