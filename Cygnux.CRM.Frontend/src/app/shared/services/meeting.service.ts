@@ -104,4 +104,8 @@ export class MeetingService {
   getMOMList(userId:string): Observable<any>{
     return this.apiHandlerService.Get(`Meeting/Pending-Mom?userId=${userId}`);
   }
+
+  onSubmitMOM(userId:string,payload:any): Observable<any>{
+    return this.apiHandlerService.Post(`Meeting/SubmitMom?UserId=${userId}`,payload);
+  }
 }

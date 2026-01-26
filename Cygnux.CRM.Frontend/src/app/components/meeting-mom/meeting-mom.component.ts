@@ -3,6 +3,7 @@ import { MeetingService } from '../../shared/services/meeting.service';
 import { CommonService } from '../../shared/services/common.service';
 import { MeetingMoMListResponse, MeetingMoMResponse } from '../../shared/models/meeting.model';
 import { IdentityService } from '../../shared/services/identity.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-meeting-mom',
@@ -13,13 +14,18 @@ import { IdentityService } from '../../shared/services/identity.service';
 export class MeetingMOMComponent {
   public meetingMom: MeetingMoMResponse[] = [];
   public MOMList: MeetingMoMListResponse[] = [];
-   page = 1; // Current page number
+  page = 1; // Current page number
   pageSize = 10; // Number of items per page
   totalItems = 0; // Total number of items
 
   public selectedMeetingId: string | null = null;
 
-  constructor( private meetingService: MeetingService,public commonService: CommonService,private identityService:IdentityService) {}
+  constructor(
+    private meetingService: MeetingService,
+    public commonService: CommonService,
+    private identityService:IdentityService,
+    private toasterService: ToastrService,
+  ) {}
 
 
    ngOnInit(): void {
@@ -70,4 +76,25 @@ getMeetingMOMList(){
     // this.getMeetingMOMList(this.page);
   }
 
+  onSubmit(item:any){
+    if(item.meetingMOM && item.remarks){
+      const payload={
+      meetingId: item.meetingId,
+      meetingMOM:item.meetingMOM,
+      remarks: item.remarks
+    }
+     this.meetingService.onSubmitMOM(this.identityService.getLoggedUserId(),payload).subscribe({
+      next: (response) => {
+        if (response.data.status === 1) {
+          this.toasterService.success(response.data.message);
+          this.getMeetingMOMList();
+        }
+        this.commonService.updateLoader(false);
+      },
+      error: (response: any) => {
+        this.commonService.updateLoader(false);
+      },
+    });
+  }
+  }
 }
