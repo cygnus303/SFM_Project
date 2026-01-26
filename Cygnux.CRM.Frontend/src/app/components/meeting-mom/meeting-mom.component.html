@@ -1,7 +1,7 @@
 <div class="page-content">
     <div class="container-fluid bg-white  p-3">
-        <div class="table-responsive table-card">
-            <table class="table table-bordered align-middle" id="customerTable">
+        <div class="table-card">
+            <table class="table table-bordered align-middle">
                 <thead class="table-light">
                     <tr>
                         <th>Meeting ID</th>
@@ -23,10 +23,12 @@
                         <td>{{ item.customerName }}</td>
                         <td>{{ item.checkIn }}</td>
                         <td>{{ item.checkOut }}</td>
-                        <td>
-                            <ng-select [items]="meetingMom" bindLabel="moM" bindValue="moM" 
-                                placeholder="Search Mom" [multiple]="true" [clearable]="true" [searchable]="true">
-                           </ng-select>
+                        <td style="max-width: 240px; min-width: 240px;">
+                            <ng-select [items]="meetingMom" bindLabel="moM" bindValue="moM" placeholder="Search Mom" class="fixed-ng-select">
+                                <ng-template ng-option-tmp let-item="item">
+                                    <span [title]="item.moM">{{ item.moM }}</span>
+                                </ng-template>
+                            </ng-select>
                         </td>
                         <td>
                             <textarea rows="1" class="form-control form-control-sm" placeholder="Remarks"></textarea>
