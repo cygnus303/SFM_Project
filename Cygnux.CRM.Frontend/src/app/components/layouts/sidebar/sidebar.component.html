@@ -52,6 +52,12 @@
             <span data-key="t-calendar">Meeting</span>
           </a>
         </li>
+          <li class="nav-item" *ngIf="isSFMMasters?.SFM === 'Y'">
+            <a class="nav-link menu-link" routerLink="./meetingMOM" routerLinkActive="active">
+              <i class="ri-map-pin-line"></i>
+              <span data-key="t-calendar">Meeting MOM</span>
+            </a>
+         </li>
         <li class="nav-item"  *ngIf="isSFMMasters?.SFM==='Y'">
           <a class="nav-link menu-link" routerLink="./call/lists" routerLinkActive="active">
             <i class="ri-phone-line"></i>

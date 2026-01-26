@@ -61,6 +61,15 @@ export const routes: Routes = [
         data: { title: 'MEETINGS' }
       },
       {
+        path: 'meetingMOM',
+        loadChildren: () =>
+          import('./components/meeting-mom/meeting-mom.module').then(
+            (m) => m.MeetingMomModule
+          ),
+        canActivate: [AuthGuard],
+        data: { title: 'MEETINGS MOM' }
+      },
+      {
         path: 'task',
         loadChildren: () =>
           import('./components/tasks/tasks.module').then((m) => m.TaskModule),
