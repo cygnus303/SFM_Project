@@ -67,7 +67,7 @@ export const routes: Routes = [
             (m) => m.MeetingMomModule
           ),
         canActivate: [AuthGuard],
-        data: { title: 'MEETINGS MOM' }
+        data: { title: 'MEETING MOM' }
       },
       {
         path: 'task',

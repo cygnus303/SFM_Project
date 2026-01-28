@@ -13,6 +13,40 @@
                         <th class="text-center">Remarks</th>
                         <th class="text-center">Action</th>
                     </tr>
+                    <tr>
+                     <th>
+                       <input type="text" [(ngModel)]="filters['MeetingId']"  (input)="onfilterList()"
+                         class="form-control" />
+                     </th>
+                     <th>
+                        <div class="input-group position-relative">
+                           <input type="text" class="form-control" placeholder="dd/mm/yyyy" name="meetingDate"
+                           [(ngModel)]="filters['MeetingDate']" bsDatepicker #dpL="bsDatepicker" 
+                           [bsConfig]="{dateInputFormat: 'DD/MM/YYYY',showWeekNumbers: false, containerClass: 'theme-dark-blue'}" (ngModelChange)="onfilterList()"
+                           [class.disabled-input]="true" >
+                         <span role="button" tabindex="0" class="ng-clear-wrapper clear-wrapper" title="Clear date"
+                           *ngIf="filters['MeetingDate']" (click)="clearDate()">
+                           <span aria-hidden="true" class="ng-clear clear">×</span>
+                         </span>
+                         <button type="button" class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="dpL.toggle()">
+                         </button>
+                       </div>
+                     </th>
+                     <th>
+                       <input type="text" [(ngModel)]="filters['CustomerName']"  (input)="onfilterList()"
+                         class="form-control" />
+                     </th>
+                     <th>
+                       <input type="text" [(ngModel)]="filters['CheckIn']"  class="form-control" (input)="onfilterList()" />
+                     </th>
+                     <th>
+                       <input type="text" [(ngModel)]="filters['CheckOut']"  (input)="onfilterList()"
+                         class="form-control" />
+                     </th>
+                     <th></th>
+                     <th></th>
+                     <th></th>
+                   </tr>
                 </thead>
                 <tbody class="list form-check-all">
                     <tr *ngFor="let item of MOMList">
@@ -20,10 +54,10 @@
                             <a href="javascript:void(0)" class="fw-semibold text-decoration-underline" (click)="onMeetingClick(item.meetingId)"
                             [ngClass]="{ 'text-danger': isRowActive(item) }">{{ item.meetingId }}</a>
                         </td>
-                        <td class="text-center">{{ item.meetingDate?(item.meetingDate | date:'dd/MM/yyyy'):'--' }}</td>
-                        <td class="text-center">{{ item.contactName }}</td>
-                        <td class="text-center">{{ item.checkIn ?(item.checkIn | date:'dd/MM/yyyy') :'--' }}</td>
-                        <td class="text-center">{{ item.checkOut ? (item.checkOut | date:'dd/MM/yyyy'):'--' }}</td>
+                        <td class="text-center">{{ item.meetingDate?(item.meetingDate):'--' }}</td>
+                        <td class="text-center">{{ item.custnm }}</td>
+                        <td class="text-center">{{ item.checkIn ?(item.checkIn) :'--' }}</td>
+                        <td class="text-center">{{ item.checkOut ? (item.checkOut ):'--' }}</td>
                         <td style="max-width: 240px; min-width: 240px;">
                             <ng-select [items]="meetingMom" bindLabel="moM" bindValue="moM" placeholder="Search Mom" class="fixed-ng-select"
                             [readonly]="!isRowActive(item)" [(ngModel)]="item.meetingMOM"
@@ -52,13 +86,25 @@
                             </div>
                         </td>
                         <td class="text-center">
-                            <button class="btn btn-outline-dark btn-sm fw-semibold" (click)="onSubmit(item)">
+                            <button class="bg-blue text-light" style="border-radius: 3px;" (click)="onSubmit(item)" [disabled]="!isRowActive(item)" 
+                            [ngClass]="{'disabled-button':!isRowActive(item)}">
                                 Submit
                             </button>
                         </td>
                     </tr>
                 </tbody>
             </table>
+             <div *ngIf="loading && MOMList.length === 0" class="text-center border-found">
+                 <lord-icon src="/assets/json/system-solid-716-spinner-three-dots-loop-scale.json" trigger="loop"
+                   colors="primary:#121331,secondary:#08a88a" style="width: 100px; height: 100px">
+                 </lord-icon>
+               </div>
+               <div class="noresult" *ngIf="!loading && MOMList.length == 0">
+                 <div class="text-center">
+                   <img src="assets/images/noData.png" height="200" width="300">
+                   <h5 class="mt-2">Sorry! No Data Found</h5>
+                 </div>
+               </div>
         </div>
         <div class="d-flex justify-content-end align-items-center mt-3" *ngIf="MOMList.length != 0">
             <div class="m-3 mt-0"> Showing Total Records : <strong>{{totalItems}}</strong> </div>

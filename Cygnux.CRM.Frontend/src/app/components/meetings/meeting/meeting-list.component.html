@@ -42,7 +42,6 @@
           </div>
           <div class="col-sm-auto ms-auto d-flex align-items-center" *ngIf="activeTab !== 'dashboard'">
             <div class="hstack gap-2">
-              <!-- <button type="button" class="btn btn-success add-btn" (click)="openChartModal()">Dashboard</button> -->
   
               <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()">
                 <i class="ri-delete-bin-2-line"></i>
@@ -78,7 +77,6 @@
                   <th class="text-center">CreatedBy</th>
                   <th class="text-center">Meeting Status</th>
                   <th class="text-center">Attendees</th>
-                  <!-- <th class="text-center">Check In-Check Out</th> -->
                   <th class="text-center">Action</th>
                 </tr>
                 <tr>
@@ -90,19 +88,6 @@
                     <input type="text" [(ngModel)]="filters['CustomerName']" (input)="onStartTimeChange()"
                       class="form-control" />
                   </th>
-                  <!-- <th style="width: 11% !important;">
-                    <div class="input-group">
-                      <input width="100%" class="form-control" placeholder="dd/mm/yyyy" name="d2" #c2="ngModel"
-                        [(ngModel)]="filters['MeetingDate']" ngbDatepicker (ngModelChange)="onStartTimeChange()"
-                        #d2="ngbDatepicker" readonly />
-                      <span role="button" (click)="clearDate()" tabindex="0" class="ng-clear-wrapper clear-wrapper"
-                        title="Clear date" *ngIf="filters['MeetingDate']">
-                        <span aria-hidden="true" class="ng-clear clear">×</span>
-                      </span>
-                      <button class="btn btn-sm btn-outline-secondary ri-calendar-line" (click)="d2.toggle()"
-                        type="button"></button>
-                    </div>
-                  </th> -->
                   <th>
                     <div class="input-group position-relative" style="width: 160px !important;">
                       <input type="text" class="form-control" placeholder="dd/mm/yyyy" name="meetingDate"
@@ -138,10 +123,7 @@
                     <input type="text" [(ngModel)]="filters['Status']" (input)="onStartTimeChange()" class="form-control" />
                   </th>
                   <th>
-                    <!-- <input type="text" [(ngModel)]="filters['AttendeeName']" (input)="getMeetings(this.dateRange)"
-                                  class="form-control" />  -->
                   </th>
-                  <!-- <th></th> -->
                   <th></th>
                 </tr>
               </thead>
@@ -168,13 +150,6 @@
                       {{ name }}<br />
                     </ng-container>
                   </td>
-                  <!-- <td class="text-center">
-                              <div class="d-flex">
-                                <span [title]="meeting.checkInReason"><button class="btn btn-danger me-1 fontsize" (click)="onCheckIn(meeting,i)"  [disabled]="!meeting.isCheckInEnabled || meeting.checkIn !== '-'">Check In</button></span>
-                                <span [title]="meeting.checkOutReason"><button class="btn btn-secondary fontsize" (click)="onCheckOut(meeting,i)"  [disabled]="!meeting.isCheckOutEnabled">Check Out</button></span>
-                              </div>
-                              </td>  -->
-                  <!-- <td>{{ meeting.taTinHrs }}</td> -->
                   <td class="text-center">
                     <ul class="list-inline hstack gap-2 mb-0">
                       <li
@@ -191,18 +166,6 @@
                         <a href="#" (click)="viewModal($event, meeting.attendeeCode)"><i
                             class="ri-eye-fill align-bottom text-muted"></i></a>
                       </li>
-                      <!-- <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                    data-bs-placement="top" title="CheckIn">
-                                    <a href="#" (click)="
-                                        onCheckInChange(
-                                          $event,
-                                          meeting.meetingId,
-                                          meeting.isCheckedIn
-                                        )
-                                      " class="text-muted d-inline-block">
-                                      <i class="ri-map-pin-user-fill fs-16"></i>
-                                    </a>
-                                  </li> -->
                       <li
                         class="list-inline-item disabled-icon bg-blue d-flex justify-content-center align-items-center cursor-pointer">
                         <div [popover]="hourPopover" [popoverContext]="{index: meeting}" triggers="hover" placement="left"
@@ -212,22 +175,6 @@
                           </a>
                         </div>
                       </li>
-                      <!-- <li
-                                    class="list-inline-item edit"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-trigger="hover"
-                                    data-bs-placement="top"
-                                    title="Call"
-                                  >
-                                    <a
-                                      href="#"
-                                      (click)="callModal($event, meeting.meetingId)"
-                                      class="text-muted d-inline-block"
-                                    >
-                                      <i class="ri-phone-line fs-16"></i>
-                                    </a>
-                                  </li> -->
-        
                       <li
                         class="list-inline-item disabled-icon bg-blue d-flex justify-content-center align-items-center cursor-pointer">
                         <div [popover]="meeting.geoLocation" placement="left" [popoverTitle]="'Location Details'"

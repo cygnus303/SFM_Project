@@ -122,7 +122,7 @@ export interface MeetingMoMListResponse{
     checkIn: string;
     checkOut: string;
     remarks: string;
-    contactName: string;
+    custnm: string;
 }
 
 export interface MeetingCheckInRequest{
