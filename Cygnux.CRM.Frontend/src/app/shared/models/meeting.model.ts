@@ -34,6 +34,7 @@ export interface MeetingResponse {
   meetingAddress?:string;
   attendeeNames?:any;
   AttendeeIds?:any;
+  isComplete?:boolean;
   createdName?:any
 }
 export interface MeetingDetailResponse extends MeetingResponse {
@@ -59,7 +60,7 @@ export interface MeetingDetailResponse extends MeetingResponse {
   previousLatitude?:string;
   previousLongitude?:string;
   createLongitude?:string;
-  createLatitude?:string
+  createLatitude?:string;
 }
 export interface AddMeetingResponse {
   leadId: string;

@@ -61,6 +61,20 @@
                     <span *ngIf="isExportLoading" class="spinner-border spinner-border-sm"></span>
                     <i *ngIf="!isExportLoading" class="bi bi-download"></i>
                   </button>
+                  <button 
+                      class="btn btn-square btn-primary pull-right rounded-3 ms-2 d-flex align-items-center gap-2"
+                      [disabled]="isDownloadAuditor" (click)="downLoadAuditorExpense()">
+
+                      <!-- <span *ngIf="isDownloadAuditor" class="spinner-border spinner-border-sm"></span> -->
+                      <ng-container *ngIf="isDownloadAuditor">
+                        <span class="spinner-border spinner-border-sm"></span>
+                        <span>Approved</span>
+                      </ng-container>
+                      <ng-container *ngIf="!isDownloadAuditor">
+                        <i class="bi bi-download"></i>
+                        <span>Approved</span>
+                      </ng-container>
+                  </button>
                 </div>
               </div>
             </div>

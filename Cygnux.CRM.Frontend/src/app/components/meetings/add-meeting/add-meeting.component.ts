@@ -62,6 +62,7 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
   public customerData !: CustomerDetailResponse;
   isCustomerLoading = false; // loader flag
   public notCustomerNameValue = 'Please enter at least 3 characters';
+  public isMOMValue:boolean=false;
 
 
 
@@ -107,6 +108,11 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
       this.center.lng = this.meetingResponse.longitude;
       this.meetingId = this.meetingResponse.meetingId;
       this.attendeeId = this.meetingResponse.attendeeCode;
+      if (this.meetingResponse.meetingMOM?.length > 0) {
+        this.isMOMValue=true;
+      } else {
+        this.isMOMValue=false;
+      }
       // this.meetingForm.patchValue(this.meetingResponse);
       this.meetingForm.patchValue({
         ...this.meetingResponse,
@@ -131,7 +137,6 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
     this.getLocations();
     this.getMeetingTypes();
     this.getUsers();
-    this.getCalendar();
     this.getMeetingMom();
     this.getCustomerList();
     this.getCustomerDetail('',this.meetingResponse?.customerCode);
@@ -312,24 +317,6 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  getCalendar() {
-    this.commonService.updateLoader(true);
-    const filter = {
-      userId: this.identityService.getLoggedUserId()
-    }
-    this.calendarService.getCalendar(filter).subscribe({
-      next: (response) => {
-        if (response) {
-          this.calendarOptions = response.data;
-        }
-        this.commonService.updateLoader(false);
-      },
-      error: (response: any) => {
-        this.toasterService.error(response);
-        this.commonService.updateLoader(false);
-      },
-    });
-  }
 
   formatDate(dateString: any): string {
     if (!dateString || typeof dateString !== 'string' || dateString.trim() === '') {
@@ -589,20 +576,20 @@ getCustomerList(event?:any){
     // this.isSearching = true;
     this.notCustomerNameValue = 'Searching...';
   if(searchTerm && searchTerm.length >=3){
-  this.meetingService.getMeetingCustomer(this.identityService.getLoggedUserId(),searchTerm).subscribe({
-      next: (response) => {
-        if (response) {
-          this.meetingCustomerList = response.data;
-          this.notCustomerNameValue = 'No items found';
-        }
-        this.commonService.updateLoader(false);
-      },
-      error: (response: any) => {
-        this.toasterService.error(response);
-        this.commonService.updateLoader(false);
-      },
-    });
-  }
+    this.meetingService.getMeetingCustomer(this.identityService.getLoggedUserId(),searchTerm).subscribe({
+        next: (response) => {
+          if (response) {
+            this.meetingCustomerList = response.data;
+            this.notCustomerNameValue = 'No items found';
+          }
+          this.commonService.updateLoader(false);
+        },
+        error: (response: any) => {
+          this.toasterService.error(response);
+          this.commonService.updateLoader(false);
+        },
+      });
+    }
 }
 
 getLatLongData(event:any){

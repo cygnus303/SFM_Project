@@ -116,7 +116,7 @@ getMeetingMOMList(page: number = 1){
     if(item.meetingMOM && item.remarks){
       const payload={
       meetingId: item.meetingId,
-      meetingMOM:item.meetingMOM,
+      meetingMOM:item.meetingMOM.join(','),
       remarks: item.remarks
     }
      this.meetingService.onSubmitMOM(this.identityService.getLoggedUserId(),payload).subscribe({

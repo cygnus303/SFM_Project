@@ -155,8 +155,8 @@
                       <li
                         class="list-inline-item disabled-icon bg-blue d-flex justify-content-center align-items-center cursor-pointer"
                         [popover]="'Edit'" placement="auto" triggers="hover" [outsideClick]="true" container="body">
-                        <a class="edit-item-btn" [ngClass]="{'disabled-image': meeting.isExpired}"
-                          (click)="meeting.isExpired ? null : editModal($event, meeting.attendeeCode, meeting.checkOut)"><i
+                        <a class="edit-item-btn" [ngClass]="{'disabled-image': meeting.isExpired || meeting.isComplete}"
+                          (click)="meeting.isExpired || meeting.isComplete ? null : editModal($event, meeting.attendeeCode, meeting.checkOut)"><i
                             class="ri-pencil-fill align-bottom text-muted"></i></a>
                       </li>
                       <li

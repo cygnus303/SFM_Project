@@ -60,7 +60,7 @@
                         <td class="text-center">{{ item.checkOut ? (item.checkOut ):'--' }}</td>
                         <td style="max-width: 240px; min-width: 240px;">
                             <ng-select [items]="meetingMom" bindLabel="moM" bindValue="moM" placeholder="Search Mom" class="fixed-ng-select"
-                            [readonly]="!isRowActive(item)" [(ngModel)]="item.meetingMOM"
+                            [readonly]="!isRowActive(item)" [(ngModel)]="item.meetingMOM" [multiple]="true"
                                 [ngClass]="{
                                 'border-danger': isRowActive(item) && (!item.meetingMOM || item.meetingMOM.length === 0)
                                 }">

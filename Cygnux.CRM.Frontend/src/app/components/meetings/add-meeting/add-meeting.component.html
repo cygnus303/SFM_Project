@@ -223,6 +223,12 @@
             placeholder="Search Location" [searchable]="true" [clearable]="true" [disabled]="checkOutValue !== '-' || meetingRole?true:false"
             [readonly]="checkOutValue !== '-' || meetingRole?true:false" required>
           </ng-select>
+          <div *ngIf="
+              meetingForm.controls['meetingLocation'].invalid &&
+              meetingForm.controls['meetingLocation']?.touched
+            " class="text-danger">
+            <small *ngIf="meetingForm.controls['meetingLocation'].errors?.['required']">Location is required.</small>
+          </div>
 
           &nbsp;
           <div>
@@ -240,12 +246,6 @@
               <map-marker [position]="center" [label]="'A'"></map-marker>
             </google-map>
           </div>
-          <div *ngIf="
-              meetingForm.controls['meetingLocation'].invalid &&
-              meetingForm.controls['meetingLocation']?.touched
-            " class="text-danger">
-            <small *ngIf="meetingForm.controls['meetingLocation'].errors?.['required']">Location is required.</small>
-          </div>
         </div>
       </div>
       <div class="col-lg-6 " *ngIf="meetingId != ''">
@@ -255,7 +255,7 @@
           <ng-select [items]="meetingMom" bindLabel="moM" bindValue="moM" formControlName="meetingMOM"
             [ngClass]="{ 'border-danger': meetingForm.controls['meetingMOM'].invalid && meetingForm.controls['meetingMOM'].touched}"
             placeholder="Search Mom" [multiple]="true" [clearable]="true" [searchable]="true"
-            [class.disabled]="checkOutValue === '-'">
+            [class.disabled]="checkOutValue === '-'" [readonly]="isMOMValue">
           </ng-select>
           <div *ngIf="meetingForm.controls['meetingMOM'].invalid && meetingForm.controls['meetingMOM']?.touched"
             class="text-danger">

@@ -54,6 +54,7 @@ export class ExpenseApprovalListComponent implements OnInit {
     new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0, 23, 59, 59, 999)];
   @Output() edit = new EventEmitter<ExpenseResponse>();
    public isExportLoading = false;
+   public isDownloadAuditor:boolean = false;
 
   constructor(
     private expenseService: ExpenseService,
@@ -428,5 +429,21 @@ getSelectedJSON(isApproved: boolean = false){
       this.reasonRemark ='';
      
     }
+  }
+
+  downLoadAuditorExpense(){
+    this.isDownloadAuditor = true;
+    this.expenseService.downloadAuditorExpense(this.identifyService.getLoggedUserId()).subscribe({
+      next:(response)=>{
+      if(response){
+          this.exportService.exportToExcel(response.data);
+      }
+        this.isDownloadAuditor = false;
+      },
+       error: (response: any) => {
+        this.toasterService.error(response);
+        this.isDownloadAuditor = false;
+      },
+    })
   }
 }
