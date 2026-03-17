@@ -235,7 +235,7 @@
             <!-- <app-location-search [class.disabled]="checkOutValue !== '-' || meetingRole" (mapDataEmitter)="onLocationSearch($event)" 
               [meetingResponse]="this.meetingResponse?.geoLocation"></app-location-search> -->
                <ng-select [items]="geoLocation" [meetingResponse]="this.meetingResponse?.geoLocation" (input)="getGeoLocation($event)" formControlName="geoLocation" (change)="getLatLongData($event)"
-            placeholder="Search Location" [searchable]="true" [clearable]="true"  [class.disabled]="checkOutValue !== '-' || meetingRole" required>
+            placeholder="Search Location" [searchable]="true" [clearable]="true"  [class.disabled]="checkOutValue !== '-' || meetingRole">
           </ng-select>
           </div>
           
@@ -267,11 +267,7 @@
         <div>
           <label class="control-label">Remarks</label>
           <textarea class="form-control" maxlength="300" rows="1" formControlName="remarks" [readOnly]="checkOutValue === '-'"
-            [ngClass]="{ 'border-danger': meetingForm.controls['remarks'].invalid && meetingForm.controls['remarks'].touched}"></textarea>
-          <div *ngIf="meetingForm.controls['remarks'].invalid && meetingForm.controls['remarks']?.touched"
-            class="text-danger">
-            <small *ngIf="meetingForm.controls['remarks'].errors?.['required']">Remarks is required.</small>
-          </div>
+           ></textarea>
         </div>
       </div>
       <div class="col-lg-4">
