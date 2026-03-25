@@ -64,8 +64,8 @@
                       <th class="text-center">Check In Time</th>
                       <th class="text-center">Check Out Time</th>
                       <th class="text-center">Dist. In KM</th>
-                      <th class="text-center">Req. Id/Date</th>
-                      <th class="text-center">RTGS No.</th>
+                      <th class="text-center">Payment ID</th>
+                      <th class="text-center">Payment Date</th>
                       <th class="text-center">Amount</th>
                       <th class="text-center">Status</th>
                       <th class="text-center">Action</th>
@@ -177,7 +177,7 @@
                       <td class="text-center truncate-text">{{expense.checkOut?expense.checkOut:'--'}}</td>
                       <td class="text-center truncate-text">{{expense.distanceTravelled?expense.distanceTravelled:'0'}}</td>
                       <td class="text-center truncate-text">{{expense.requestID ? (expense.requestID):'--' }}</td>
-                      <td class="text-center"></td>
+                      <td class="text-center">{{expense.requestIdDate ? expense.requestIdDate :'--'}}</td>
                       <td class="text-center truncate-text">{{ expense.amount ? expense.amount:'0' }}</td>
                       <td class="text-center truncate-text">{{ expense.status ? expense.status:'--' }}</td>
                       <td class="text-center">

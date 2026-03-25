@@ -29,6 +29,8 @@ export interface ExpenseResponse {
   attendeeCode:string;
   meetingMOM:string;
   requestID:string;
+  utrNo?:string;
+  requestIdDate?:string;
 }
 
 export interface ExpenseDetailResponse extends ExpenseResponse {

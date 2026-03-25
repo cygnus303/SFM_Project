@@ -82,6 +82,12 @@
             <span data-key="t-expense">Expense Approval</span>
           </a>
         </li>
+          <li class="nav-item"  *ngIf="isSFMMasters?.SFM==='Y'">
+          <a class="nav-link menu-link" routerLink="./payment" routerLinkActive="active">
+          <i class="ri-money-rupee-circle-line"></i>
+            <span data-key="t-expense">Payment</span>
+          </a>
+        </li>
         <li class="nav-item"  *ngIf="isSFMMasters?.COMPLAINT_MGNT==='Y'">
           <a class="nav-link menu-link" routerLink="./complaint/list" routerLinkActive="active">
             <i class="ri-stack-line"></i>

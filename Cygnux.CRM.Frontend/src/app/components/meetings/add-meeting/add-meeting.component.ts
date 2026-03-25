@@ -304,8 +304,14 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
     const isChecked = (event.target as HTMLInputElement).checked;
     if (isChecked) {
       this.isChecked = true;
+      const now = new Date();
+
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+
+    const currentTime = `${hours}:${minutes}`;
       this.meetingForm.patchValue({
-        startTime: '10:00',
+        startTime: currentTime,
         endTime: '18:00'
       });
     } else {

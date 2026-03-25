@@ -112,6 +112,15 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
          data: { title: 'ATTENDANCE' }
       },
+      {
+        path: 'payment',
+        loadComponent: () =>
+          import('./components/payment/payment.component').then(
+            (m) => m.PaymentComponent
+          ),
+        canActivate: [AuthGuard],
+         data: { title: 'PAYMENT' }
+      },
     ],
   },
 ];
