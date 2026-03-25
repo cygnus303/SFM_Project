@@ -236,6 +236,9 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   checkDuplicateMeetingTimes(_control?: AbstractControl): ValidationErrors | null {
+  if (this.isChecked) {
+    return null;
+  }
     if ((this.checkOutValue == '-' && !this.meetingId) || (this.checkOutValue == '-' && this.meetingId)) {
       const meetingDate = this.meetingForm.get('meetingDate')?.value;
       const startTime = this.meetingForm.get('startTime')?.value;

@@ -51,6 +51,16 @@ export class AddExpenseGeneralMasterComponent {
     this.buildForm();
     this.getTransportModes();
     this.getDesignationList();
+    if(this.expenseResponse){
+      this.expenseMasterForm?.patchValue({
+        transportModeId: this.expenseResponse.transportModeId.toString(),
+        designationId: this.expenseResponse.designationId.toString(),
+        ratePerKM: this.expenseResponse.ratePerKM,
+        id:this.expenseResponse.id,
+        modifiedBy:this.expenseResponse.modifiedBy,
+        active:this.expenseResponse.isActive,
+      });
+    }
   }
 
   buildForm(): void {
