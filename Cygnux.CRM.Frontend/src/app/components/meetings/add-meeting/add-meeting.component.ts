@@ -307,7 +307,8 @@ export class AddMeetingComponent implements OnInit, OnChanges, OnDestroy {
     const isChecked = (event.target as HTMLInputElement).checked;
     if (isChecked) {
       this.isChecked = true;
-      const now = new Date();
+       const now = new Date();
+       now.setMinutes(now.getMinutes() + 1);
 
     const hours = now.getHours().toString().padStart(2, '0');
     const minutes = now.getMinutes().toString().padStart(2, '0');

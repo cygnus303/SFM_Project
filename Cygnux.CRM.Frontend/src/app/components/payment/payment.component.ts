@@ -144,7 +144,11 @@ getPayment(page: number = 1){
     downloadExcel(event: any) {
     event.preventDefault();
     this.isdownloadLoading = true;
-    this.paymentservice.DownloadExcel().subscribe({
+    const params={
+      fromDate:'',
+      toDate:''
+    }
+    this.paymentservice.DownloadExcel(params).subscribe({
       next: (response: Blob) => {
         const blob = new Blob([response], {
           type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
