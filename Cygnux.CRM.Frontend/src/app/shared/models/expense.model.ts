@@ -31,6 +31,7 @@ export interface ExpenseResponse {
   requestID:string;
   utrNo?:string;
   requestIdDate?:string;
+  reqIdDate?:String;
 }
 
 export interface ExpenseDetailResponse extends ExpenseResponse {
