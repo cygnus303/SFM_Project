@@ -24,7 +24,7 @@ export class PaymentService {
     return this.apiHandlerService.DownloadFile(`Expense/DownloadRTGSTemplate`);
   }
 
-  DownloadExcel(params:any){
-    return this.apiHandlerService.DownloadFile(`Expense/download-excel?fromDate=${params.fromDate}&toDate=${params.toDate}`);
+  DownloadExcel(userId:string){
+    return this.apiHandlerService.DownloadFile(`Expense/download-excel?userId=${userId}`);
   }
 }

@@ -11,6 +11,7 @@ import {PaymentResponse } from '../../shared/models/payment.model';
 import { ToastrService } from 'ngx-toastr';
 import { CommonService } from '../../shared/services/common.service';
 import { ExportService } from '../../shared/services/export.service';
+import { IdentityService } from '../../shared/services/identity.service';
 
 @Component({
   selector: 'app-payment',
@@ -33,7 +34,8 @@ export class PaymentComponent {
     private paymentservice:PaymentService,
     private toasterService:ToastrService,
     private commonService:CommonService,
-    private exportService:ExportService
+    private exportService:ExportService,
+    private identityService:IdentityService
   ){defineElement(lottie.loadAnimation);
     this.commonService.loading.subscribe((state: boolean) => {
       this.loading = state;
@@ -144,11 +146,7 @@ getPayment(page: number = 1){
     downloadExcel(event: any) {
     event.preventDefault();
     this.isdownloadLoading = true;
-    const params={
-      fromDate:'',
-      toDate:''
-    }
-    this.paymentservice.DownloadExcel(params).subscribe({
+    this.paymentservice.DownloadExcel(this.identityService.getLoggedUserId()).subscribe({
       next: (response: Blob) => {
         const blob = new Blob([response], {
           type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
